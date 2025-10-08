@@ -1,40 +1,34 @@
-package com.breakout.entities;
+public class Brick extends GameObject {
+    public final static int NORMAL_BRICK = 1;
+    public final static int STRONG_BRICK = 2;
 
-import com.breakout.core.GameObject;
-import com.breakout.interfaces.Destructible;
-import java.awt.*;
+    private int type;
+    private int hitPoints;
+    private boolean destroyed = false;
 
-public class Brick extends GameObject implements Destructible {
-    protected int durability;
-    protected boolean destroyed;
-    protected Color color;
-    
-    public Brick(double x, double y, double width, double height, int durability) {
+    public Brick(double x, double y, int type) {
+        super(x, y);
+        this.type = type;
+        hitPoints = type;
     }
-    
-    private void setColorByDurability() {
+
+    public void takeHit() {
+        hitPoints--;
     }
-    
-    @Override
-    public boolean hit() {
-    }
-    
-    @Override
+
     public boolean isDestroyed() {
-        return destroyed;
+        return hitPoints <= 0;
     }
-    
+
+    public char getSymbol() {
+        if (destroyed) return ' ';
+        switch (type) {
+            case NORMAL_BRICK: return '*';
+            case STRONG_BRICK: return '#';
+            default: return ' ';
+        }
+    }
+
     @Override
-    public void onDestroyed() {
-        // Override in subclasses for special behavior
-    }
-    
-    @Override
-    public void update(double deltaTime) {
-        // Bricks don't update
-    }
-    
-    @Override
-    public void draw(Graphics2D g) {
-    }
+    public void update(double dt) { }
 }
