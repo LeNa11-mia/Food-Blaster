@@ -1,37 +1,37 @@
 package com.breakout.entities;
 
-import com.breakout.core.GameObject;
-import com.breakout.interfaces.Controllable;
 import java.awt.*;
+import com.breakout.core.GameObject;
 
-public class Paddle extends GameObject implements Controllable {
-    private static final double SPEED = 400;
-    private double screenWidth;
+/**
+ * Paddle - moves left and right.
+ */
+public class Paddle extends GameObject {
+    private double speed = 400; // Movement speed
     
-    public Paddle(double x, double y, double width, double height, double screenWidth) {
-    }
-    
-    @Override
-    public void moveLeft(double deltaTime) {
-    }
-    
-    @Override
-    public void moveRight(double deltaTime) {
-    }
-    
-    @Override
-    public void handleInput(boolean leftPressed, boolean rightPressed, double deltaTime) {
+    public Paddle(double x, double y) {
+        super(x, y, 100, 15); // Paddle size: 100x15 pixels
     }
     
     @Override
     public void update(double deltaTime) {
-        // Handled by input
     }
     
     @Override
     public void draw(Graphics2D g) {
+        g.setColor(Color.BLUE);
+        g.fillRect((int)x, (int)y, (int)width, (int)height);
     }
     
-    public void expand(double amount) {
+    public void moveLeft(double deltaTime, double screenWidth) {
+        x -= speed * deltaTime;
+        if (x < 0) x = 0; // Keep within screen bounds
+    }
+    
+    public void moveRight(double deltaTime, double screenWidth) {
+        x += speed * deltaTime;
+        if (x + width > screenWidth) {
+            x = screenWidth - width;
+        }
     }
 }
