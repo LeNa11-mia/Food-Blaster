@@ -21,7 +21,7 @@ public class Brick extends GameObject {
     @Override
     public void draw(Graphics2D g) {
         if (!destroyed) {
-            g.setColor(Color.RED);
+            g.setColor(Color.decode("#fecbc2"));
             g.fillRect((int)x, (int)y, (int)width, (int)height);
             g.setColor(Color.BLACK);
             g.drawRect((int)x, (int)y, (int)width, (int)height);

@@ -19,7 +19,7 @@ public class Paddle extends GameObject {
     
     @Override
     public void draw(Graphics2D g) {
-        g.setColor(Color.BLUE);
+        g.setColor(Color.decode("#B19CD8"));
         g.fillRect((int)x, (int)y, (int)width, (int)height);
     }
     
