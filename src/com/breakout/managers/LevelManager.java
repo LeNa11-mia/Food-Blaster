@@ -1,12 +1,12 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class Level {
+public class LevelManager {
     private final List<Brick> bricks = new ArrayList<>();
     private final int width;
     private final int height;
 
-    public Level(int width, int height, int[][] layout, int yOffset) {
+    public LevelManager(int width, int height, int[][] layout, int yOffset) {
         this.width = width;
         this.height = height;
         loadLayout(layout, yOffset);
