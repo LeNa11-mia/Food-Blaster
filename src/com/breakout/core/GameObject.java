@@ -1,5 +1,6 @@
 package com.breakout.core;
 
+import javax.swing.*;
 import java.awt.Graphics2D;
 
 /**
@@ -8,6 +9,7 @@ import java.awt.Graphics2D;
 public abstract class GameObject {
     protected double x, y;
     protected double width, height;
+    protected ImageIcon sprite; // Object sprite image
     
     public GameObject(double x, double y, double width, double height) {
         this.x = x;
@@ -20,8 +22,8 @@ public abstract class GameObject {
     public double getY() { return y; }
     public double getWidth() { return width; }
     public double getHeight() { return height; }
-    
-    public abstract void draw(Graphics2D g);
+    public ImageIcon getSprite() { return sprite; }
+
     public abstract void update(double deltaTime);
     
     // Simple collision detection
