@@ -3,6 +3,8 @@ package com.breakout.entities;
 import java.awt.*;
 import com.breakout.core.GameObject;
 
+import javax.swing.*;
+
 /**
  * Paddle - moves left and right.
  */
@@ -11,16 +13,11 @@ public class Paddle extends GameObject {
     
     public Paddle(double x, double y) {
         super(x, y, 100, 15); // Paddle size: 100x15 pixels
+        sprite = new ImageIcon("assets/paddle.png");
     }
     
     @Override
     public void update(double deltaTime) {
-    }
-    
-    @Override
-    public void draw(Graphics2D g) {
-        g.setColor(Color.decode("#B19CD8"));
-        g.fillRect((int)x, (int)y, (int)width, (int)height);
     }
     
     public void moveLeft(double deltaTime, double screenWidth) {
