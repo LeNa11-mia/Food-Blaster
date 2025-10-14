@@ -27,16 +27,7 @@ public class GameManager {
     }
 
     public void startGame() {
-        // Create level Easy bricks (temporary replace for Level class)
-        double brickWidth = Main.WIDTH / 10.0;
-        double brickHeight = 20;
-        for (int row = 0; row < 5; row++) {
-            for (int col = 0; col < 10; col++) {
-                double x = col * brickWidth;
-                double y = 50 + row * brickHeight;
-                bricks.add(new Brick(x, y, brickWidth - 2, brickHeight - 2));
-            }
-        }
+        bricks = Level.loadLevel(1);
     }
 
     public void update(double deltaTime, boolean leftPressed, boolean rightPressed) {
@@ -80,8 +71,6 @@ public class GameManager {
             }
         }
     }
-
-
 
     private void spawnRandomItem(double x, double y) {
     }
