@@ -16,6 +16,7 @@ public class GameManager {
     private Ball ball;
     private Paddle paddle;
     private List<Brick> bricks;
+    private Rectangle gameArea;
 
     private int score;
     private int lives;
@@ -25,7 +26,8 @@ public class GameManager {
 
     public GameManager() {
         // Initialize game objects
-        ball = new Ball(Main.WIDTH/2, Main.HEIGHT/2);
+        gameArea = new Rectangle(0, 0, Main.WIDTH-15, Main.HEIGHT);
+        ball = new Ball(Main.WIDTH/2, Main.HEIGHT/2, gameArea);
         paddle = new Paddle(Main.WIDTH/2 - 50, Main.HEIGHT - 50);
         bricks = new ArrayList<>();
         lives = 1; // Only 1 life as per your requirement
@@ -69,16 +71,6 @@ public class GameManager {
             paddle.moveRight(deltaTime, Main.WIDTH);
         }
 
-        // Ball hits left/right walls
-        if (ball.getX() <= 0 || ball.getX() + ball.getWidth() >= Main.WIDTH) {
-            ball.bounceX();
-        }
-
-        // Ball hits top wall
-        if (ball.getY() <= 0) {
-            ball.bounceY();
-        }
-
         // Ball falls below bottom border - GAME OVER
         if (ball.getY() > Main.HEIGHT) {
             lives--;
@@ -117,7 +109,7 @@ public class GameManager {
     }
 
     private void resetBall() {
-        ball = new Ball(Main.WIDTH/2, Main.HEIGHT/2);
+        ball = new Ball(Main.WIDTH/2, Main.HEIGHT/2, gameArea);
     }
 
     private void resetPaddle() {

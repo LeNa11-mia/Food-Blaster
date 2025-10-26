@@ -13,7 +13,7 @@ public class GameplayPanel extends GUIPanel {
     public GameplayPanel(GameManager gm) {
         this.gm = gm;
         setPreferredSize(new Dimension(Main.WIDTH, Main.HEIGHT));
-        setBackground(Color.BLACK);
+        setBackground(new Color(225,220,220));
     }
 
     private void draw(GameObject obj, Graphics2D g2d) {
