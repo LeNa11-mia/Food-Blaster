@@ -94,6 +94,7 @@ public class Game {
                 gui.showMenuScreen(frame);
                 break;
             case PLAYING:
+                keyListener.resetKeys();
                 gui.showGameplayPanel(frame);
                 break;
             case WIN:

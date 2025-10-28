@@ -46,6 +46,11 @@ public class GameKeyListener implements KeyListener {
     @Override
     public void keyTyped(KeyEvent e) {}
 
+    public void resetKeys() {
+        leftPressed = false;
+        rightPressed = false;
+    }
+
     public boolean isLeftPressed() {
         return leftPressed;
     }
