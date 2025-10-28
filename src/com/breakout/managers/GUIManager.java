@@ -4,6 +4,9 @@ import com.breakout.Game;
 import com.breakout.gui.*;
 
 import javax.swing.*;
+import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * GUI manager
@@ -19,6 +22,12 @@ public class GUIManager {
         menuPanel = new MenuPanel(game);
         winPanel = new WinPanel(game);
         gameOverPanel = new GameOverPanel(game);
+    }
+
+    public void resetButton(Map<JButton, Color> originalColors) {
+        for (JButton btn : originalColors.keySet()) {
+            btn.setBackground(originalColors.get(btn));
+        }
     }
 
     private void showGUIPanel(JFrame frame, GUIPanel panel) {

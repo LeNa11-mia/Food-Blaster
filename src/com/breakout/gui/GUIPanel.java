@@ -5,8 +5,15 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class GUIPanel extends JPanel {
+    public static Map<JButton, Color> originalColors = new HashMap<>();
+
+    public void addButton(JButton button) {
+        originalColors.put(button, button.getBackground());
+    }
 
     public GUIPanel() {}
 

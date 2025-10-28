@@ -70,6 +70,7 @@ public class GameOverPanel extends GUIPanel {
     private void addButtons(Game game, JPanel centerPanel) {
         // Restart button
         JButton restartBtn = createButton("RESTART", Color.decode("#8B0000")); // Dark red
+        addButton(restartBtn);
         restartBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         restartBtn.setMaximumSize(new Dimension(300, 50));
         restartBtn.addActionListener(e -> {
@@ -82,6 +83,7 @@ public class GameOverPanel extends GUIPanel {
 
         // Menu button
         JButton menuBtn = createButton("MAIN MENU", Color.decode("#A0522D")); // Sienna
+        addButton(menuBtn);
         menuBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         menuBtn.setMaximumSize(new Dimension(300, 50));
         menuBtn.addActionListener(e -> game.changeState(GameState.MENU));
