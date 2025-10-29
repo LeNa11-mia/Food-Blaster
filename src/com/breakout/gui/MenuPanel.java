@@ -6,6 +6,8 @@ import com.breakout.managers.GameState;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MenuPanel extends GUIPanel {
 
@@ -42,10 +44,15 @@ public class MenuPanel extends GUIPanel {
 
         // Create buttons with different colors
         JButton easyBtn = createButton("EASY", Color.decode("#F8C8DC"));
+        addButton(easyBtn);
         JButton mediumBtn = createButton("MEDIUM", Color.decode("#FFC0CB"));
+        addButton(mediumBtn);
         JButton hardBtn = createButton("HARD", Color.decode("#FAA0A0"));
+        addButton(hardBtn);
         JButton bossBtn = createButton("BOSS FIGHTS", Color.decode("#F89880"));
+        addButton(bossBtn);
         JButton exitBtn = createButton("EXIT", Color.decode("#D8BFD8"));
+        addButton(exitBtn);
 
         // Add action listeners
         easyBtn.addActionListener(e -> {

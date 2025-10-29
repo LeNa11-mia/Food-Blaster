@@ -86,6 +86,7 @@ public class WinPanel extends GUIPanel {
 
         // Restart button
         JButton restartBtn = createButton("RESTART", Color.decode("#6B8E23")); // Olive drab
+        addButton(restartBtn);
         restartBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         restartBtn.setMaximumSize(new Dimension(300, 50));
         restartBtn.addActionListener(e -> {
@@ -98,6 +99,7 @@ public class WinPanel extends GUIPanel {
 
         // Menu button
         JButton menuBtn = createButton("MAIN MENU", Color.decode("#8B7355")); // Burlywood
+        addButton(menuBtn);
         menuBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         menuBtn.setMaximumSize(new Dimension(300, 50));
         menuBtn.addActionListener(e -> game.changeState(GameState.MENU));

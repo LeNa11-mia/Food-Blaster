@@ -1,6 +1,8 @@
 package com.breakout;
 
+import com.breakout.gui.GUIPanel;
 import com.breakout.gui.GameplayPanel;
+import com.breakout.gui.MenuPanel;
 import com.breakout.listeners.GameKeyListener;
 import com.breakout.managers.*;
 
@@ -91,6 +93,7 @@ public class Game {
         this.state = state;
         switch (state) {
             case MENU:
+                gui.resetButton(GUIPanel.originalColors);
                 gui.showMenuScreen(frame);
                 break;
             case PLAYING:
@@ -98,9 +101,11 @@ public class Game {
                 gui.showGameplayPanel(frame);
                 break;
             case WIN:
+                gui.resetButton(GUIPanel.originalColors);
                 gui.showWinScreen(frame);
                 break;
             case GAMEOVER:
+                gui.resetButton(GUIPanel.originalColors);
                 gui.showGameOverScreen(frame);
                 break;
         }

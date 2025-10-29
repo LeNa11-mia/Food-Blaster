@@ -1,3 +1,17 @@
-# Java build files
-/bin/
-*.class
+# Thư mục IDE
+.idea/
+*.iml
+
+# Thư mục build
+/out/
+target/
+
+# File log
+*.log
+
+# File hệ điều hành
+.DS_Store
+Thumbs.db
+
+# File tạm
+*.tmp
