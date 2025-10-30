@@ -1,6 +1,9 @@
 package com.breakout.managers;
 
-import com.breakout.entities.*;
+import com.breakout.entities.bricks.Brick;
+import com.breakout.entities.bricks.ExplosiveBrick;
+import com.breakout.entities.bricks.FallingBrick;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +36,9 @@ public class Level extends LevelData {
                 }
                 else if (type == 2) {
                     b = new ExplosiveBrick(x, y, bricks, 1);
+                }
+                else if (type == 3) {
+                    b = new FallingBrick(x, y);
                 }
                 if (b != null) bricks.add(b);
             }

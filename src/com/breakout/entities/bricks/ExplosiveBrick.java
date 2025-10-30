@@ -1,7 +1,6 @@
-package com.breakout.entities;
+package com.breakout.entities.bricks;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.List;
 
 public class ExplosiveBrick extends Brick {
@@ -15,9 +14,7 @@ public class ExplosiveBrick extends Brick {
         sprite = new ImageIcon("assets/explosiveBrick.png");
     }
 
-    @Override
-    public void hit() {
-        super.hit();
+    public void onDestroyed() {
         explode();
     }
 
