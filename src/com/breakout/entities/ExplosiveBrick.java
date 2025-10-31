@@ -1,18 +1,18 @@
 package com.breakout.entities;
 
-import javax.swing.*;
-import java.awt.*;
+import com.breakout.config.GameConfig;
+
 import java.util.List;
 
 public class ExplosiveBrick extends Brick {
     private final int explosionRadius;    //explosion radius by bricks
     private List<Brick> bricks;
 
-    public ExplosiveBrick(double x, double y, List<Brick> bricks, int explosionRadius) {
+    public ExplosiveBrick(double x, double y, List<Brick> bricks) {
         super(x, y);
         this.bricks = bricks;
-        this.explosionRadius = explosionRadius;
-        sprite = new ImageIcon("assets/explosiveBrick.png");
+        this.explosionRadius = GameConfig.EXPLOSION_RADIUS;
+        sprite = GameConfig.EXPLOSIVE_BRICK_IMAGE;
     }
 
     @Override
@@ -39,7 +39,7 @@ public class ExplosiveBrick extends Brick {
             double dy = Math.abs(b.getY() - cy);
 
             // If b in explosion radius (radius * brick's width or length)
-            if (dx <= explosionRadius * Brick.WIDTH && dy <= explosionRadius * Brick.HEIGHT) {
+            if (dx <= explosionRadius * GameConfig.BRICK_WIDTH && dy <= explosionRadius * GameConfig.BRICK_HEIGHT) {
                 b.hit();
             }
         }

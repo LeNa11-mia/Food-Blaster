@@ -1,11 +1,10 @@
 package com.breakout.managers;
 
 import com.breakout.Game;
-import com.breakout.Main;
+import com.breakout.config.Defs;
+import com.breakout.config.GameConfig;
 import com.breakout.entities.*;
 
-import javax.swing.*;
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 
@@ -19,29 +18,22 @@ public class GameManager {
 
     private int score;
     private int lives;
-    private String currentDifficulty = "EASY";
+    private int currentDifficulty;
     private boolean laserEnabled;
     private boolean gameOver;
 
     public GameManager() {
         // Initialize game objects
-        ball = new Ball(Main.WIDTH/2, Main.HEIGHT/2);
-        paddle = new Paddle(Main.WIDTH/2 - 50, Main.HEIGHT - 50);
+        ball = new Ball(GameConfig.SCREEN_WIDTH/2.0, GameConfig.SCREEN_HEIGHT/2.0);
+        paddle = new Paddle(GameConfig.SCREEN_WIDTH/2.0 - 50, GameConfig.SCREEN_HEIGHT - 50);
         bricks = new ArrayList<>();
         lives = 1; // Only 1 life as per your requirement
         gameOver = false;
     }
 
-    public void startGame(String difficulty) {
-        if (difficulty.equals("EASY")) {
-            bricks = Level.loadLevel(1);
-        } else if (difficulty.equals("MEDIUM")) {
-            bricks = Level.loadLevel(2);
-        } else if (difficulty.equals("HARD")) {
-            bricks = Level.loadLevel(3);
-        } else if (difficulty.equals("BOSS")) {
-            bricks = Level.loadLevel(3);
-        }
+    public void startGame(int difficulty) {
+        currentDifficulty = difficulty;
+        bricks = Level.loadLevel(difficulty);
         resetBall();
         resetPaddle();
         lives = 1;
@@ -51,10 +43,10 @@ public class GameManager {
 
     public void update(Game game, double deltaTime, boolean leftPressed, boolean rightPressed) {
         if (isGameOver()) {
-            game.changeState(GameState.GAMEOVER);
+            game.changeState(Defs.STATE_GAMEOVER);
             return; // Don't update if game is over
         } else if (isWin()) {
-            game.changeState(GameState.WIN);
+            game.changeState(Defs.STATE_WIN);
             return;
         }
 
@@ -63,14 +55,14 @@ public class GameManager {
 
         // Control paddle
         if (leftPressed) {
-            paddle.moveLeft(deltaTime, Main.WIDTH);
+            paddle.moveLeft(deltaTime, GameConfig.SCREEN_WIDTH);
         }
         if (rightPressed) {
-            paddle.moveRight(deltaTime, Main.WIDTH);
+            paddle.moveRight(deltaTime, GameConfig.SCREEN_WIDTH);
         }
 
         // Ball hits left/right walls
-        if (ball.getX() <= 0 || ball.getX() + ball.getWidth() >= Main.WIDTH) {
+        if (ball.getX() <= 0 || ball.getX() + ball.getWidth() >= GameConfig.SCREEN_WIDTH) {
             ball.bounceX();
         }
 
@@ -80,7 +72,7 @@ public class GameManager {
         }
 
         // Ball falls below bottom border - GAME OVER
-        if (ball.getY() > Main.HEIGHT) {
+        if (ball.getY() > GameConfig.SCREEN_HEIGHT) {
             lives--;
             if (lives <= 0) {
                 gameOver = true;
@@ -106,22 +98,19 @@ public class GameManager {
         }
     }
 
-    public String getNextDifficulty() {
-        switch (currentDifficulty) {
-            case "EASY": return "MEDIUM";
-            case "MEDIUM": return "HARD";
-            case "HARD": return "BOSS";
-            case "BOSS": return null;
-            default: return null;
+    public int getNextDifficulty() {
+        if (currentDifficulty < Defs.LEVEL_BOSS) {
+            currentDifficulty++;
         }
+        return currentDifficulty;
     }
 
     private void resetBall() {
-        ball = new Ball(Main.WIDTH/2, Main.HEIGHT/2);
+        ball = new Ball(GameConfig.SCREEN_WIDTH/2.0, GameConfig.SCREEN_HEIGHT/2.0);
     }
 
     private void resetPaddle() {
-        paddle = new Paddle(Main.WIDTH/2 - 50, Main.HEIGHT - 50);
+        paddle = new Paddle(GameConfig.SCREEN_WIDTH/2.0 - 50, GameConfig.SCREEN_HEIGHT - 50);
     }
 
     private void spawnRandomItem(double x, double y) {
@@ -148,12 +137,22 @@ public class GameManager {
         return true;
     }
 
+    public String getDifficultyName() {
+        switch (currentDifficulty) {
+            case Defs.LEVEL_EASY: return "EASY";
+            case Defs.LEVEL_MEDIUM: return "MEDIUM";
+            case Defs.LEVEL_HARD: return "HARD";
+            case Defs.LEVEL_BOSS: return "BOSS";
+            default: return null;
+        }
+    }
+
     // Getters
     public Ball getBall() { return ball; }
     public Paddle getPaddle() { return paddle; }
     public List<Brick> getBricks() { return bricks; }
     public int getScore() { return score; }
     public int getLives() { return lives; }
-    public String getDifficulty() { return currentDifficulty; }
+    public int getCurrentDifficulty() { return currentDifficulty; }
     public boolean isGameOver() { return gameOver; }
 }

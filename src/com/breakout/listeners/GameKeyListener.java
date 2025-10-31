@@ -1,8 +1,7 @@
 package com.breakout.listeners;
 
 import com.breakout.Game;
-import com.breakout.managers.GUIManager;
-import com.breakout.managers.GameState;
+import com.breakout.config.Defs;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -20,7 +19,7 @@ public class GameKeyListener implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
-        if (game.getState() == GameState.PLAYING) {
+        if (game.getState() == Defs.STATE_PLAYING) {
             if (key == KeyEvent.VK_LEFT || key == KeyEvent.VK_A) {
                 leftPressed = true;
             }
@@ -33,7 +32,7 @@ public class GameKeyListener implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode();
-        if (game.getState() == GameState.PLAYING) {
+        if (game.getState() == Defs.STATE_PLAYING) {
             if (key == KeyEvent.VK_LEFT || key == KeyEvent.VK_A) {
                 leftPressed = false;
             }
