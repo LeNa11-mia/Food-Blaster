@@ -17,9 +17,9 @@ public abstract class GUIPanel extends JPanel {
 
     public GUIPanel() {}
 
-    public GUIPanel(String backgroundColor) {
+    public GUIPanel(Color backgroundColor) {
         setLayout(new BorderLayout());
-        setBackground(Color.decode(backgroundColor));
+        setBackground(backgroundColor);
     }
 
     protected JButton createButton(String text, Color color) {

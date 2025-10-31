@@ -1,8 +1,8 @@
 package com.breakout.gui;
 
 import com.breakout.Game;
+import com.breakout.config.Defs;
 import com.breakout.managers.GameManager;
-import com.breakout.managers.GameState;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,7 +10,7 @@ import java.awt.*;
 public class WinPanel extends GUIPanel {
 
     public WinPanel(Game game) {
-        super("#2D5016"); // Dark green
+        super(Color.decode("#2D5016")); // Dark green
 
         // Center content
         JPanel centerPanel = new JPanel();
@@ -51,7 +51,7 @@ public class WinPanel extends GUIPanel {
 
         // Difficulty display
         JLabel difficultyLabel = createLabel(
-                "Difficulty: " + gm.getDifficulty(),
+                "Difficulty: " + gm.getDifficultyName(),
                 Color.WHITE,
                 new Font("Arial", Font.PLAIN, 18)
         );
@@ -70,14 +70,14 @@ public class WinPanel extends GUIPanel {
     private void addButtons(Game game, JPanel centerPanel) {
         GameManager gm = game.getGm();
         // Next level button
-        String nextLevel = game.getGm().getNextDifficulty();
-        if (nextLevel != null) {
+        int nextLevel = game.getGm().getNextDifficulty();
+        if (nextLevel > 0) {
             JButton nextBtn = createButton("NEXT LEVEL", Color.decode("#228B22")); // Forest green
             nextBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
             nextBtn.setMaximumSize(new Dimension(300, 50));
             nextBtn.addActionListener(e -> {
                 gm.startGame(gm.getNextDifficulty());
-                game.changeState(GameState.PLAYING);
+                game.changeState(Defs.STATE_PLAYING);
 
             });
             centerPanel.add(nextBtn);
@@ -90,8 +90,8 @@ public class WinPanel extends GUIPanel {
         restartBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         restartBtn.setMaximumSize(new Dimension(300, 50));
         restartBtn.addActionListener(e -> {
-            gm.startGame(gm.getDifficulty());
-            game.changeState(GameState.PLAYING);
+            gm.startGame(gm.getCurrentDifficulty());
+            game.changeState(Defs.STATE_PLAYING);
         });
         centerPanel.add(restartBtn);
 
@@ -102,7 +102,7 @@ public class WinPanel extends GUIPanel {
         addButton(menuBtn);
         menuBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         menuBtn.setMaximumSize(new Dimension(300, 50));
-        menuBtn.addActionListener(e -> game.changeState(GameState.MENU));
+        menuBtn.addActionListener(e -> game.changeState(Defs.STATE_MENU));
         centerPanel.add(menuBtn);
     }
 }

@@ -1,8 +1,8 @@
 package com.breakout.gui;
 
 import com.breakout.Game;
+import com.breakout.config.Defs;
 import com.breakout.managers.GameManager;
-import com.breakout.managers.GameState;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,7 +10,7 @@ import java.awt.*;
 public class GameOverPanel extends GUIPanel {
 
     public GameOverPanel(Game game) {
-        super("#722F37"); // Cherry wine red
+        super(Color.decode("#722F37")); // Cherry wine red
 
         // Center content
         JPanel centerPanel = new JPanel();
@@ -51,7 +51,7 @@ public class GameOverPanel extends GUIPanel {
 
         // Difficulty display
         JLabel difficultyLabel = createLabel(
-                "Difficulty: " + gm.getDifficulty(),
+                "Difficulty: " + gm.getDifficultyName(),
                 Color.WHITE,
                 new Font("Arial", Font.PLAIN, 18)
         );
@@ -74,8 +74,8 @@ public class GameOverPanel extends GUIPanel {
         restartBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         restartBtn.setMaximumSize(new Dimension(300, 50));
         restartBtn.addActionListener(e -> {
-            game.changeState(GameState.PLAYING);
-            game.getGm().startGame(game.getGm().getDifficulty());
+            game.changeState(Defs.STATE_PLAYING);
+            game.getGm().startGame(game.getGm().getCurrentDifficulty());
         });
         centerPanel.add(restartBtn);
 
@@ -86,7 +86,7 @@ public class GameOverPanel extends GUIPanel {
         addButton(menuBtn);
         menuBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         menuBtn.setMaximumSize(new Dimension(300, 50));
-        menuBtn.addActionListener(e -> game.changeState(GameState.MENU));
+        menuBtn.addActionListener(e -> game.changeState(Defs.STATE_MENU));
         centerPanel.add(menuBtn);
     }
 }

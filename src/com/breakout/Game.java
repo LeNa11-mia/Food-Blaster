@@ -1,8 +1,7 @@
 package com.breakout;
 
+import com.breakout.config.Defs;
 import com.breakout.gui.GUIPanel;
-import com.breakout.gui.GameplayPanel;
-import com.breakout.gui.MenuPanel;
 import com.breakout.listeners.GameKeyListener;
 import com.breakout.managers.*;
 
@@ -19,7 +18,7 @@ public class Game {
     private GameKeyListener keyListener;
 
     // Game state
-    private GameState state;
+    private int state;
     private Thread gameThread;
     private boolean running;
 
@@ -27,11 +26,11 @@ public class Game {
     private long lastTime;
 
     public Game(JFrame frame) {
+        state = Defs.STATE_LOADING;
         this.frame = frame;
         gm = new GameManager();
         gui = new GUIManager(this);
         keyListener = new GameKeyListener(this);
-        state = null;
         gui.getGameplayPanel().addKeyListener(keyListener); // Only gameplay panel get keyboard input
     }
 
@@ -63,7 +62,7 @@ public class Game {
         lastTime = System.nanoTime();
         running = true;
 
-        changeState(GameState.MENU);
+        changeState(Defs.STATE_MENU);
 
         // Start game loop
         startGameLoop();
@@ -77,34 +76,34 @@ public class Game {
         double deltaTime = (currentTime - lastTime) / 1_000_000_000.0;
         lastTime = currentTime;
 
-        if (state == GameState.PLAYING) {
+        if (state == Defs.STATE_PLAYING) {
             gm.update(this, deltaTime, keyListener.isLeftPressed(), keyListener.isRightPressed());
             gui.getGameplayPanel().repaint();
         }
     }
 
-    public GameState getState() {
+    public int getState() {
         return state;
     }
 
-    public void changeState(GameState state) {
+    public void changeState(int state) {
         if (this.state == state) return;
 
         this.state = state;
         switch (state) {
-            case MENU:
+            case Defs.STATE_MENU:
                 gui.resetButton(GUIPanel.originalColors);
                 gui.showMenuScreen(frame);
                 break;
-            case PLAYING:
+            case Defs.STATE_PLAYING:
                 keyListener.resetKeys();
                 gui.showGameplayPanel(frame);
                 break;
-            case WIN:
+            case Defs.STATE_WIN:
                 gui.resetButton(GUIPanel.originalColors);
                 gui.showWinScreen(frame);
                 break;
-            case GAMEOVER:
+            case Defs.STATE_GAMEOVER:
                 gui.resetButton(GUIPanel.originalColors);
                 gui.showGameOverScreen(frame);
                 break;

@@ -1,20 +1,17 @@
 package com.breakout.entities;
 
+import com.breakout.config.GameConfig;
 import com.breakout.core.GameObject;
-
-import javax.swing.*;
 
 /**
  * Brick - can be drawn and destroyed.
  */
 public class Brick extends GameObject {
     private boolean destroyed = false;
-    public static final int WIDTH = 80;
-    public static final int HEIGHT = 20;
     
     public Brick(double x, double y) {
-        super(x, y, WIDTH, HEIGHT);
-        sprite = new ImageIcon("assets/brick.png");
+        super(x, y, GameConfig.BRICK_WIDTH, GameConfig.BRICK_HEIGHT);
+        sprite = GameConfig.NORMAL_BRICK_IMAGE;
     }
     
     @Override

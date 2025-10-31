@@ -1,20 +1,18 @@
 package com.breakout.entities;
 
-import java.awt.*;
+import com.breakout.config.GameConfig;
 import com.breakout.core.GameObject;
-
-import javax.swing.*;
 
 /**
  * Ball - handles movement and rendering.
  */
 public class Ball extends GameObject {
-    private double vx = 200; // X velocity
-    private double vy = 200; // Y velocity
+    private double vx = GameConfig.BALL_SPEED; // X velocity
+    private double vy = GameConfig.BALL_SPEED; // Y velocity
     
     public Ball(double x, double y) {
-        super(x, y, 15, 15); // Ball size: 15x15 pixels
-        sprite = new ImageIcon("assets/ball.png");
+        super(x, y, GameConfig.BALL_WIDTH, GameConfig.BALL_HEIGHT); // Ball size: 15x15 pixels
+        sprite = GameConfig.BALL_IMAGE;
     }
     
     @Override
