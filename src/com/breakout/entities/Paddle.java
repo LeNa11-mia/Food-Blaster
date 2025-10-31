@@ -13,6 +13,14 @@ public class Paddle extends GameObject {
         super(x, y, GameConfig.PADDLE_WIDTH, GameConfig.PADDLE_HEIGHT); // Paddle size: 100x15 pixels
         sprite = GameConfig.PADDLE_IMAGE;
     }
+
+    public double getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
     
     @Override
     public void update(double deltaTime) {

@@ -4,6 +4,7 @@ import com.breakout.Game;
 import com.breakout.config.Defs;
 import com.breakout.config.GameConfig;
 import com.breakout.entities.*;
+import com.breakout.items.Item;
 
 import java.util.*;
 import java.util.List;
@@ -15,6 +16,7 @@ public class GameManager {
     private Ball ball;
     private Paddle paddle;
     private List<Brick> bricks;
+    private List<Item> activeItems;
 
     private int score;
     private int lives;
@@ -27,8 +29,17 @@ public class GameManager {
         ball = new Ball(GameConfig.SCREEN_WIDTH/2.0, GameConfig.SCREEN_HEIGHT/2.0);
         paddle = new Paddle(GameConfig.SCREEN_WIDTH/2.0 - 50, GameConfig.SCREEN_HEIGHT - 50);
         bricks = new ArrayList<>();
+        activeItems = new ArrayList<>();
         lives = 1; // Only 1 life as per your requirement
         gameOver = false;
+    }
+
+    public void addItem(Item item) {
+        this.activeItems.add(item);
+    }
+
+    public List<Item> getActiveItems() {
+        return activeItems;
     }
 
     public void startGame(int difficulty) {
