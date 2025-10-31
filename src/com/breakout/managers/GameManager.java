@@ -92,10 +92,18 @@ public class GameManager {
             if (!brick.isDestroyed() && ball.intersects(brick)) {
                 brick.hit();
                 ball.bounceY();
-                score += 1;
                 break; // Only destroy one brick per collision
             }
         }
+
+        // Update score
+        int destroyedCount = 0;
+        for (Brick brick : bricks) {
+            if (brick.isDestroyed()) {
+                destroyedCount++;
+            }
+        }
+        this.score = destroyedCount;
     }
 
     public int getNextDifficulty() {
