@@ -8,6 +8,8 @@ import javax.swing.*;
 import java.awt.*;
 
 public class WinPanel extends GUIPanel {
+    private JLabel scoreLabel;
+    private JLabel difficultyLabel;
 
     public WinPanel(Game game) {
         super(Color.decode("#2D5016")); // Dark green
@@ -40,7 +42,7 @@ public class WinPanel extends GUIPanel {
         add(titleLabel, BorderLayout.NORTH);
 
         // Score display
-        JLabel scoreLabel = createLabel(
+        scoreLabel = createLabel(
                 "Score: " + (gm != null ? gm.getScore() : 0),
                 Color.WHITE,
                 new Font("Arial", Font.BOLD, 24)
@@ -50,7 +52,7 @@ public class WinPanel extends GUIPanel {
         centerPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
         // Difficulty display
-        JLabel difficultyLabel = createLabel(
+        difficultyLabel = createLabel(
                 "Difficulty: " + gm.getDifficultyName(),
                 Color.WHITE,
                 new Font("Arial", Font.PLAIN, 18)
@@ -65,6 +67,15 @@ public class WinPanel extends GUIPanel {
                 BorderFactory.createEmptyBorder(20, 0, 20, 0)
         );
         add(instructionLabel, BorderLayout.SOUTH);
+    }
+
+    public void updateScore(int finalScore, String difficultyName) {
+        if (scoreLabel != null) {
+            scoreLabel.setText("Score: " + finalScore);
+        }
+        if (difficultyLabel != null) {
+            difficultyLabel.setText("Difficulty: " + difficultyName);
+        }
     }
 
     private void addButtons(Game game, JPanel centerPanel) {
