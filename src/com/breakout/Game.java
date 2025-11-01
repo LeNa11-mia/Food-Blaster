@@ -32,7 +32,11 @@ public class Game {
         gui = new GUIManager(this);
         keyListener = new GameKeyListener(this);
         state = null;
-        gui.getGameplayPanel().addKeyListener(keyListener); // Only gameplay panel get keyboard input
+        // Thêm KeyListener cho GameplayPanel
+        gui.getGameplayPanel().addKeyListener(keyListener);
+
+        // THÊM DÒNG NÀY - KeyListener cho SettingPanel
+        gui.getSettingPanel().addKeyListener(keyListener);
     }
 
     private void startGameLoop() {
@@ -90,22 +94,28 @@ public class Game {
     public void changeState(GameState state) {
         if (this.state == state) return;
 
+        if (state == GameState.SETTING && this.state != null) {
+            gui.setPreviousState(this.state);
+        }
+
         this.state = state;
         switch (state) {
             case MENU:
-                gui.resetButton(GUIPanel.originalColors);
                 gui.showMenuScreen(frame);
                 break;
             case PLAYING:
-                keyListener.resetKeys();
                 gui.showGameplayPanel(frame);
                 break;
+            case GAME_MODES:  // THÊM CASE NÀY
+                gui.showGameModesScreen(frame);
+                break;
+            case SETTING:
+                gui.showSettingsScreen(frame);
+                break;
             case WIN:
-                gui.resetButton(GUIPanel.originalColors);
                 gui.showWinScreen(frame);
                 break;
             case GAMEOVER:
-                gui.resetButton(GUIPanel.originalColors);
                 gui.showGameOverScreen(frame);
                 break;
         }

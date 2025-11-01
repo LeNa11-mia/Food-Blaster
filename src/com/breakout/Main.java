@@ -7,8 +7,8 @@ import javax.swing.*;
  */
 public class Main {
     // Screen dimensions
-    public static final int WIDTH = 800;
-    public static final int HEIGHT = 600;
+    public static final int WIDTH = 600;
+    public static final int HEIGHT = 800;
 
     public static void main(String[] args) {
         // Schedules code to run later on the Event Dispatch Thread (EDT).
