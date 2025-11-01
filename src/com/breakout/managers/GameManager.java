@@ -4,7 +4,9 @@ import com.breakout.Game;
 import com.breakout.config.Defs;
 import com.breakout.config.GameConfig;
 import com.breakout.entities.*;
-import com.breakout.items.Item;
+import com.breakout.entities.bricks.Brick;
+import com.breakout.entities.bricks.FallingBrick;
+import com.breakout.entities.items.Item;
 
 import java.util.*;
 import java.util.List;
@@ -22,7 +24,6 @@ public class GameManager {
     private int lives;
     private int currentDifficulty;
     private boolean laserEnabled;
-    private boolean gameOver;
 
     public GameManager() {
         // Initialize game objects
@@ -31,7 +32,6 @@ public class GameManager {
         bricks = new ArrayList<>();
         activeItems = new ArrayList<>();
         lives = 1; // Only 1 life as per your requirement
-        gameOver = false;
     }
 
     public void addItem(Item item) {
@@ -49,7 +49,6 @@ public class GameManager {
         resetPaddle();
         lives = 1;
         score = 0;
-        gameOver = false;
     }
 
     public void update(Game game, double deltaTime, boolean leftPressed, boolean rightPressed) {
@@ -63,6 +62,14 @@ public class GameManager {
 
         // Update ball
         ball.update(deltaTime);
+        for (Brick brick : bricks) {
+            if (brick instanceof FallingBrick) {
+                brick.update(deltaTime);
+                if (paddle.intersects(brick)) {
+                    lives--;
+                }
+            }
+        }
 
         // Control paddle
         if (leftPressed) {
@@ -85,9 +92,7 @@ public class GameManager {
         // Ball falls below bottom border - GAME OVER
         if (ball.getY() > GameConfig.SCREEN_HEIGHT) {
             lives--;
-            if (lives <= 0) {
-                gameOver = true;
-            } else {
+            if (!isGameOver()) {
                 // Reset ball if still have lives (though you have only 1 life)
                 resetBall();
             }
@@ -172,6 +177,6 @@ public class GameManager {
     public List<Brick> getBricks() { return bricks; }
     public int getScore() { return score; }
     public int getLives() { return lives; }
+    public boolean isGameOver() { return lives <= 0; }
     public int getCurrentDifficulty() { return currentDifficulty; }
-    public boolean isGameOver() { return gameOver; }
 }

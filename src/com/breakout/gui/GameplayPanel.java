@@ -2,7 +2,7 @@ package com.breakout.gui;
 
 import com.breakout.config.GameConfig;
 import com.breakout.core.GameObject;
-import com.breakout.entities.*;
+import com.breakout.entities.bricks.Brick;
 import com.breakout.managers.GameManager;
 
 import java.awt.*;

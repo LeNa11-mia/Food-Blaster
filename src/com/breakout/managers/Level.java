@@ -3,6 +3,10 @@ package com.breakout.managers;
 import com.breakout.config.Defs;
 import com.breakout.config.GameConfig;
 import com.breakout.entities.*;
+import com.breakout.entities.bricks.Brick;
+import com.breakout.entities.bricks.ExplosiveBrick;
+import com.breakout.entities.bricks.FallingBrick;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +40,9 @@ public class Level extends LevelData {
                 }
                 else if (type == Defs.EXPLOSIVE_BRICK) {
                     b = new ExplosiveBrick(x, y, bricks);
+                }
+                else if (type == 3) {
+                    b = new FallingBrick(x, y);
                 }
                 if (b != null) bricks.add(b);
             }

@@ -1,4 +1,4 @@
-package com.breakout.entities;
+package com.breakout.entities.bricks;
 
 import com.breakout.config.GameConfig;
 
@@ -16,8 +16,7 @@ public class ExplosiveBrick extends Brick {
     }
 
     @Override
-    public void hit() {
-        super.hit();
+    public void onDestroyed() {
         explode();
     }
 

@@ -30,6 +30,9 @@ public class GameConfig {
     public static final int EXPLOSION_RADIUS = 1;    //explosion radius by bricks
     public static final ImageIcon EXPLOSIVE_BRICK_IMAGE = new ImageIcon("assets/explosiveBrick.png");
 
+    public static final double GRAVITY = 980; // Bricks fall faster over time
+    public static final ImageIcon FALLING_BRICK_IMAGE =  new ImageIcon("assets/rottenCake.png");
+
     public static final double ITEM_FALLING_SPEED = 150;
     public static final ImageIcon ITEM_BRICK_IMAGE = new ImageIcon("assets/chocolateCake.png");
 
