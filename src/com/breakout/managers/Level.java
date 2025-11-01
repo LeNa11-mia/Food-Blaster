@@ -1,5 +1,8 @@
 package com.breakout.managers;
 
+import com.breakout.config.Defs;
+import com.breakout.config.GameConfig;
+import com.breakout.entities.*;
 import com.breakout.entities.bricks.Brick;
 import com.breakout.entities.bricks.ExplosiveBrick;
 import com.breakout.entities.bricks.FallingBrick;
@@ -10,9 +13,10 @@ import java.util.List;
 public class Level extends LevelData {
     public static List<Brick> loadLevel(int id) {
         switch (id) {
-            case 1: return createLevel(LevelData.level1);
-            case 2: return createLevel(LevelData.level2);
-            case 3: return createLevel(LevelData.level3);
+            case Defs.LEVEL_EASY: return createLevel(LevelData.level1);
+            case Defs.LEVEL_MEDIUM: return createLevel(LevelData.level2);
+            case Defs.LEVEL_HARD: return createLevel(LevelData.level3);
+            case Defs.LEVEL_BOSS: return createLevel(LevelData.level3);
             default: return new ArrayList<>();
         }
     }
@@ -27,15 +31,15 @@ public class Level extends LevelData {
         for (int row = 0; row < layout.length; row++) {
             for (int col = 0; col < layout[row].length; col++) {
                 int type = layout[row][col];
-                double x = col * Brick.WIDTH;
-                double y = 50 + row * Brick.HEIGHT;
+                double x = col * GameConfig.BRICK_WIDTH;
+                double y = 50 + row * GameConfig.BRICK_HEIGHT;
 
                 Brick b = null;
-                if (type == 1) {
+                if (type == Defs.NORMAL_BRICK) {
                     b = new Brick(x, y);
                 }
-                else if (type == 2) {
-                    b = new ExplosiveBrick(x, y, bricks, 1);
+                else if (type == Defs.EXPLOSIVE_BRICK) {
+                    b = new ExplosiveBrick(x, y, bricks);
                 }
                 else if (type == 3) {
                     b = new FallingBrick(x, y);

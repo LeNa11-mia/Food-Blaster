@@ -1,18 +1,15 @@
 package com.breakout.gui;
 
 import com.breakout.Game;
-import com.breakout.managers.GameManager;
-import com.breakout.managers.GameState;
+import com.breakout.config.Defs;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
 
 public class MenuPanel extends GUIPanel {
 
     public MenuPanel(Game game) {
-        super("#F3CFC6");
+        super(Color.decode("#F3CFC6"));
 
         // Title
         JLabel titleLabel = createBorderedLabel(
@@ -56,20 +53,20 @@ public class MenuPanel extends GUIPanel {
 
         // Add action listeners
         easyBtn.addActionListener(e -> {
-            game.getGm().startGame("EASY");
-            game.changeState(GameState.PLAYING);
+            game.getGm().startGame(Defs.LEVEL_EASY);
+            game.changeState(Defs.STATE_PLAYING);
         });
         mediumBtn.addActionListener(e -> {
-            game.getGm().startGame("MEDIUM");
-            game.changeState(GameState.PLAYING);
+            game.getGm().startGame(Defs.LEVEL_MEDIUM);
+            game.changeState(Defs.STATE_PLAYING);
         });
         hardBtn.addActionListener(e -> {
-            game.getGm().startGame("HARD");
-            game.changeState(GameState.PLAYING);
+            game.getGm().startGame(Defs.LEVEL_HARD);
+            game.changeState(Defs.STATE_PLAYING);
         });
         bossBtn.addActionListener(e -> {
-            game.getGm().startGame("BOSS");
-            game.changeState(GameState.PLAYING);
+            game.getGm().startGame(Defs.LEVEL_BOSS);
+            game.changeState(Defs.STATE_PLAYING);
         });
         exitBtn.addActionListener(e -> System.exit(0));
 

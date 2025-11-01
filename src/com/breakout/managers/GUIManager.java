@@ -16,8 +16,10 @@ public class GUIManager {
     private MenuPanel menuPanel;
     private WinPanel winPanel;
     private GameOverPanel gameOverPanel;
+    private Game game;
 
     public GUIManager(Game game) {
+        this.game = game;
         gameplayPanel = new GameplayPanel(game.getGm());
         menuPanel = new MenuPanel(game);
         winPanel = new WinPanel(game);
@@ -55,10 +57,14 @@ public class GUIManager {
     }
 
     public void showWinScreen(JFrame frame) {
+        GameManager gm = game.getGm();
+        winPanel.updateScore(gm.getScore(), gm.getDifficultyName());
         showGUIPanel(frame, winPanel);
     }
 
     public void showGameOverScreen(JFrame frame) {
+        GameManager gm = game.getGm();
+        gameOverPanel.updateScore(gm.getScore(), gm.getDifficultyName());
         showGUIPanel(frame, gameOverPanel);
     }
 }

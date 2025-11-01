@@ -1,6 +1,6 @@
 package com.breakout.gui;
 
-import com.breakout.Main;
+import com.breakout.config.GameConfig;
 import com.breakout.core.GameObject;
 import com.breakout.entities.bricks.Brick;
 import com.breakout.managers.GameManager;
@@ -12,7 +12,7 @@ public class GameplayPanel extends GUIPanel {
 
     public GameplayPanel(GameManager gm) {
         this.gm = gm;
-        setPreferredSize(new Dimension(Main.WIDTH, Main.HEIGHT));
+        setPreferredSize(new Dimension(GameConfig.SCREEN_WIDTH, GameConfig.SCREEN_HEIGHT));
         setBackground(Color.BLACK);
     }
 

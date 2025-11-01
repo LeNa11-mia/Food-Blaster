@@ -1,9 +1,7 @@
 package com.breakout.entities;
 
-import java.awt.*;
+import com.breakout.config.GameConfig;
 import com.breakout.core.GameObject;
-
-import javax.swing.*;
 
 /**
  * Paddle - moves left and right.
@@ -12,8 +10,16 @@ public class Paddle extends GameObject {
     private double speed = 400; // Movement speed
     
     public Paddle(double x, double y) {
-        super(x, y, 100, 15); // Paddle size: 100x15 pixels
-        sprite = new ImageIcon("assets/paddle.png");
+        super(x, y, GameConfig.PADDLE_WIDTH, GameConfig.PADDLE_HEIGHT); // Paddle size: 100x15 pixels
+        sprite = GameConfig.PADDLE_IMAGE;
+    }
+
+    public double getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
     }
     
     @Override

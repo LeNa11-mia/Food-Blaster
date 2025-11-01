@@ -1,5 +1,6 @@
 package com.breakout.entities.bricks;
 
+import com.breakout.config.GameConfig;
 import com.breakout.core.GameObject;
 import com.breakout.interfaces.Destructible;
 
@@ -10,12 +11,10 @@ import javax.swing.*;
  */
 public class Brick extends GameObject implements Destructible {
     protected boolean destroyed = false;
-    public static final int WIDTH = 80;
-    public static final int HEIGHT = 20;
     
     public Brick(double x, double y) {
-        super(x, y, WIDTH, HEIGHT);
-        sprite = new ImageIcon("assets/brick.png");
+        super(x, y, GameConfig.BRICK_WIDTH, GameConfig.BRICK_HEIGHT);
+        sprite = GameConfig.NORMAL_BRICK_IMAGE;
     }
     
     @Override

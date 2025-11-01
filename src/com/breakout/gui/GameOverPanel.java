@@ -1,16 +1,18 @@
 package com.breakout.gui;
 
 import com.breakout.Game;
+import com.breakout.config.Defs;
 import com.breakout.managers.GameManager;
-import com.breakout.managers.GameState;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class GameOverPanel extends GUIPanel {
+    private JLabel scoreLabel;
+    private JLabel difficultyLabel;
 
     public GameOverPanel(Game game) {
-        super("#722F37"); // Cherry wine red
+        super(Color.decode("#722F37")); // Cherry wine red
 
         // Center content
         JPanel centerPanel = new JPanel();
@@ -40,7 +42,7 @@ public class GameOverPanel extends GUIPanel {
         add(titleLabel, BorderLayout.NORTH);
 
         // Score display
-        JLabel scoreLabel = createLabel(
+        scoreLabel = createLabel(
                 "Score: " + (gm != null ? gm.getScore() : 0),
                 Color.WHITE,
                 new Font("Arial", Font.BOLD, 24)
@@ -50,8 +52,8 @@ public class GameOverPanel extends GUIPanel {
         centerPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
         // Difficulty display
-        JLabel difficultyLabel = createLabel(
-                "Difficulty: " + gm.getDifficulty(),
+        difficultyLabel = createLabel(
+                "Difficulty: " + gm.getDifficultyName(),
                 Color.WHITE,
                 new Font("Arial", Font.PLAIN, 18)
         );
@@ -67,6 +69,15 @@ public class GameOverPanel extends GUIPanel {
         add(instructionLabel, BorderLayout.SOUTH);
     }
 
+    public void updateScore(int finalScore, String difficultyName) {
+        if (scoreLabel != null) {
+            scoreLabel.setText("Score: " + finalScore);
+        }
+        if (difficultyLabel != null) {
+            difficultyLabel.setText("Difficulty: " + difficultyName);
+        }
+    }
+
     private void addButtons(Game game, JPanel centerPanel) {
         // Restart button
         JButton restartBtn = createButton("RESTART", Color.decode("#8B0000")); // Dark red
@@ -74,8 +85,8 @@ public class GameOverPanel extends GUIPanel {
         restartBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         restartBtn.setMaximumSize(new Dimension(300, 50));
         restartBtn.addActionListener(e -> {
-            game.changeState(GameState.PLAYING);
-            game.getGm().startGame(game.getGm().getDifficulty());
+            game.changeState(Defs.STATE_PLAYING);
+            game.getGm().startGame(game.getGm().getCurrentDifficulty());
         });
         centerPanel.add(restartBtn);
 
@@ -86,7 +97,7 @@ public class GameOverPanel extends GUIPanel {
         addButton(menuBtn);
         menuBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         menuBtn.setMaximumSize(new Dimension(300, 50));
-        menuBtn.addActionListener(e -> game.changeState(GameState.MENU));
+        menuBtn.addActionListener(e -> game.changeState(Defs.STATE_MENU));
         centerPanel.add(menuBtn);
     }
 }
