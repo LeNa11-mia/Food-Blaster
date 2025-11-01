@@ -1,4 +1,4 @@
-package com.breakout.items;
+package com.breakout.entities.items;
 
 import com.breakout.config.GameConfig;
 

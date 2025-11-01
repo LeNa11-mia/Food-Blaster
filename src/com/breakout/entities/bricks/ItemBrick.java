@@ -1,7 +1,7 @@
-package com.breakout.entities;
+package com.breakout.entities.bricks;
 
 import com.breakout.config.GameConfig;
-import com.breakout.items.Item;
+import com.breakout.entities.items.Item;
 import com.breakout.managers.GameManager;
 
 public class ItemBrick extends Brick {
@@ -14,8 +14,7 @@ public class ItemBrick extends Brick {
     }
 
     @Override
-    public void hit() {
-        super.hit(); // Đánh dấu gạch đã bị phá hủy
+    public void onDestroyed() {
         spawnItem(); // Sinh ra vật phẩm
     }
 
