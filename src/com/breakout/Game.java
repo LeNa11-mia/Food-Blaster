@@ -18,7 +18,7 @@ public class Game {
     private GameKeyListener keyListener;
 
     // Game state
-    private int state;
+    private GameState state;
     private Thread gameThread;
     private boolean running;
 
@@ -31,7 +31,12 @@ public class Game {
         gm = new GameManager();
         gui = new GUIManager(this);
         keyListener = new GameKeyListener(this);
-        gui.getGameplayPanel().addKeyListener(keyListener); // Only gameplay panel get keyboard input
+        state = null;
+        // Thêm KeyListener cho GameplayPanel
+        gui.getGameplayPanel().addKeyListener(keyListener);
+
+        // THÊM DÒNG NÀY - KeyListener cho SettingPanel
+        gui.getSettingPanel().addKeyListener(keyListener);
     }
 
     private void startGameLoop() {
@@ -62,7 +67,7 @@ public class Game {
         lastTime = System.nanoTime();
         running = true;
 
-        changeState(Defs.STATE_MENU);
+        changeState(GameState.MENU);
 
         // Start game loop
         startGameLoop();
@@ -76,35 +81,41 @@ public class Game {
         double deltaTime = (currentTime - lastTime) / 1_000_000_000.0;
         lastTime = currentTime;
 
-        if (state == Defs.STATE_PLAYING) {
+        if (state == GameState.PLAYING) {
             gm.update(this, deltaTime, keyListener.isLeftPressed(), keyListener.isRightPressed());
             gui.getGameplayPanel().repaint();
         }
     }
 
-    public int getState() {
+    public GameState getState() {
         return state;
     }
 
-    public void changeState(int state) {
+    public void changeState(GameState state) {
         if (this.state == state) return;
+
+        if (state == GameState.SETTING && this.state != null) {
+            gui.setPreviousState(this.state);
+        }
 
         this.state = state;
         switch (state) {
-            case Defs.STATE_MENU:
-                gui.resetButton(GUIPanel.originalColors);
+            case MENU:
                 gui.showMenuScreen(frame);
                 break;
-            case Defs.STATE_PLAYING:
-                keyListener.resetKeys();
+            case PLAYING:
                 gui.showGameplayPanel(frame);
                 break;
-            case Defs.STATE_WIN:
-                gui.resetButton(GUIPanel.originalColors);
+            case GAME_MODES:  // THÊM CASE NÀY
+                gui.showGameModesScreen(frame);
+                break;
+            case SETTING:
+                gui.showSettingsScreen(frame);
+                break;
+            case WIN:
                 gui.showWinScreen(frame);
                 break;
-            case Defs.STATE_GAMEOVER:
-                gui.resetButton(GUIPanel.originalColors);
+            case GAMEOVER:
                 gui.showGameOverScreen(frame);
                 break;
         }

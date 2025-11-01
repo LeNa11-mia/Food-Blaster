@@ -4,9 +4,6 @@ import com.breakout.Game;
 import com.breakout.gui.*;
 
 import javax.swing.*;
-import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * GUI manager
@@ -14,22 +11,22 @@ import java.util.Map;
 public class GUIManager {
     private GameplayPanel gameplayPanel;
     private MenuPanel menuPanel;
+    private SettingPanel settingPanel;
+    private GameModesPanel gameModesPanel;
     private WinPanel winPanel;
     private GameOverPanel gameOverPanel;
+    private GameState previousState;  // Lưu state trước khi vào Settings
     private Game game;
 
     public GUIManager(Game game) {
         this.game = game;
         gameplayPanel = new GameplayPanel(game.getGm());
         menuPanel = new MenuPanel(game);
+        gameModesPanel = new GameModesPanel(game);
         winPanel = new WinPanel(game);
+        settingPanel = new SettingPanel(game);
         gameOverPanel = new GameOverPanel(game);
-    }
-
-    public void resetButton(Map<JButton, Color> originalColors) {
-        for (JButton btn : originalColors.keySet()) {
-            btn.setBackground(originalColors.get(btn));
-        }
+        previousState = null;
     }
 
     private void showGUIPanel(JFrame frame, GUIPanel panel) {
@@ -38,7 +35,6 @@ public class GUIManager {
             frame.add(panel);
             frame.revalidate();
             frame.repaint();
-
             panel.setFocusable(true);
             panel.requestFocusInWindow();
         });
@@ -48,12 +44,16 @@ public class GUIManager {
         showGUIPanel(frame, gameplayPanel);
     }
 
-    public GameplayPanel getGameplayPanel() {
-        return gameplayPanel;
+    public void showGameModesScreen(JFrame frame) {
+        showGUIPanel(frame, gameModesPanel);
     }
 
     public void showMenuScreen(JFrame frame) {
         showGUIPanel(frame, menuPanel);
+    }
+
+    public void showSettingsScreen(JFrame frame) {
+        showGUIPanel(frame, settingPanel);
     }
 
     public void showWinScreen(JFrame frame) {
@@ -66,5 +66,21 @@ public class GUIManager {
         GameManager gm = game.getGm();
         gameOverPanel.updateScore(gm.getScore(), gm.getDifficultyName());
         showGUIPanel(frame, gameOverPanel);
+    }
+
+    public GameplayPanel getGameplayPanel() {
+        return gameplayPanel;
+    }
+
+    public SettingPanel getSettingPanel() {
+        return settingPanel;
+    }
+
+    public void setPreviousState(GameState state) {
+        this.previousState = state;
+    }
+
+    public GameState getPreviousState() {
+        return previousState;
     }
 }
