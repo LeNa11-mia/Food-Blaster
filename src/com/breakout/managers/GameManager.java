@@ -6,7 +6,7 @@ import com.breakout.config.GameConfig;
 import com.breakout.entities.*;
 import com.breakout.entities.bricks.Brick;
 import com.breakout.entities.bricks.FallingBrick;
-import com.breakout.items.Item;
+import com.breakout.entities.items.Item;
 
 import java.util.*;
 import java.util.List;

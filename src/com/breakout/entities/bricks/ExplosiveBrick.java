@@ -15,6 +15,7 @@ public class ExplosiveBrick extends Brick {
         sprite = GameConfig.EXPLOSIVE_BRICK_IMAGE;
     }
 
+    @Override
     public void onDestroyed() {
         explode();
     }
