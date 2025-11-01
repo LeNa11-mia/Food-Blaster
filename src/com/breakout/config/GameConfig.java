@@ -30,9 +30,12 @@ public class GameConfig {
     public static final int EXPLOSION_RADIUS = 1;    //explosion radius by bricks
     public static final ImageIcon EXPLOSIVE_BRICK_IMAGE = new ImageIcon("assets/explosiveBrick.png");
 
+    public static final double ITEM_FALLING_SPEED = 150;
+    public static final ImageIcon ITEM_BRICK_IMAGE = new ImageIcon("assets/chocolateCake.png");
+
     // ----- ITEM -----
     public static final int ITEM_WIDTH = 0;
     public static final int ITEM_HEIGHT = 0;
-    public static final ImageIcon ITEM_IMAGE = null;
+    public static final ImageIcon ITEM_IMAGE = new ImageIcon("assets/gameOverItem.png");
     // Add items ...
 }
