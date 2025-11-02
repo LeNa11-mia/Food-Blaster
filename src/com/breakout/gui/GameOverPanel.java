@@ -15,7 +15,6 @@ public class GameOverPanel extends GUIPanel {
 
     public GameOverPanel(Game game) {
         super(Color.decode("#722F37")); // Cherry wine red
-        super("#722F37");
 
         // Load background image
         loadBackgroundImage();
@@ -128,7 +127,7 @@ public class GameOverPanel extends GUIPanel {
                 Color.WHITE,
                 new Font("Arial", Font.PLAIN, 18)
         );
-        JLabel difficultyLabel = new JLabel("Difficulty: " + gm.getDifficulty());
+        JLabel difficultyLabel = new JLabel("Difficulty: " + gm.getDifficultyName());
         difficultyLabel.setFont(new Font("Arial", Font.PLAIN, 20));
         difficultyLabel.setForeground(new Color(218, 112, 161));
         difficultyLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -165,7 +164,7 @@ public class GameOverPanel extends GUIPanel {
         menuBtn.addActionListener(e -> game.changeState(Defs.STATE_MENU));
         menuBtn.setMaximumSize(new Dimension(300, 55));
         menuBtn.setPreferredSize(new Dimension(300, 55));
-        menuBtn.addActionListener(e -> game.changeState(GameState.MENU));
+        menuBtn.addActionListener(e -> game.changeState(Defs.STATE_MENU));
         centerPanel.add(menuBtn);
     }
 

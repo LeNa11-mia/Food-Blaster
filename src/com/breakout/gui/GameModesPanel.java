@@ -1,7 +1,7 @@
 package com.breakout.gui;
 
 import com.breakout.Game;
-import com.breakout.managers.GameState;
+import com.breakout.config.Defs;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +11,7 @@ public class GameModesPanel extends GUIPanel {
     private Image backgroundImage;
 
     public GameModesPanel(Game game) {
-        super("#F3CFC6");
+        super(Color.decode("#F3CFC6"));
 
         // Load background image
         loadBackgroundImage();
@@ -103,11 +103,11 @@ public class GameModesPanel extends GUIPanel {
         modesPanel.setOpaque(false);
 
         // Tạo các nút nhỏ gọn với màu sắc khác nhau
-        JButton easyBtn = createRoundedButton("EASY", Color.decode("#F8C8DC"), game, "EASY");
-        JButton mediumBtn = createRoundedButton("MEDIUM", Color.decode("#FFC0CB"), game, "MEDIUM");
-        JButton hardBtn = createRoundedButton("HARD", Color.decode("#FAA0A0"), game, "HARD");
-        JButton bossBtn = createRoundedButton("BOSS FIGHTS", Color.decode("#F89880"), game, "BOSS");
-        JButton backBtn = createRoundedButton("← BACK", Color.decode("#D8BFD8"), game, "BACK");
+        JButton easyBtn = createRoundedButton("EASY", Color.decode("#F8C8DC"), game, Defs.LEVEL_EASY);
+        JButton mediumBtn = createRoundedButton("MEDIUM", Color.decode("#FFC0CB"), game, Defs.LEVEL_MEDIUM);
+        JButton hardBtn = createRoundedButton("HARD", Color.decode("#FAA0A0"), game, Defs.LEVEL_HARD);
+        JButton bossBtn = createRoundedButton("BOSS FIGHTS", Color.decode("#F89880"), game, Defs.LEVEL_BOSS);
+        JButton backBtn = createRoundedButton("← BACK", Color.decode("#D8BFD8"), game, Defs.GO_BACK);
 
         modesPanel.add(easyBtn);
         modesPanel.add(mediumBtn);
@@ -118,7 +118,7 @@ public class GameModesPanel extends GUIPanel {
         return modesPanel;
     }
 
-    private JButton createRoundedButton(String text, Color bgColor, Game game, String mode) {
+    private JButton createRoundedButton(String text, Color bgColor, Game game, int mode) {
         JButton button = new JButton(text) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -173,11 +173,11 @@ public class GameModesPanel extends GUIPanel {
 
         // Add action listeners
         button.addActionListener(e -> {
-            if (mode.equals("BACK")) {
-                game.changeState(GameState.MENU);
+            if (mode == Defs.GO_BACK) {
+                game.changeState(Defs.STATE_MENU);
             } else {
                 game.getGm().startGame(mode);
-                game.changeState(GameState.PLAYING);
+                game.changeState(Defs.STATE_PLAYING);
             }
         });
 

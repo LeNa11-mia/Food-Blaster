@@ -41,7 +41,7 @@ public class Level extends LevelData {
                 else if (type == Defs.EXPLOSIVE_BRICK) {
                     b = new ExplosiveBrick(x, y, bricks);
                 }
-                else if (type == 3) {
+                else if (type == Defs.FALLING_BRICK) {
                     b = new FallingBrick(x, y);
                 }
                 if (b != null) bricks.add(b);

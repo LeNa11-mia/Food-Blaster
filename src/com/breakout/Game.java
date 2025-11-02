@@ -1,7 +1,6 @@
 package com.breakout;
 
 import com.breakout.config.Defs;
-import com.breakout.gui.GUIPanel;
 import com.breakout.listeners.GameKeyListener;
 import com.breakout.managers.*;
 
@@ -18,7 +17,7 @@ public class Game {
     private GameKeyListener keyListener;
 
     // Game state
-    private GameState state;
+    private int state;
     private Thread gameThread;
     private boolean running;
 
@@ -31,7 +30,7 @@ public class Game {
         gm = new GameManager();
         gui = new GUIManager(this);
         keyListener = new GameKeyListener(this);
-        state = null;
+
         // Thêm KeyListener cho GameplayPanel
         gui.getGameplayPanel().addKeyListener(keyListener);
 
@@ -67,7 +66,7 @@ public class Game {
         lastTime = System.nanoTime();
         running = true;
 
-        changeState(GameState.MENU);
+        changeState(Defs.STATE_MENU);
 
         // Start game loop
         startGameLoop();
@@ -81,41 +80,41 @@ public class Game {
         double deltaTime = (currentTime - lastTime) / 1_000_000_000.0;
         lastTime = currentTime;
 
-        if (state == GameState.PLAYING) {
+        if (state == Defs.STATE_PLAYING) {
             gm.update(this, deltaTime, keyListener.isLeftPressed(), keyListener.isRightPressed());
             gui.getGameplayPanel().repaint();
         }
     }
 
-    public GameState getState() {
+    public int getState() {
         return state;
     }
 
-    public void changeState(GameState state) {
+    public void changeState(int state) {
         if (this.state == state) return;
 
-        if (state == GameState.SETTING && this.state != null) {
+        if (state == Defs.STATE_SETTING && this.state != Defs.STATE_LOADING) {
             gui.setPreviousState(this.state);
         }
 
         this.state = state;
         switch (state) {
-            case MENU:
+            case Defs.STATE_MENU:
                 gui.showMenuScreen(frame);
                 break;
-            case PLAYING:
+            case Defs.STATE_PLAYING:
                 gui.showGameplayPanel(frame);
                 break;
-            case GAME_MODES:  // THÊM CASE NÀY
+            case Defs.STATE_GAME_MODES:  // THÊM CASE NÀY
                 gui.showGameModesScreen(frame);
                 break;
-            case SETTING:
+            case Defs.STATE_SETTING:
                 gui.showSettingsScreen(frame);
                 break;
-            case WIN:
+            case Defs.STATE_WIN:
                 gui.showWinScreen(frame);
                 break;
-            case GAMEOVER:
+            case Defs.STATE_GAMEOVER:
                 gui.showGameOverScreen(frame);
                 break;
         }

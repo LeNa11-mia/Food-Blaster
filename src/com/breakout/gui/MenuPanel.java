@@ -2,7 +2,6 @@ package com.breakout.gui;
 
 import com.breakout.Game;
 import com.breakout.config.Defs;
-import com.breakout.managers.GameState;
 import com.breakout.managers.SaveManager;
 
 import javax.swing.*;
@@ -15,7 +14,7 @@ public class MenuPanel extends GUIPanel {
     private Game game;
 
     public MenuPanel(Game game) {
-        super("#F3CFC6");
+        super(Color.decode("#F3CFC6"));
         this.game = game;
 
         // Load background image
@@ -123,7 +122,7 @@ public class MenuPanel extends GUIPanel {
 
         // Nút PLAY
         JButton playBtn = createRoundedButton("PLAY", Color.decode("#F8C8DC"));
-        playBtn.addActionListener(e -> game.changeState(GameState.GAME_MODES));
+        playBtn.addActionListener(e -> game.changeState(Defs.STATE_GAME_MODES));
         buttonPanel.add(playBtn);
 
         // Nếu có save → thêm CONTINUE ở giữa PLAY và EXIT
@@ -133,13 +132,23 @@ public class MenuPanel extends GUIPanel {
                 if (game.getGm() != null) {
                     game.getGm().continueGame();
                 }
-                game.changeState(GameState.PLAYING);
+                game.changeState(Defs.STATE_PLAYING);
             });
             buttonPanel.add(continueButton);
         }
 
-        // Nút EXIT
-        JButton exitBtn = createRoundedButton("EXIT", Color.decode("#D8BFD8"));
+        // Create buttons with different colors
+        JButton easyBtn = createButton("EASY", Color.decode("#F8C8DC"));
+        addButton(easyBtn);
+        JButton mediumBtn = createButton("MEDIUM", Color.decode("#FFC0CB"));
+        addButton(mediumBtn);
+        JButton hardBtn = createButton("HARD", Color.decode("#FAA0A0"));
+        addButton(hardBtn);
+        JButton bossBtn = createButton("BOSS FIGHTS", Color.decode("#F89880"));
+        addButton(bossBtn);
+        JButton exitBtn = createButton("EXIT", Color.decode("#D8BFD8"));
+        addButton(exitBtn);
+
         // Add action listeners
         easyBtn.addActionListener(e -> {
             game.getGm().startGame(Defs.LEVEL_EASY);

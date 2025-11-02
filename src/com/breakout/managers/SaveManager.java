@@ -1,5 +1,7 @@
 package com.breakout.managers;
 
+import com.breakout.saves.GameSave;
+
 import java.io.*;
 
 public class SaveManager {

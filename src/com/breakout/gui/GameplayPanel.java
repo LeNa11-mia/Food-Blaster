@@ -12,7 +12,7 @@ public class GameplayPanel extends GUIPanel {
 
     public GameplayPanel(GameManager gm) {
         this.gm = gm;
-        setPreferredSize(new Dimension(Main.WIDTH, Main.HEIGHT));
+        setPreferredSize(new Dimension(GameConfig.SCREEN_WIDTH, GameConfig.SCREEN_HEIGHT));
         setBackground(new Color(255, 214, 214));
     }
 

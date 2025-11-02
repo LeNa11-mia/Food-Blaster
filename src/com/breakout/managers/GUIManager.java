@@ -1,6 +1,7 @@
 package com.breakout.managers;
 
 import com.breakout.Game;
+import com.breakout.config.Defs;
 import com.breakout.gui.*;
 
 import javax.swing.*;
@@ -15,18 +16,18 @@ public class GUIManager {
     private GameModesPanel gameModesPanel;
     private WinPanel winPanel;
     private GameOverPanel gameOverPanel;
-    private GameState previousState;  // Lưu state trước khi vào Settings
+    private int previousState;  // Lưu state trước khi vào Settings
     private Game game;
 
     public GUIManager(Game game) {
         this.game = game;
+        previousState = Defs.STATE_LOADING;
         gameplayPanel = new GameplayPanel(game.getGm());
         menuPanel = new MenuPanel(game);
         gameModesPanel = new GameModesPanel(game);
         winPanel = new WinPanel(game);
         settingPanel = new SettingPanel(game);
         gameOverPanel = new GameOverPanel(game);
-        previousState = null;
     }
 
     private void showGUIPanel(JFrame frame, GUIPanel panel) {
@@ -76,11 +77,11 @@ public class GUIManager {
         return settingPanel;
     }
 
-    public void setPreviousState(GameState state) {
+    public void setPreviousState(int state) {
         this.previousState = state;
     }
 
-    public GameState getPreviousState() {
+    public int getPreviousState() {
         return previousState;
     }
 }

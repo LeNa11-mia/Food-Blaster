@@ -4,8 +4,6 @@ import com.breakout.config.GameConfig;
 import com.breakout.core.GameObject;
 import com.breakout.interfaces.Destructible;
 
-import javax.swing.*;
-
 /**
  * Brick - can be drawn and destroyed.
  */
@@ -15,6 +13,9 @@ public class Brick extends GameObject implements Destructible {
     public Brick(double x, double y) {
         super(x, y, GameConfig.BRICK_WIDTH, GameConfig.BRICK_HEIGHT);
         sprite = GameConfig.NORMAL_BRICK_IMAGE;
+        if (sprite == null) {
+            System.out.println("Sprite is null");
+        }
     }
 
     @Override
@@ -31,8 +32,6 @@ public class Brick extends GameObject implements Destructible {
 
     @Override
     public void onDestroyed() {} // No effect
-
-    @Override
 
     public void destroy() {
         destroyed = true;
@@ -62,10 +61,10 @@ public class Brick extends GameObject implements Destructible {
 
     // Thêm method để tính row/col tạm thời (nếu cần)
     public int getRow() {
-        return (int)(getY() / HEIGHT);
+        return (int)(getY() / GameConfig.BRICK_HEIGHT);
     }
 
     public int getCol() {
-        return (int)(getX() / WIDTH);
+        return (int)(getX() / GameConfig.BRICK_WIDTH);
     }
 }

@@ -7,6 +7,10 @@ import com.breakout.entities.*;
 import com.breakout.entities.bricks.Brick;
 import com.breakout.entities.bricks.FallingBrick;
 import com.breakout.entities.items.Item;
+import com.breakout.saves.BallSave;
+import com.breakout.saves.BrickSave;
+import com.breakout.saves.GameSave;
+import com.breakout.saves.PaddleSave;
 
 import java.util.*;
 import java.util.List;
@@ -22,7 +26,7 @@ public class GameManager {
 
     private int score;
     private int lives;
-    private String currentDifficulty = "EASY";
+    private int currentDifficulty;
     private int currentLevel = 1;
     private boolean laserEnabled;
 
@@ -62,19 +66,11 @@ public class GameManager {
         ballStarted = true;
     }
 
-    public void startGame(String difficulty) {
-        this.currentDifficulty = difficulty;
-        this.currentLevel = 1;
+    public void startGame(int difficulty) {
+        currentDifficulty = difficulty;
+        currentLevel = 1;
 
-        if (difficulty.equals("EASY")) {
-            bricks = Level.loadLevel(1);
-        } else if (difficulty.equals("MEDIUM")) {
-            bricks = Level.loadLevel(2);
-        } else if (difficulty.equals("HARD")) {
-            bricks = Level.loadLevel(3);
-        } else if (difficulty.equals("BOSS")) {
-            bricks = Level.loadLevel(4);
-        }
+        bricks = Level.loadLevel(difficulty);
         resetBall();
         resetPaddle();
         lives = 1;
@@ -90,12 +86,12 @@ public class GameManager {
         if (isGameOver()) {
             // Lưu game trước khi chuyển sang GAMEOVER
             saveCurrentGame();
-            game.changeState(GameState.GAMEOVER);
+            game.changeState(Defs.STATE_GAMEOVER);
             return; // Don't update if game is over
         } else if (isWin()) {
             // Lưu game trước khi chuyển sang WIN
             saveCurrentGame();
-            game.changeState(GameState.WIN);
+            game.changeState(Defs.STATE_WIN);
             return;
         }
 
@@ -202,10 +198,10 @@ public class GameManager {
     public void loadSavedGame(GameSave gameSave) {
         if (gameSave == null) return;
 
-        this.currentDifficulty = gameSave.getDifficulty();
-        this.score = gameSave.getScore();
-        this.lives = gameSave.getLives();
-        this.currentLevel = gameSave.getLevel();
+        currentDifficulty = gameSave.getDifficulty();
+        score = gameSave.getScore();
+        lives = gameSave.getLives();
+        currentLevel = gameSave.getLevel();
 
         // Khôi phục ball
         BallSave ballData = gameSave.getBallData();
@@ -230,7 +226,6 @@ public class GameManager {
             }
         }
 
-        this.gameOver = false;
     }
 
     /**
@@ -238,20 +233,7 @@ public class GameManager {
      */
     private void loadLevelForSavedGame() {
         if (bricks == null || bricks.isEmpty()) {
-            switch (currentDifficulty) {
-                case "EASY":
-                    bricks = Level.loadLevel(1);
-                    break;
-                case "MEDIUM":
-                    bricks = Level.loadLevel(2);
-                    break;
-                case "HARD":
-                    bricks = Level.loadLevel(3);
-                    break;
-                case "BOSS":
-                    bricks = Level.loadLevel(4);
-                    break;
-            }
+            bricks = Level.loadLevel(currentDifficulty);
         }
     }
 
@@ -277,22 +259,19 @@ public class GameManager {
     /**
      * Tiếp tục game từ save
      */
-//    public void continueGame() {
-//        GameSave savedGame = SaveManager.loadGame();
-//        if (savedGame != null) {
-//            loadSavedGame(savedGame);
-//        }
-//    }
-
-
-    public String getNextDifficulty() {
-        switch (currentDifficulty) {
-            case "EASY": return "MEDIUM";
-            case "MEDIUM": return "HARD";
-            case "HARD": return "BOSS";
-            case "BOSS": return null;
-            default: return null;
+    public void continueGame() {
+        GameSave savedGame = SaveManager.loadGame();
+        if (savedGame != null) {
+            loadSavedGame(savedGame);
         }
+    }
+
+
+    public int getNextDifficulty() {
+        if (currentDifficulty < Defs.LEVEL_BOSS) {
+            currentDifficulty++;
+        }
+        return currentDifficulty;
     }
 
     private void resetBall() {
@@ -349,9 +328,7 @@ public class GameManager {
     public List<Brick> getBricks() { return bricks; }
     public int getScore() { return score; }
     public int getLives() { return lives; }
-    public String getDifficulty() { return currentDifficulty; }
     public int getCurrentLevel() { return currentLevel; }
-    public boolean isGameOver() { return gameOver; }
 
     /**
      * Lấy thông tin game đã lưu để hiển thị

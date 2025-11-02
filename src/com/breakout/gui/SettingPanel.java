@@ -1,7 +1,7 @@
 package com.breakout.gui;
 
 import com.breakout.Game;
-import com.breakout.managers.GameState;
+import com.breakout.config.Defs;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -19,7 +19,7 @@ public class SettingPanel extends GUIPanel {
     private Image backgroundImage;
 
     public SettingPanel(Game game) {
-        super("#1a1a2e");
+        super(Color.decode("#1a1a2e"));
         this.game = game;
         setLayout(new BorderLayout());
 
@@ -64,7 +64,7 @@ public class SettingPanel extends GUIPanel {
         JButton continueBtn = createRoundedButton("Continue", new Color(255, 105, 180)); // Màu hồng Hot Pink
         continueBtn.addActionListener(e -> {
             // Return to previous state (PLAYING)
-            game.changeState(GameState.PLAYING);
+            game.changeState(Defs.STATE_PLAYING);
         });
         buttonsPanel.add(continueBtn);
         buttonsPanel.add(Box.createVerticalStrut(15));
@@ -72,7 +72,7 @@ public class SettingPanel extends GUIPanel {
         // Back to Menu Button với bo góc và màu hồng - sử dụng Times New Roman
         JButton menuBtn = createRoundedButton("Back to Menu", new Color(255, 105, 180)); // Màu hồng Hot Pink
         menuBtn.addActionListener(e -> {
-            game.changeState(GameState.MENU);
+            game.changeState(Defs.STATE_MENU);
         });
         buttonsPanel.add(menuBtn);
 
