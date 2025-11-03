@@ -3,8 +3,6 @@ package com.breakout.entities;
 import com.breakout.config.GameConfig;
 import com.breakout.core.GameObject;
 
-import javax.swing.*;
-
 /**
  * Ball - handles movement and rendering.
  */

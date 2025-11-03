@@ -1,7 +1,6 @@
 package com.breakout.core;
 
 import javax.swing.*;
-import java.awt.Graphics2D;
 
 /**
  * Base class for all game objects.

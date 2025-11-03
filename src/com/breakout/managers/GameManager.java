@@ -77,7 +77,7 @@ public class GameManager {
         score = 0;
     }
 
-    public void update(Game game, double deltaTime, boolean leftPressed, boolean rightPressed) {
+    public void update(double deltaTime, boolean leftPressed, boolean rightPressed) {
 
         if (paused) return;
 
@@ -86,12 +86,12 @@ public class GameManager {
         if (isGameOver()) {
             // Lưu game trước khi chuyển sang GAMEOVER
             saveCurrentGame();
-            game.changeState(Defs.STATE_GAMEOVER);
+            Game.getGame().changeState(Defs.STATE_GAMEOVER);
             return; // Don't update if game is over
         } else if (isWin()) {
             // Lưu game trước khi chuyển sang WIN
             saveCurrentGame();
-            game.changeState(Defs.STATE_WIN);
+            Game.getGame().changeState(Defs.STATE_WIN);
             return;
         }
 

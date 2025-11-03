@@ -18,10 +18,10 @@ public class Main {
             frame.setLocationRelativeTo(null);
             frame.setResizable(false);
 
-            Game game = new Game(frame);
+            Game.initGame(frame);
 
             // Start with menu
-            game.start();
+            Game.getGame().start();
             frame.setVisible(true);
         });
     }

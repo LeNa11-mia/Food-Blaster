@@ -1,17 +1,15 @@
 package com.breakout.gui;
 
+import com.breakout.Game;
 import com.breakout.config.GameConfig;
 import com.breakout.core.GameObject;
 import com.breakout.entities.bricks.Brick;
-import com.breakout.managers.GameManager;
 
 import java.awt.*;
 
 public class GameplayPanel extends GUIPanel {
-    private GameManager gm;
 
-    public GameplayPanel(GameManager gm) {
-        this.gm = gm;
+    public GameplayPanel() {
         setPreferredSize(new Dimension(GameConfig.SCREEN_WIDTH, GameConfig.SCREEN_HEIGHT));
         setBackground(new Color(255, 214, 214));
     }
@@ -21,9 +19,9 @@ public class GameplayPanel extends GUIPanel {
     }
 
     public void drawObjects(Graphics2D g2d) {
-        draw(gm.getBall(), g2d);
-        draw(gm.getPaddle(), g2d);
-        for (Brick brick : gm.getBricks()) {
+        draw(Game.getGame().getGm().getBall(), g2d);
+        draw(Game.getGame().getGm().getPaddle(), g2d);
+        for (Brick brick : Game.getGame().getGm().getBricks()) {
             if (!brick.isDestroyed()) {
                 draw(brick, g2d);
             }

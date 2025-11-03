@@ -10,7 +10,7 @@ public class GameModesPanel extends GUIPanel {
 
     private Image backgroundImage;
 
-    public GameModesPanel(Game game) {
+    public GameModesPanel() {
         super(Color.decode("#F3CFC6"));
 
         // Load background image
@@ -19,7 +19,7 @@ public class GameModesPanel extends GUIPanel {
         setLayout(null); // Dùng absolute positioning
 
         // Tạo panel chứa các nút
-        JPanel modesPanel = createModesPanel(game);
+        JPanel modesPanel = createModesPanel();
         modesPanel.setBounds(125, 280, 350, 320); // x, y, width, height
         add(modesPanel);
     }
@@ -97,17 +97,17 @@ public class GameModesPanel extends GUIPanel {
         g2d.dispose();
     }
 
-    private JPanel createModesPanel(Game game) {
+    private JPanel createModesPanel() {
         JPanel modesPanel = new JPanel();
         modesPanel.setLayout(new GridLayout(5, 1, 0, 15)); // 5 nút, cách nhau 15px
         modesPanel.setOpaque(false);
 
         // Tạo các nút nhỏ gọn với màu sắc khác nhau
-        JButton easyBtn = createRoundedButton("EASY", Color.decode("#F8C8DC"), game, Defs.LEVEL_EASY);
-        JButton mediumBtn = createRoundedButton("MEDIUM", Color.decode("#FFC0CB"), game, Defs.LEVEL_MEDIUM);
-        JButton hardBtn = createRoundedButton("HARD", Color.decode("#FAA0A0"), game, Defs.LEVEL_HARD);
-        JButton bossBtn = createRoundedButton("BOSS FIGHTS", Color.decode("#F89880"), game, Defs.LEVEL_BOSS);
-        JButton backBtn = createRoundedButton("← BACK", Color.decode("#D8BFD8"), game, Defs.GO_BACK);
+        JButton easyBtn = createRoundedButton("EASY", Color.decode("#F8C8DC"), Defs.LEVEL_EASY);
+        JButton mediumBtn = createRoundedButton("MEDIUM", Color.decode("#FFC0CB"), Defs.LEVEL_MEDIUM);
+        JButton hardBtn = createRoundedButton("HARD", Color.decode("#FAA0A0"), Defs.LEVEL_HARD);
+        JButton bossBtn = createRoundedButton("BOSS FIGHTS", Color.decode("#F89880"), Defs.LEVEL_BOSS);
+        JButton backBtn = createRoundedButton("← BACK", Color.decode("#D8BFD8"), Defs.GO_BACK);
 
         modesPanel.add(easyBtn);
         modesPanel.add(mediumBtn);
@@ -118,7 +118,7 @@ public class GameModesPanel extends GUIPanel {
         return modesPanel;
     }
 
-    private JButton createRoundedButton(String text, Color bgColor, Game game, int mode) {
+    private JButton createRoundedButton(String text, Color bgColor, int mode) {
         JButton button = new JButton(text) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -174,10 +174,10 @@ public class GameModesPanel extends GUIPanel {
         // Add action listeners
         button.addActionListener(e -> {
             if (mode == Defs.GO_BACK) {
-                game.changeState(Defs.STATE_MENU);
+                Game.getGame().changeState(Defs.STATE_MENU);
             } else {
-                game.getGm().startGame(mode);
-                game.changeState(Defs.STATE_PLAYING);
+                Game.getGame().getGm().startGame(mode);
+                Game.getGame().changeState(Defs.STATE_PLAYING);
             }
         });
 

@@ -1,15 +1,18 @@
 package com.breakout;
 
 import com.breakout.config.Defs;
+import com.breakout.gui.GUIPanel;
 import com.breakout.listeners.GameKeyListener;
 import com.breakout.managers.*;
 
 import javax.swing.*;
 
 /**
- * Game controller
+ * Game controller, using Singleton
  */
 public class Game {
+    private static Game instance = null;
+
     private JFrame frame;
 
     private GameManager gm;
@@ -24,18 +27,34 @@ public class Game {
     // Timing
     private long lastTime;
 
-    public Game(JFrame frame) {
+    private Game(JFrame frame) {
         state = Defs.STATE_LOADING;
         this.frame = frame;
+        instance = this; // Đảm bào instance không null trước khi khởi tạo gm và gui
         gm = new GameManager();
-        gui = new GUIManager(this);
-        keyListener = new GameKeyListener(this);
+        gui = new GUIManager();
+        keyListener = new GameKeyListener();
 
         // Thêm KeyListener cho GameplayPanel
         gui.getGameplayPanel().addKeyListener(keyListener);
 
         // THÊM DÒNG NÀY - KeyListener cho SettingPanel
         gui.getSettingPanel().addKeyListener(keyListener);
+    }
+
+    public static void initGame(JFrame frame) {
+        instance = new Game(frame);
+        System.out.println("Đã khởi tạo Game!");
+    }
+
+    public static Game getGame() {
+        if (instance != null) {
+            return instance;
+        } else {
+            System.out.println("Chưa khởi tạo Game!");
+            System.exit(0);
+            return null;
+        }
     }
 
     private void startGameLoop() {
@@ -81,7 +100,7 @@ public class Game {
         lastTime = currentTime;
 
         if (state == Defs.STATE_PLAYING) {
-            gm.update(this, deltaTime, keyListener.isLeftPressed(), keyListener.isRightPressed());
+            gm.update(deltaTime, keyListener.isLeftPressed(), keyListener.isRightPressed());
             gui.getGameplayPanel().repaint();
         }
     }
@@ -100,21 +119,27 @@ public class Game {
         this.state = state;
         switch (state) {
             case Defs.STATE_MENU:
+                gui.resetButton(GUIPanel.originalColors);
                 gui.showMenuScreen(frame);
                 break;
             case Defs.STATE_PLAYING:
+                keyListener.resetKeys();
                 gui.showGameplayPanel(frame);
                 break;
             case Defs.STATE_GAME_MODES:  // THÊM CASE NÀY
+                gui.resetButton(GUIPanel.originalColors);
                 gui.showGameModesScreen(frame);
                 break;
             case Defs.STATE_SETTING:
+                gui.resetButton(GUIPanel.originalColors);
                 gui.showSettingsScreen(frame);
                 break;
             case Defs.STATE_WIN:
+                gui.resetButton(GUIPanel.originalColors);
                 gui.showWinScreen(frame);
                 break;
             case Defs.STATE_GAMEOVER:
+                gui.resetButton(GUIPanel.originalColors);
                 gui.showGameOverScreen(frame);
                 break;
         }

@@ -2,7 +2,6 @@ package com.breakout.gui;
 
 import com.breakout.Game;
 import com.breakout.config.Defs;
-import com.breakout.managers.GameManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,7 +12,7 @@ public class GameOverPanel extends GUIPanel {
 
     private Image backgroundImage;
 
-    public GameOverPanel(Game game) {
+    public GameOverPanel() {
         super(Color.decode("#722F37")); // Cherry wine red
 
         // Load background image
@@ -27,9 +26,9 @@ public class GameOverPanel extends GUIPanel {
         contentPanel.setOpaque(false);
         contentPanel.setBounds(150, 220, 300, 300); // Căn giữa hơn
 
-        displayInfo(game.getGm(), contentPanel);
+        displayInfo(contentPanel);
         contentPanel.add(Box.createRigidArea(new Dimension(0, 40))); // Khoảng cách lớn hơn
-        addButtons(game, contentPanel);
+        addButtons(contentPanel);
 
         add(contentPanel);
     }
@@ -106,14 +105,14 @@ public class GameOverPanel extends GUIPanel {
         g2d.dispose();
     }
 
-    private void displayInfo(GameManager gm, JPanel centerPanel) {
+    private void displayInfo(JPanel centerPanel) {
         // Score display
-        JLabel scoreLabel = new JLabel("Score: " + (gm != null ? gm.getScore() : 0));
+        JLabel scoreLabel = new JLabel("Score: " + (Game.getGame().getGm() != null ? Game.getGame().getGm().getScore() : 0));
         scoreLabel.setFont(new Font("Arial", Font.BOLD, 32));
         scoreLabel.setForeground(new Color(255, 105, 180));
         scoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         scoreLabel = createLabel(
-                "Score: " + (gm != null ? gm.getScore() : 0),
+                "Score: " + (Game.getGame().getGm() != null ? Game.getGame().getGm().getScore() : 0),
                 Color.WHITE,
                 new Font("Arial", Font.BOLD, 24)
         );
@@ -123,11 +122,11 @@ public class GameOverPanel extends GUIPanel {
 
         // Difficulty display
         difficultyLabel = createLabel(
-                "Difficulty: " + gm.getDifficultyName(),
+                "Difficulty: " + Game.getGame().getGm().getDifficultyName(),
                 Color.WHITE,
                 new Font("Arial", Font.PLAIN, 18)
         );
-        JLabel difficultyLabel = new JLabel("Difficulty: " + gm.getDifficultyName());
+        JLabel difficultyLabel = new JLabel("Difficulty: " + Game.getGame().getGm().getDifficultyName());
         difficultyLabel.setFont(new Font("Arial", Font.PLAIN, 20));
         difficultyLabel.setForeground(new Color(218, 112, 161));
         difficultyLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -143,15 +142,15 @@ public class GameOverPanel extends GUIPanel {
         }
     }
 
-    private void addButtons(Game game, JPanel centerPanel) {
+    private void addButtons(JPanel centerPanel) {
         // Restart button
         JButton restartBtn = createRoundedButton("RESTART", new Color(139, 0, 0));
         restartBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         restartBtn.setMaximumSize(new Dimension(300, 55));
         restartBtn.setPreferredSize(new Dimension(300, 55));
         restartBtn.addActionListener(e -> {
-            game.changeState(Defs.STATE_PLAYING);
-            game.getGm().startGame(game.getGm().getCurrentDifficulty());
+            Game.getGame().changeState(Defs.STATE_PLAYING);
+            Game.getGame().getGm().startGame(Game.getGame().getGm().getCurrentDifficulty());
         });
         centerPanel.add(restartBtn);
 
@@ -161,10 +160,10 @@ public class GameOverPanel extends GUIPanel {
         JButton menuBtn = createRoundedButton("MAIN MENU", new Color(160, 82, 45));
         menuBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         menuBtn.setMaximumSize(new Dimension(300, 50));
-        menuBtn.addActionListener(e -> game.changeState(Defs.STATE_MENU));
+        menuBtn.addActionListener(e -> Game.getGame().changeState(Defs.STATE_MENU));
         menuBtn.setMaximumSize(new Dimension(300, 55));
         menuBtn.setPreferredSize(new Dimension(300, 55));
-        menuBtn.addActionListener(e -> game.changeState(Defs.STATE_MENU));
+        menuBtn.addActionListener(e -> Game.getGame().changeState(Defs.STATE_MENU));
         centerPanel.add(menuBtn);
     }
 

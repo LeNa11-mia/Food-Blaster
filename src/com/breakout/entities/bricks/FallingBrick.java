@@ -1,6 +1,5 @@
 package com.breakout.entities.bricks;
 
-import com.breakout.Game;
 import com.breakout.config.GameConfig;
 
 public class FallingBrick extends Brick {

@@ -5,6 +5,8 @@ import com.breakout.config.Defs;
 import com.breakout.gui.*;
 
 import javax.swing.*;
+import java.awt.*;
+import java.util.Map;
 
 /**
  * GUI manager
@@ -17,17 +19,21 @@ public class GUIManager {
     private WinPanel winPanel;
     private GameOverPanel gameOverPanel;
     private int previousState;  // Lưu state trước khi vào Settings
-    private Game game;
 
-    public GUIManager(Game game) {
-        this.game = game;
+    public GUIManager() {
         previousState = Defs.STATE_LOADING;
-        gameplayPanel = new GameplayPanel(game.getGm());
-        menuPanel = new MenuPanel(game);
-        gameModesPanel = new GameModesPanel(game);
-        winPanel = new WinPanel(game);
-        settingPanel = new SettingPanel(game);
-        gameOverPanel = new GameOverPanel(game);
+        gameplayPanel = new GameplayPanel();
+        menuPanel = new MenuPanel();
+        gameModesPanel = new GameModesPanel();
+        winPanel = new WinPanel();
+        settingPanel = new SettingPanel();
+        gameOverPanel = new GameOverPanel();
+    }
+
+    public void resetButton(Map<JButton, Color> originalColors) {
+        for (JButton btn : originalColors.keySet()) {
+            btn.setBackground(originalColors.get(btn));
+        }
     }
 
     private void showGUIPanel(JFrame frame, GUIPanel panel) {
@@ -58,13 +64,13 @@ public class GUIManager {
     }
 
     public void showWinScreen(JFrame frame) {
-        GameManager gm = game.getGm();
+        GameManager gm = Game.getGame().getGm();
         winPanel.updateScore(gm.getScore(), gm.getDifficultyName());
         showGUIPanel(frame, winPanel);
     }
 
     public void showGameOverScreen(JFrame frame) {
-        GameManager gm = game.getGm();
+        GameManager gm = Game.getGame().getGm();
         gameOverPanel.updateScore(gm.getScore(), gm.getDifficultyName());
         showGUIPanel(frame, gameOverPanel);
     }

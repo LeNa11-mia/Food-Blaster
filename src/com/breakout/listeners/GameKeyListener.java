@@ -8,27 +8,25 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class GameKeyListener implements KeyListener {
-    private Game game;
+
     private boolean leftPressed = false;
     private boolean rightPressed = false;
 
-    public GameKeyListener(Game game) {
-        this.game = game;
-    }
+    public GameKeyListener() {}
 
     @Override
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
-        GameManager gm = game.getGm();
-        int currentState = game.getState();
+        GameManager gm = Game.getGame().getGm();
+        int currentState = Game.getGame().getState();
 
         // SPACE - Toggle Settings
         if (key == KeyEvent.VK_SPACE) {
             // Nếu đang ở Settings -> Quay về state trước đó
             if (currentState == Defs.STATE_SETTING) {
-                int previous = game.getGUI().getPreviousState();
+                int previous = Game.getGame().getGUI().getPreviousState();
                 if (previous != Defs.STATE_LOADING) {
-                    game.changeState(previous);
+                    Game.getGame().changeState(previous);
                 }
                 return;
             }
@@ -40,7 +38,7 @@ public class GameKeyListener implements KeyListener {
                     return;
                 }
                 else {
-                    game.changeState(Defs.STATE_SETTING);
+                    Game.getGame().changeState(Defs.STATE_SETTING);
                     return;
                 }
             }
@@ -60,7 +58,7 @@ public class GameKeyListener implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode();
-        if (game.getState() == Defs.STATE_PLAYING) {
+        if (Game.getGame().getState() == Defs.STATE_PLAYING) {
             if (key == KeyEvent.VK_LEFT || key == KeyEvent.VK_A) {
                 leftPressed = false;
             }
@@ -68,6 +66,11 @@ public class GameKeyListener implements KeyListener {
                 rightPressed = false;
             }
         }
+    }
+
+    public void resetKeys() {
+        leftPressed = false;
+        rightPressed = false;
     }
 
     @Override

@@ -11,7 +11,7 @@ public class WinPanel extends GUIPanel {
     private JLabel scoreLabel;
     private JLabel difficultyLabel;
 
-    public WinPanel(Game game) {
+    public WinPanel() {
         super(Color.decode("#2D5016")); // Dark green
 
         // Center content
@@ -21,17 +21,17 @@ public class WinPanel extends GUIPanel {
         centerPanel.setBorder(BorderFactory.createEmptyBorder(0, 100, 50, 100));
 
         // Title at the top, score and difficulty in center panel, instructions at the bottom
-        displayInfo(game.getGm(), centerPanel);
+        displayInfo(centerPanel);
 
         centerPanel.add(Box.createRigidArea(new Dimension(0, 40)));
 
         // Buttons
-        addButtons(game, centerPanel);
+        addButtons(centerPanel);
 
         add(centerPanel, BorderLayout.CENTER);
     }
 
-    private void displayInfo(GameManager gm, JPanel centerPanel) {
+    private void displayInfo(JPanel centerPanel) {
         // Title
         JLabel titleLabel = createBorderedLabel(
                 "YOU WIN!",
@@ -43,7 +43,7 @@ public class WinPanel extends GUIPanel {
 
         // Score display
         scoreLabel = createLabel(
-                "Score: " + (gm != null ? gm.getScore() : 0),
+                "Score: " + (Game.getGame().getGm() != null ? Game.getGame().getGm().getScore() : 0),
                 Color.WHITE,
                 new Font("Arial", Font.BOLD, 24)
         );
@@ -53,7 +53,7 @@ public class WinPanel extends GUIPanel {
 
         // Difficulty display
         difficultyLabel = createLabel(
-                "Difficulty: " + gm.getDifficultyName(),
+                "Difficulty: " + Game.getGame().getGm().getDifficultyName(),
                 Color.WHITE,
                 new Font("Arial", Font.PLAIN, 18)
         );
@@ -78,17 +78,17 @@ public class WinPanel extends GUIPanel {
         }
     }
 
-    private void addButtons(Game game, JPanel centerPanel) {
-        GameManager gm = game.getGm();
+    private void addButtons(JPanel centerPanel) {
+        GameManager gm = Game.getGame().getGm();
         // Next level button
-        int nextLevel = game.getGm().getNextDifficulty();
+        int nextLevel = Game.getGame().getGm().getNextDifficulty();
         if (nextLevel > 0) {
             JButton nextBtn = createButton("NEXT LEVEL", Color.decode("#228B22")); // Forest green
             nextBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
             nextBtn.setMaximumSize(new Dimension(300, 50));
             nextBtn.addActionListener(e -> {
                 gm.startGame(gm.getNextDifficulty());
-                game.changeState(Defs.STATE_PLAYING);
+                Game.getGame().changeState(Defs.STATE_PLAYING);
 
             });
             centerPanel.add(nextBtn);
@@ -102,7 +102,7 @@ public class WinPanel extends GUIPanel {
         restartBtn.setMaximumSize(new Dimension(300, 50));
         restartBtn.addActionListener(e -> {
             gm.startGame(gm.getCurrentDifficulty());
-            game.changeState(Defs.STATE_PLAYING);
+            Game.getGame().changeState(Defs.STATE_PLAYING);
         });
         centerPanel.add(restartBtn);
 
@@ -113,7 +113,7 @@ public class WinPanel extends GUIPanel {
         addButton(menuBtn);
         menuBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         menuBtn.setMaximumSize(new Dimension(300, 50));
-        menuBtn.addActionListener(e -> game.changeState(Defs.STATE_MENU));
+        menuBtn.addActionListener(e -> Game.getGame().changeState(Defs.STATE_MENU));
         centerPanel.add(menuBtn);
     }
 }
