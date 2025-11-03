@@ -75,10 +75,10 @@ public class GameManager {
         resetPaddle();
         lives = 1;
         score = 0;
+        activeItems.clear();
     }
 
     public void update(double deltaTime, boolean leftPressed, boolean rightPressed) {
-
         if (paused) return;
 
         if (!ballStarted) return;
@@ -115,7 +115,8 @@ public class GameManager {
         }
 
         // Ball hits left/right walls
-        if (ball.getX() <= 0 || ball.getX() + ball.getWidth() >= GameConfig.SCREEN_WIDTH - 15) {
+        if (ball.getX() <= 0
+                || ball.getX() + ball.getWidth() >= GameConfig.SCREEN_WIDTH - 12) {
             ball.bounceX();
         }
 
@@ -144,6 +145,19 @@ public class GameManager {
                 brick.hit();
                 ball.bounceY();
                 break; // Only destroy one brick per collision
+            }
+        }
+
+        // Update items
+        Iterator<Item> iter = activeItems.iterator();
+        while (iter.hasNext()) {
+            Item item = iter.next();
+            item.update(deltaTime);
+            if (item.intersects(paddle)) {
+                item.applyEffect(paddle, this);
+                iter.remove();
+            } else if (item.getY() > GameConfig.SCREEN_HEIGHT) {
+                iter.remove(); // xóa item khi rơi ra ngoài
             }
         }
 

@@ -4,6 +4,7 @@ import com.breakout.Game;
 import com.breakout.config.GameConfig;
 import com.breakout.core.GameObject;
 import com.breakout.entities.bricks.Brick;
+import com.breakout.entities.items.Item;
 
 import java.awt.*;
 
@@ -15,16 +16,37 @@ public class GameplayPanel extends GUIPanel {
     }
 
     private void draw(GameObject obj, Graphics2D g2d) {
-        g2d.drawImage(obj.getSprite().getImage(), (int) obj.getX(), (int) obj.getY(), null);
+        if (obj.getSprite() != null && obj.getSprite().getImage() != null) {
+            g2d.drawImage(obj.getSprite().getImage(),
+                    (int) obj.getX(),
+                    (int) obj.getY(),
+                    (int) obj.getWidth(),
+                    (int) obj.getHeight(),
+                    null);
+        }
     }
 
+
+
     public void drawObjects(Graphics2D g2d) {
-        draw(Game.getGame().getGm().getBall(), g2d);
-        draw(Game.getGame().getGm().getPaddle(), g2d);
-        for (Brick brick : Game.getGame().getGm().getBricks()) {
+        var gm = Game.getGame().getGm();
+
+        // Vẽ bóng
+        draw(gm.getBall(), g2d);
+
+        // Vẽ thanh paddle
+        draw(gm.getPaddle(), g2d);
+
+        // Vẽ gạch
+        for (Brick brick : gm.getBricks()) {
             if (!brick.isDestroyed()) {
                 draw(brick, g2d);
             }
+        }
+
+        // Vẽ item
+        for (Item item : gm.getActiveItems()) {
+            draw(item, g2d);
         }
     }
 
