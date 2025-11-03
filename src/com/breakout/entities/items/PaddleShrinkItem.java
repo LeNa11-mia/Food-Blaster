@@ -12,6 +12,9 @@ public class PaddleShrinkItem extends BadItem {
 
     @Override
     public void applyEffect(Paddle paddle, GameManager gm) {
-        paddle.setWidth(paddle.getWidth() * SHRINK_MULTIPLIER);
+        double centerX = paddle.getX() + paddle.getWidth() / 2;
+        double newWidth = paddle.getWidth() * SHRINK_MULTIPLIER;
+        paddle.setX(centerX - newWidth / 2);
+        paddle.resizeSprite(newWidth, paddle.getHeight());
     }
 }
