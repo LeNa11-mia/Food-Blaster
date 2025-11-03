@@ -23,6 +23,7 @@ public class GameManager {
     private Paddle paddle;
     private List<Brick> bricks;
     private List<Item> activeItems;
+    private Game game;
 
     private int score;
     private int lives;
@@ -37,6 +38,10 @@ public class GameManager {
         bricks = new ArrayList<>();
         activeItems = new ArrayList<>();
         lives = 1; // Only 1 life as per your requirement
+    }
+
+    public GameManager(Game game) {
+        this.game = game;
     }
 
     private boolean paused = false;
@@ -87,6 +92,8 @@ public class GameManager {
             // Lưu game trước khi chuyển sang GAMEOVER
             saveCurrentGame();
             Game.getGame().changeState(Defs.STATE_GAMEOVER);
+
+            game.changeState(Defs.STATE_GAMEOVER);
             return; // Don't update if game is over
         } else if (isWin()) {
             // Lưu game trước khi chuyển sang WIN
@@ -197,6 +204,8 @@ public class GameManager {
      */
     public void loadSavedGame(GameSave gameSave) {
         if (gameSave == null) return;
+
+        game.changeState(Defs.STATE_LOADING);
 
         currentDifficulty = gameSave.getDifficulty();
         score = gameSave.getScore();
