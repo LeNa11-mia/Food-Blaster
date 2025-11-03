@@ -26,6 +26,7 @@ public class Defs {
     public static final int NORMAL_BRICK = 1;
     public static final int EXPLOSIVE_BRICK = 2;
     public static final int FALLING_BRICK = 3;
+    public static final int ITEM_BRICK = 4;
 
     // ----- ITEM TYPES -----
 }
