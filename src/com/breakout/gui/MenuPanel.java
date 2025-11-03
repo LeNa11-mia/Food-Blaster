@@ -11,11 +11,9 @@ public class MenuPanel extends GUIPanel {
 
     private Image backgroundImage;
     private JButton continueButton;
-    private Game game;
 
-    public MenuPanel(Game game) {
+    public MenuPanel() {
         super(Color.decode("#F3CFC6"));
-        this.game = game;
 
         // Load background image
         loadBackgroundImage();
@@ -23,7 +21,7 @@ public class MenuPanel extends GUIPanel {
         setLayout(null); // Dùng absolute positioning để đặt chính xác vị trí
 
         // Tạo button panel và đặt ở phần màu hồng
-        JPanel buttonPanel = createButtonPanel(game);
+        JPanel buttonPanel = createButtonPanel();
         buttonPanel.setBounds(150, 350, 300, 250); // x, y, width, height
         add(buttonPanel);
     }
@@ -106,7 +104,7 @@ public class MenuPanel extends GUIPanel {
         }
     }
 
-    private JPanel createButtonPanel(Game game) {
+    private JPanel createButtonPanel() {
         JPanel buttonPanel = new JPanel();
 
         boolean hasSave = SaveManager.saveExists();
@@ -122,17 +120,17 @@ public class MenuPanel extends GUIPanel {
 
         // Nút PLAY
         JButton playBtn = createRoundedButton("PLAY", Color.decode("#F8C8DC"));
-        playBtn.addActionListener(e -> game.changeState(Defs.STATE_GAME_MODES));
+        playBtn.addActionListener(e -> Game.getGame().changeState(Defs.STATE_GAME_MODES));
         buttonPanel.add(playBtn);
 
         // Nếu có save → thêm CONTINUE ở giữa PLAY và EXIT
         if (hasSave) {
             continueButton = createRoundedButton("CONTINUE", Color.decode("#FFB6C1"));
             continueButton.addActionListener(e -> {
-                if (game.getGm() != null) {
-                    game.getGm().continueGame();
+                if (Game.getGame().getGm() != null) {
+                    Game.getGame().getGm().continueGame();
                 }
-                game.changeState(Defs.STATE_PLAYING);
+                Game.getGame().changeState(Defs.STATE_PLAYING);
             });
             buttonPanel.add(continueButton);
         }
@@ -151,20 +149,20 @@ public class MenuPanel extends GUIPanel {
 
         // Add action listeners
         easyBtn.addActionListener(e -> {
-            game.getGm().startGame(Defs.LEVEL_EASY);
-            game.changeState(Defs.STATE_PLAYING);
+            Game.getGame().getGm().startGame(Defs.LEVEL_EASY);
+            Game.getGame().changeState(Defs.STATE_PLAYING);
         });
         mediumBtn.addActionListener(e -> {
-            game.getGm().startGame(Defs.LEVEL_MEDIUM);
-            game.changeState(Defs.STATE_PLAYING);
+            Game.getGame().getGm().startGame(Defs.LEVEL_MEDIUM);
+            Game.getGame().changeState(Defs.STATE_PLAYING);
         });
         hardBtn.addActionListener(e -> {
-            game.getGm().startGame(Defs.LEVEL_HARD);
-            game.changeState(Defs.STATE_PLAYING);
+            Game.getGame().getGm().startGame(Defs.LEVEL_HARD);
+            Game.getGame().changeState(Defs.STATE_PLAYING);
         });
         bossBtn.addActionListener(e -> {
-            game.getGm().startGame(Defs.LEVEL_BOSS);
-            game.changeState(Defs.STATE_PLAYING);
+            Game.getGame().getGm().startGame(Defs.LEVEL_BOSS);
+            Game.getGame().changeState(Defs.STATE_PLAYING);
         });
         exitBtn.addActionListener(e -> System.exit(0));
         buttonPanel.add(exitBtn);
@@ -180,7 +178,7 @@ public class MenuPanel extends GUIPanel {
         loadBackgroundImage();
 
         // Tạo lại button panel
-        JPanel buttonPanel = createButtonPanel(game);
+        JPanel buttonPanel = createButtonPanel();
         buttonPanel.setBounds(150, 350, 300, 250);
         add(buttonPanel);
 
@@ -251,7 +249,7 @@ public class MenuPanel extends GUIPanel {
     // Thêm method để enable/disable nút continue nếu cần
     public void setContinueButtonEnabled(boolean enabled) {
         if (continueButton != null) {
-            continueButton.setEnabled(game.getGm().canContinueGame());
+            continueButton.setEnabled(Game.getGame().getGm().canContinueGame());
         }
     }
 
