@@ -153,6 +153,10 @@ public class Game {
         return gui;
     }
 
+    public GameKeyListener getKeyListener() {
+        return keyListener;
+    }
+
     public JFrame getFrame() {
         return frame;
     }

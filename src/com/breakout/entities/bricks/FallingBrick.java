@@ -27,6 +27,7 @@ public class FallingBrick extends Brick {
 
     @Override
     public void hit() {
-        falling = true; // Fall off when hit
+        hit = true;
+        falling = true; // Rơi xuống thay vì bị phá hủy
     }
 }

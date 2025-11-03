@@ -15,7 +15,9 @@ public class GameplayPanel extends GUIPanel {
     }
 
     private void draw(GameObject obj, Graphics2D g2d) {
-        g2d.drawImage(obj.getSprite().getImage(), (int) obj.getX(), (int) obj.getY(), null);
+        g2d.drawImage(obj.getSprite().getImage(), (int) obj.getX(), (int) obj.getY(),
+                        (int) obj.getWidth(), (int) obj.getHeight(), null);
+        // Ảnh khớp với kích thước object
     }
 
     public void drawObjects(Graphics2D g2d) {

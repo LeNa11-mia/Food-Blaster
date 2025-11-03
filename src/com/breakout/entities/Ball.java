@@ -7,7 +7,7 @@ import com.breakout.core.GameObject;
  * Ball - handles movement and rendering.
  */
 public class Ball extends GameObject {
-    private double vx = GameConfig.BALL_SPEED; // X velocity
+    private double vx = 0; // X velocity
     private double vy = GameConfig.BALL_SPEED; // Y velocity
 
     public Ball(double x, double y) {
@@ -20,6 +20,53 @@ public class Ball extends GameObject {
         // Move the ball
         x += vx * deltaTime;
         y += vy * deltaTime;
+    }
+
+    // Xử lý va chạm từ các hướng
+    public void collisionFromSides(GameObject obj) {
+        if (obj instanceof Paddle) {
+            collisionWithPaddle((Paddle) obj);
+        } else {
+            double overlapX = Math.min(x + getWidth(), obj.getX() + obj.getWidth()) - Math.max(x, obj.getX());
+            // Mép phải nhỏ hơn - mép trái lớn hơn = phần trùng nhau theo trục X
+            double overlapY = Math.min(y + getHeight(), obj.getY() + obj.getHeight()) - Math.max(y, obj.getY());
+            // Mép trên nhỏ hơn - mép dưới lớn hơn = phần trùng nhau theo chiều Y
+
+            if (overlapX == 0 || overlapY == 0) {
+                return;
+            }
+
+            if (overlapX < overlapY) { // Mới va chạm theo chiều X
+                bounceX();
+            } else {
+                bounceY();
+            }
+        }
+    }
+
+    // Xử lý va chạm với paddle
+    public void collisionWithPaddle(Paddle paddle) {
+        setPaddleBounceVelocity(paddle); // Tính góc bật tùy vào vị trí va chạm
+        addPaddleVelocity(paddle); // Vận tốc của paddle cũng ảnh hưởng đến bóng
+    }
+
+    private void setPaddleBounceVelocity(Paddle paddle) {
+        // Khoảng cách từ tâm bóng đến giữa paddle
+        double distance = (x + getWidth() / 2) - (paddle.getX() + paddle.getWidth() / 2);
+
+        double sin = distance / (paddle.getWidth() / 2); // Góc giữa paddle và bóng bật lên
+        sin = Math.max(-1, Math.min(1, sin)); // Sin trong khoảng [-1, 1]
+
+        double angle = Math.toRadians(60) * sin; // Góc bật trong khoảng [-60, 60]
+
+        double newVx = Math.sin(angle) * GameConfig.BALL_SPEED;
+        double newVy = -Math.cos(angle) * GameConfig.BALL_SPEED; // Trục y hướng xuống
+        setVelocity(newVx, newVy);
+    }
+
+    private void addPaddleVelocity(Paddle paddle) {
+        double transfer = 0.2;  // Truyền 20% vận tốc paddle cho bóng
+        setVelocity(vx + transfer * paddle.getVx(), vy);
     }
 
     // Reverse direction when hitting walls

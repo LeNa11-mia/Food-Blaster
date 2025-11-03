@@ -8,14 +8,14 @@ import com.breakout.interfaces.Destructible;
  * Brick - can be drawn and destroyed.
  */
 public class Brick extends GameObject implements Destructible {
-    protected boolean destroyed = false;
+    protected boolean hit;
+    protected boolean destroyed;
 
     public Brick(double x, double y) {
         super(x, y, GameConfig.BRICK_WIDTH, GameConfig.BRICK_HEIGHT);
         sprite = GameConfig.NORMAL_BRICK_IMAGE;
-        if (sprite == null) {
-            System.out.println("Sprite is null");
-        }
+        destroyed = false;
+        hit = false;
     }
 
     @Override
@@ -26,6 +26,7 @@ public class Brick extends GameObject implements Destructible {
     @Override
     public void hit() {
         destroyed = true;
+        hit = true;
         onDestroyed();
         // Bricks are destroyed when hit (default)
     }
@@ -40,6 +41,11 @@ public class Brick extends GameObject implements Destructible {
     public boolean isDestroyed() {
         return destroyed;
     }
+
+    public boolean isHit() {
+        return hit;
+    }
+
     // Thêm method getter cho health (luôn trả về 1)
     public int getHealth() {
             return destroyed ? 0 : 1;

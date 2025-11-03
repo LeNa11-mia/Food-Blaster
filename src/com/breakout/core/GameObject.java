@@ -31,9 +31,9 @@ public abstract class GameObject {
     
     // Simple collision detection
     public boolean intersects(GameObject other) {
-        return x < other.x + other.width &&
-               x + width > other.x &&
-               y < other.y + other.height &&
-               y + height > other.y;
+        return x <= other.x + other.width &&
+               x + width >= other.x &&
+               y <= other.y + other.height &&
+               y + height >= other.y;
     }
 }
