@@ -19,6 +19,10 @@ import java.util.List;
  * Gameplay manager
  */
 public class GameManager {
+    private String screenMessage = null;
+    private double messageTimer = 0.0;
+    private static final double MESSAGE_DURATION = 2.0;
+
     private Ball ball;
     private Paddle paddle;
     private List<Brick> bricks;
@@ -37,6 +41,15 @@ public class GameManager {
         bricks = new ArrayList<>();
         activeItems = new ArrayList<>();
         lives = 1; // Only 1 life as per your requirement
+    }
+
+    public void showMessageOnScreen(String message) {
+        this.screenMessage = message;
+        this.messageTimer = MESSAGE_DURATION; // Bắt đầu đếm ngược
+    }
+
+    public String getScreenMessage() {
+        return screenMessage;
     }
 
     private boolean paused = false;
@@ -150,6 +163,13 @@ public class GameManager {
                 brick.hit();
                 ball.collisionFromSides(brick);
                 break; // Only destroy one brick per collision
+            }
+        }
+
+        if (messageTimer > 0) {
+            messageTimer -= deltaTime;
+            if (messageTimer <= 0) {
+                screenMessage = null; // Ẩn tin nhắn khi hết giờ
             }
         }
 

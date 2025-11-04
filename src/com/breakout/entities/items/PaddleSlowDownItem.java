@@ -8,11 +8,17 @@ public class PaddleSlowDownItem extends BadItem {
 
     public PaddleSlowDownItem(double x, double y) {
         super(x, y);
+        name = "PADDLE SLOW DOWN";
     }
 
     @Override
     public void applyEffect(Paddle paddle, GameManager gm) {
         double newSpeed = paddle.getSpeed() * SPEED_MULTIPLIER;
+        double oldSpeed = paddle.getSpeed();
         paddle.setSpeed(newSpeed);
+        System.out.println("✅" + name + " : " + oldSpeed
+                + " → " + newSpeed);
+
+        gm.showMessageOnScreen(name + " " + icon);
     }
 }
