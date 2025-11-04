@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Level extends LevelData {
+
     public static List<Brick> loadLevel(int id) {
         switch (id) {
             case Defs.LEVEL_EASY: return createLevel(LevelData.level1);
