@@ -10,6 +10,7 @@ import java.util.function.BiFunction;
 
 public abstract class Item extends GameObject {
     private double speed = GameConfig.ITEM_FALLING_SPEED;
+    protected String name;
 
     public Item(double x, double y) {
         super(x, y, GameConfig.ITEM_WIDTH, GameConfig.ITEM_HEIGHT);
@@ -23,18 +24,6 @@ public abstract class Item extends GameObject {
     }
 
     public abstract void applyEffect(Paddle paddle, GameManager gm);
-
-//    public static Item createRandomItem(double x, double y) {
-//        Random rand = new Random();
-//        // 2 types of items: Good và Bad
-//        int type = rand.nextInt(2);
-//
-//        if (type == 0) {
-//            return new PaddleSpeedUpItem(x, y);
-//        } else if (type == 1) {
-//            return new PaddleShrinkItem(x, y);
-//        }
-//    }
 
     public static Item createRandomItem(double x, double y) {
         List<BiFunction<Double, Double, Item>> factories = List.of(

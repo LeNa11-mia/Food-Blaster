@@ -65,5 +65,30 @@ public class GameplayPanel extends GUIPanel {
 
         // Display instructions
         drawInstructions(g2d);
+
+        drawItemMessage(g2d);
+    }
+
+    private void drawItemMessage(Graphics2D g2d) {
+        String message = Game.getGame().getGm().getScreenMessage();
+
+        if (message != null) {
+            // Cấu hình font và màu
+            Font font = new Font("Arial", Font.PLAIN, 12);
+            g2d.setFont(font);
+
+            // Tính toán vị trí để căn giữa tin nhắn
+            FontMetrics fm = g2d.getFontMetrics();
+            int x = (GameConfig.SCREEN_WIDTH - fm.stringWidth(message)) / 2;
+            int y = 25;
+
+            // Vẽ hiệu ứng đổ bóng/viền (tùy chọn)
+//            g2d.setColor(new Color(0, 0, 0, 150)); // Shadow
+//            g2d.drawString(message, x + 2, y + 2);
+
+            // Vẽ tin nhắn chính
+            g2d.setColor(Color.BLACK);
+            g2d.drawString(message, x, y);
+        }
     }
 }

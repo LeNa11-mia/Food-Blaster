@@ -44,7 +44,6 @@ public abstract class GameObject {
             System.out.println("❌ Sprite null before resize");
             return;
         }
-        System.out.println("✅ Resizing from " + width + "x" + height + " → " + newWidth + "x" + newHeight);
         this.width = newWidth;
         this.height = newHeight;
         this.sprite = ImageUtils.resize(sprite, (int)newWidth, (int)newHeight);

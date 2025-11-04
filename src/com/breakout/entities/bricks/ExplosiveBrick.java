@@ -46,7 +46,7 @@ public class ExplosiveBrick extends Brick implements Destructible {
             double dy = Math.abs(b.getY() - cy);
 
             // If b in explosion radius (radius * brick's width or length)
-            if (dx <= explosionRadius * GameConfig.BRICK_WIDTH && dy <= explosionRadius * GameConfig.BRICK_HEIGHT) {
+            if (dx <= explosionRadius * (GameConfig.BRICK_WIDTH + 1) && dy <= explosionRadius * (GameConfig.BRICK_HEIGHT + 1)) {
                 b.hit();
             }
         }
