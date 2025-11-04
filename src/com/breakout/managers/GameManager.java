@@ -32,7 +32,6 @@ public class GameManager {
     private int lives;
     private int currentDifficulty;
     private int currentLevel = 1;
-    private boolean laserEnabled;
 
     public GameManager() {
         // Initialize game objects
@@ -376,5 +375,8 @@ public class GameManager {
         return SaveManager.getSaveInfo();
     }
     public boolean isGameOver() { return lives <= 0; }
+    public void setLives(int lives) {
+        this.lives = lives;
+    }
     public int getCurrentDifficulty() { return currentDifficulty; }
 }

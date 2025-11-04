@@ -18,7 +18,5 @@ public class PaddleSlowDownItem extends BadItem {
         paddle.setSpeed(newSpeed);
         System.out.println("✅" + name + " : " + oldSpeed
                 + " → " + newSpeed);
-
-        gm.showMessageOnScreen(name + " " + icon);
     }
 }
