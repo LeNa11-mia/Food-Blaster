@@ -108,25 +108,6 @@ public class GameManager {
             return;
         }
 
-        // Update ball
-        ball.update(deltaTime);
-        for (Brick brick : bricks) {
-            if (brick instanceof FallingBrick) {
-                brick.update(deltaTime);
-                if (paddle.intersects(brick)) {
-                    lives--;
-                }
-            }
-        }
-
-        // Control paddle
-        if (leftPressed) {
-            paddle.moveLeft(deltaTime, GameConfig.SCREEN_WIDTH);
-        }
-        if (rightPressed) {
-            paddle.moveRight(deltaTime, GameConfig.SCREEN_WIDTH);
-        }
-
         // Ball hits left/right walls
         if (ball.getX() <= 0
                 || ball.getX() + ball.getWidth() >= GameConfig.SCREEN_WIDTH - 12) {
@@ -151,7 +132,6 @@ public class GameManager {
 
         // Collision with paddle
         if (ball.intersects(paddle) && ball.getVy() > 0) {
-            ball.bounceY();
             ball.collisionFromSides(paddle);
             SoundManager.playWallHitSound();
         }
@@ -159,9 +139,9 @@ public class GameManager {
         // Collision with bricks
         for (Brick brick : bricks) {
             if (!brick.isDestroyed() && !brick.isHit() && ball.intersects(brick)) {
-                SoundManager.playBrickHitSound();
                 brick.hit();
                 ball.collisionFromSides(brick);
+                SoundManager.playBrickHitSound();
                 break; // Only destroy one brick per collision
             }
         }
@@ -170,6 +150,21 @@ public class GameManager {
             messageTimer -= deltaTime;
             if (messageTimer <= 0) {
                 screenMessage = null; // Ẩn tin nhắn khi hết giờ
+            }
+        }
+
+        // Update ball
+        ball.update(deltaTime);
+        // Update paddle
+        paddle.update(deltaTime);
+
+        // Update bricks
+        for (Brick brick : bricks) {
+            if (brick instanceof FallingBrick) {
+                brick.update(deltaTime);
+                if (paddle.intersects(brick)) {
+                    lives--;
+                }
             }
         }
 

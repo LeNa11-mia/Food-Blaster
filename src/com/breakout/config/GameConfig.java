@@ -37,7 +37,7 @@ public class GameConfig {
     public static final ImageIcon EXPLOSIVE_BRICK_IMAGE = new ImageIcon("src/com/breakout/resources.assets/explosive-brick.png");
 
     public static final double GRAVITY = 980; // Bricks fall faster over time
-    public static final ImageIcon FALLING_BRICK_IMAGE = new ImageIcon("src/com/breakout/resources.assets/falling.png");
+    public static final ImageIcon FALLING_BRICK_IMAGE = new ImageIcon("src/com/breakout/resources.assets/falling-brick.png");
 
     public static final double ITEM_FALLING_SPEED = 170;
     public static final ImageIcon ITEM_BRICK_IMAGE = NORMAL_BRICK_IMAGE; // Ẩn vị trí Item Brick

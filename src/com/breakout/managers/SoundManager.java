@@ -5,6 +5,8 @@ import com.breakout.config.GameConfig;
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Quản lý việc tải và phát âm thanh.
@@ -12,6 +14,9 @@ import java.io.IOException;
 public class SoundManager {
     private static Clip brickHitClip;
     private static Clip wallHitClip;
+
+    // Thread pool với số luồng cố định
+    private static final ExecutorService soundPool = Executors.newFixedThreadPool(2);
 
     /**
      * Tải tất cả âm thanh cần thiết khi game khởi động.
@@ -51,13 +56,18 @@ public class SoundManager {
     public static void playBrickHitSound() {
         if (brickHitClip != null) {
             // Reset clip về đầu
-            brickHitClip.setFramePosition(0);
-            // Dừng nếu đang phát (để phát lại nhanh)
-            if (brickHitClip.isRunning()) {
-                brickHitClip.stop();
-            }
-            // Phát âm thanh
-            brickHitClip.start();
+            soundPool.submit(() -> { // Giao công việc cho thread pool
+                synchronized (brickHitClip) { // Chỉ 1 luồng được truy cập đến brickHitClip -> tránh xung đột dữ liệu
+                    brickHitClip.setFramePosition(0);
+                    // Dừng nếu đang phát (để phát lại nhanh)
+                    if (brickHitClip.isRunning()) {
+                        brickHitClip.stop();
+                    }
+                    // Phát âm thanh
+                    brickHitClip.start();
+                }
+            });
+
         }
     }
 
@@ -66,14 +76,18 @@ public class SoundManager {
      */
     public static void playWallHitSound() {
         if (wallHitClip != null) {
-            // Reset clip về đầu
-            wallHitClip.setFramePosition(0);
-            // Dừng nếu đang phát (để phát lại nhanh)
-            if (wallHitClip.isRunning()) {
-                wallHitClip.stop();
-            }
-            // Phát âm thanh
-            wallHitClip.start();
+            soundPool.submit(() -> {
+                synchronized (wallHitClip) {
+                    // Reset clip về đầu
+                    wallHitClip.setFramePosition(0);
+                    // Dừng nếu đang phát (để phát lại nhanh)
+                    if (wallHitClip.isRunning()) {
+                        wallHitClip.stop();
+                    }
+                    // Phát âm thanh
+                    wallHitClip.start();
+                }
+            });
         }
     }
 

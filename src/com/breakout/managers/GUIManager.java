@@ -1,7 +1,6 @@
 package com.breakout.managers;
 
 import com.breakout.Game;
-import com.breakout.config.Defs;
 import com.breakout.gui.*;
 
 import javax.swing.*;
@@ -18,13 +17,11 @@ public class GUIManager {
     private GameModesPanel gameModesPanel;
     private WinPanel winPanel;
     private GameOverPanel gameOverPanel;
-    private Game game;
     private int previousState;  // Lưu state trước khi vào Settings
 
-    public GUIManager(Game game) {
-        this.game = game;
+    public GUIManager() {
         gameplayPanel = new GameplayPanel();
-        menuPanel = new MenuPanel(game);
+        menuPanel = new MenuPanel();
         gameModesPanel = new GameModesPanel();
         winPanel = new WinPanel();
         settingPanel = new SettingPanel();
@@ -32,13 +29,14 @@ public class GUIManager {
         previousState = -1;
     }
 
-//    public void resetButton(Map<JButton, Color> originalColors) {
-//        for (JButton btn : originalColors.keySet()) {
-//            btn.setBackground(originalColors.get(btn));
-//        }
-//    }
+    public void resetButton(Map<JButton, Color> originalColors) {
+        for (JButton btn : originalColors.keySet()) {
+            btn.setBackground(originalColors.get(btn));
+        }
+    }
 
     private void showGUIPanel(JFrame frame, GUIPanel panel) {
+        // Xử lý giao diện trên luồng riêng (EDT)
         SwingUtilities.invokeLater(() -> {
             frame.getContentPane().removeAll();
             frame.add(panel);
@@ -67,13 +65,13 @@ public class GUIManager {
 
     public void showWinScreen(JFrame frame) {
         GameManager gm = Game.getGame().getGm();
-        winPanel.updateScore(gm.getScore(), gm.getDifficultyName());
+        winPanel.updateInfo(gm.getScore(), gm.getDifficultyName());
         showGUIPanel(frame, winPanel);
     }
 
     public void showGameOverScreen(JFrame frame) {
         GameManager gm = Game.getGame().getGm();
-        gameOverPanel.updateScore(gm.getScore(), gm.getDifficultyName());
+        gameOverPanel.updateInfo(gm.getScore(), gm.getDifficultyName());
         showGUIPanel(frame, gameOverPanel);
     }
 

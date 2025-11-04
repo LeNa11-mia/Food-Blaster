@@ -10,7 +10,7 @@ import javax.swing.*;
 public class Main {
 
     public static void main(String[] args) {
-        // Schedules code to run later on the Event Dispatch Thread (EDT).
+        // Các thao tác xử lý giao diện của Swing chạy trên Event Dispatch Thread (EDT)
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame(GameConfig.WINDOW_TITLE);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -18,11 +18,11 @@ public class Main {
             frame.setLocationRelativeTo(null);
             frame.setResizable(false);
 
-            Game.initGame(frame);
+            Game.initGame(frame); // Khởi tạo game, chưa vào game loop
 
-            // Start with menu
-            Game.getGame().start();
             frame.setVisible(true);
+
+            new Thread(() -> Game.getGame().start()).start(); // Tạo luồng riêng cho game loop
         });
     }
 }
