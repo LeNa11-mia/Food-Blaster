@@ -35,9 +35,13 @@ public class Paddle extends GameObject {
         // Control paddle
         if (Game.getGame().getKeyListener().isLeftPressed()) {
             moveLeft(deltaTime, GameConfig.SCREEN_WIDTH);
+        } else {
+            vx = 0;
         }
         if (Game.getGame().getKeyListener().isRightPressed()) {
             moveRight(deltaTime, GameConfig.SCREEN_WIDTH);
+        } else {
+            vx = 0;
         }
     }
 
