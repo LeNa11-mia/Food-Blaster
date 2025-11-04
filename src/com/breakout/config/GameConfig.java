@@ -38,6 +38,8 @@ public class GameConfig {
     public static final double ITEM_FALLING_SPEED = 150;
     public static final ImageIcon ITEM_BRICK_IMAGE = new ImageIcon("src/com/breakout/resources.assets/chocolateCake.png");
 
+    public static final ImageIcon UNBREAKABLE_BRICK_IMAGE = null;
+
     // ----- ITEM -----
     public static final double ITEM_WIDTH = 0;
     public static final double ITEM_HEIGHT = 0;

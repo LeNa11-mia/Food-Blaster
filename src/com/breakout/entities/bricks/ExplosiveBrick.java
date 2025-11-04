@@ -1,10 +1,11 @@
 package com.breakout.entities.bricks;
 
 import com.breakout.config.GameConfig;
+import com.breakout.interfaces.Destructible;
 
 import java.util.List;
 
-public class ExplosiveBrick extends Brick {
+public class ExplosiveBrick extends Brick implements Destructible {
     private final int explosionRadius;    //explosion radius by bricks
     private List<Brick> bricks;
 
@@ -13,6 +14,13 @@ public class ExplosiveBrick extends Brick {
         this.bricks = bricks;
         this.explosionRadius = GameConfig.EXPLOSION_RADIUS;
         sprite = GameConfig.EXPLOSIVE_BRICK_IMAGE;
+    }
+
+    @Override
+    public void hit() {
+        hit = true;
+        destroyed = true;
+        onDestroyed();
     }
 
     @Override
