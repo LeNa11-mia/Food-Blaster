@@ -20,9 +20,12 @@ public class GameKeyListener implements KeyListener {
         GameManager gm = Game.getGame().getGm();
         int currentState = Game.getGame().getState();
 
-        // SPACE - Toggle Settings
-        if (key == KeyEvent.VK_SPACE) {
-            // Nếu đang ở Settings -> Quay về state trước đó
+        // ESC - Thoát không lưu từ gameplay
+        if (key == KeyEvent.VK_ESCAPE) {
+            if (currentState == Defs.STATE_PLAYING) {
+                Game.getGame().exitWithoutSaving();
+                return;
+            }
             if (currentState == Defs.STATE_SETTING) {
                 int previous = Game.getGame().getGUI().getPreviousState();
                 if (previous != Defs.STATE_LOADING) {
@@ -30,17 +33,38 @@ public class GameKeyListener implements KeyListener {
                 }
                 return;
             }
+        }
 
-            // Nếu đang PLAYING -> Mở Settings
-            if (currentState == Defs.STATE_PLAYING) {
-                if (!gm.hasBallStarted()) {
-                    gm.startBall();
-                    return;
+        // SPACE - Continue hoặc chọn mode vào game, và start ball
+        if (key == KeyEvent.VK_SPACE) {
+            if (currentState == Defs.STATE_MENU) {
+                // Nếu có game đã lưu -> Continue, ngược lại -> New Game
+                if (Game.getGame().canContinueGame()) {
+                    Game.getGame().startContinueGame();
+                } else {
+                    Game.getGame().changeState(Defs.STATE_GAME_MODES);
                 }
-                else {
-                    Game.getGame().changeState(Defs.STATE_SETTING);
-                    return;
-                }
+                return;
+            }
+
+            // Nếu đang ở Game Modes -> Chọn Easy level
+            if (currentState == Defs.STATE_GAME_MODES) {
+                Game.getGame().startNewGame(Defs.LEVEL_EASY);
+                return;
+            }
+
+            // Nếu đang PLAYING và ball chưa bắt đầu -> start ball
+            if (currentState == Defs.STATE_PLAYING && !gm.hasBallStarted()) {
+                gm.startBall();
+                gm.getBall().setVelocity(150, -150);
+                System.out.println("Ball started by SPACE!");
+                return;
+            }
+
+            // Nếu đang PLAYING và ball đã bắt đầu -> vào setting
+            if (currentState == Defs.STATE_PLAYING && gm.hasBallStarted()) {
+                Game.getGame().changeState(Defs.STATE_SETTING);
+                return;
             }
         }
 

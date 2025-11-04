@@ -2,6 +2,7 @@ package com.breakout.gui;
 
 import com.breakout.Game;
 import com.breakout.config.Defs;
+import com.breakout.managers.GameManager;
 import com.breakout.managers.SaveManager;
 
 import javax.swing.*;
@@ -31,32 +32,32 @@ public class MenuPanel extends GUIPanel {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g.create();
 
-            // Vẽ background image full màn hình
-            if (backgroundImage != null) {
-                g2d.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
-            }
+        // Vẽ background image full màn hình
+        if (backgroundImage != null) {
+            g2d.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+        }
 
-           // Vẽ chữ "Food Blaster" viết tay màu hồng ở phần trắng
-            g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        // Vẽ chữ "Food Blaster" viết tay màu hồng ở phần trắng
+        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-            Font font;
-            try {
-                // Thử dùng font viết tay
-                font = new Font("Brush Script MT", Font.BOLD, 72);
-            } catch (Exception e) {
-                font = new Font("Segoe Script", Font.BOLD, 72);
-            }
+        Font font;
+        try {
+            // Thử dùng font viết tay
+            font = new Font("Brush Script MT", Font.BOLD, 72);
+        } catch (Exception e) {
+            font = new Font("Segoe Script", Font.BOLD, 72);
+        }
 
-            g2d.setFont(font);
-            g2d.setColor(new Color(255, 105, 180)); // Màu hồng pastel
+        g2d.setFont(font);
+        g2d.setColor(new Color(255, 105, 180)); // Màu hồng pastel
 
-            String text = "Food Blaster";
-            FontMetrics fm = g2d.getFontMetrics();
-            int textWidth = fm.stringWidth(text);
-            int x = (getWidth() - textWidth) / 2;
-            int y = 120; // Đặt ở phần màu trắng (khoảng 150px từ trên)
+        String text = "Food Blaster";
+        FontMetrics fm = g2d.getFontMetrics();
+        int textWidth = fm.stringWidth(text);
+        int x = (getWidth() - textWidth) / 2;
+        int y = 120; // Đặt ở phần màu trắng (khoảng 150px từ trên)
 
-            g2d.drawString(text, x, y);
+        g2d.drawString(text, x, y);
 
     }
 
@@ -76,17 +77,17 @@ public class MenuPanel extends GUIPanel {
 
         // Nút PLAY
         JButton playBtn = createRoundedButton("PLAY", Color.decode("#F8C8DC"));
-        playBtn.addActionListener(e -> Game.getGame().changeState(Defs.STATE_GAME_MODES));
+        playBtn.addActionListener(e -> {
+            Game.getGame().changeState(Defs.STATE_GAME_MODES);
+        });
         buttonPanel.add(playBtn);
 
         // Nếu có save → thêm CONTINUE ở giữa PLAY và EXIT
         if (hasSave) {
             continueButton = createRoundedButton("CONTINUE", Color.decode("#FFB6C1"));
             continueButton.addActionListener(e -> {
-                if (Game.getGame().getGm() != null) {
-                    Game.getGame().getGm().continueGame();
-                }
-                Game.getGame().changeState(Defs.STATE_PLAYING);
+                // Sử dụng phương thức startContinueGame() từ Game class
+                Game.getGame().startContinueGame();
             });
             buttonPanel.add(continueButton);
         }
@@ -104,11 +105,23 @@ public class MenuPanel extends GUIPanel {
 
         // Tạo lại button panel
         JPanel buttonPanel = createButtonPanel();
-        buttonPanel.setBounds(150, 350, 300, 250);
+        buttonPanel.setBounds(150, 400, 300, 150);
         add(buttonPanel);
 
         revalidate();
         repaint();
+//        javax.swing.SwingUtilities.invokeLater(() -> {
+//            removeAll(); // Xóa tất cả components cũ
+//
+//            setLayout(null);
+//            // Tạo lại button panel
+//            JPanel buttonPanel = createButtonPanel();
+//            buttonPanel.setBounds(150, 400, 300, 150);
+//            add(buttonPanel);
+//
+//            revalidate();
+//            repaint();
+//        });
     }
 
     private JButton createRoundedButton(String text, Color bgColor) {

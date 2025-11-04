@@ -11,6 +11,7 @@ import com.breakout.saves.BallSave;
 import com.breakout.saves.BrickSave;
 import com.breakout.saves.GameSave;
 import com.breakout.saves.PaddleSave;
+import com.breakout.gui.MenuPanel;
 
 import java.util.*;
 import java.util.List;
@@ -88,6 +89,42 @@ public class GameManager {
         lives = 1;
         score = 0;
         activeItems.clear();
+        ballStarted = false;
+    }
+
+    /**
+     * Tiếp tục game từ save file
+     */
+    public void continueGame() {
+        GameSave savedGame = SaveManager.loadGame();
+        if (savedGame != null) {
+            loadSavedGame(savedGame);
+            ballStarted = false; // không di chuyển ngay
+            ball.setVelocity(0,0);
+        }
+    }
+
+    /**
+     * Kiểm tra xem có game đã lưu không
+     */
+    public boolean canContinueGame() {
+        return SaveManager.saveExists(); // Sửa thành SaveManager.saveExists()
+    }
+
+    /**
+     * Lấy thông tin game đã lưu để hiển thị
+     */
+    public String getSaveInfo() {
+        if (!canContinueGame()) {
+            return "No saved game";
+        }
+
+        GameSave savedGame = SaveManager.loadGame(); // Sửa thành SaveManager.loadGame()
+        if (savedGame != null) {
+            return String.format("Level: %d - Score: %d - Lives: %d",
+                    savedGame.getLevel(), savedGame.getScore(), savedGame.getLives());
+        }
+        return "Saved game";
     }
 
     public void update(double deltaTime, boolean leftPressed, boolean rightPressed) {
@@ -95,14 +132,14 @@ public class GameManager {
 
         if (!ballStarted) return;
 
+        // XÓA các lệnh saveCurrentGame() tự động
         if (isGameOver()) {
-            // Lưu game trước khi chuyển sang GAMEOVER
-            saveCurrentGame();
+            // KHÔNG lưu game khi game over
+            deleteSavedGame();
             Game.getGame().changeState(Defs.STATE_GAMEOVER);
             return; // Don't update if game is over
         } else if (isWin()) {
-            // Lưu game trước khi chuyển sang WIN
-            saveCurrentGame();
+            // KHÔNG lưu game khi win
             Game.getGame().changeState(Defs.STATE_WIN);
             return;
         }
@@ -191,30 +228,37 @@ public class GameManager {
     }
 
     /**
-     * Lưu game hiện tại
+     * Lưu game hiện tại - CHỈ được gọi khi người chơi chủ động save
      */
     public void saveCurrentGame() {
         List<BrickSave> bricksData = new ArrayList<>();
 
-        // Lưu trạng thái của từng brick theo index
+        // Lưu trạng thái của từng brick
         for (int i = 0; i < bricks.size(); i++) {
             Brick brick = bricks.get(i);
             bricksData.add(new BrickSave(
-                    i,
-                    0,  // Chỉ dùng index, không cần row/col
-                    0,
-                    1, // Health mặc định là 1 (vì brick chỉ cần 1 hit để phá)
-                    brick.isDestroyed(),
-                    "NORMAL" // Loại brick mặc định
+                    (int)Math.round(brick.getX()),    // x position (làm tròn để tránh mất dữ liệu)
+                    (int)Math.round(brick.getY()),    // y position (làm tròn để tránh mất dữ liệu)
+                    (int)Math.round(brick.getWidth()),  // width
+                    (int)Math.round(brick.getHeight()), // height
+                    brick.isDestroyed(),              // destroyed
+                    1,                               // hitPoints (mặc định là 1)
+                    1,                               // maxHitPoints (mặc định là 1)
+                    0xFF0000,                        // color (màu mặc định - đỏ)
+                    10                                // points (điểm mặc định)
             ));
         }
 
         BallSave ballData = new BallSave(
-                ball.getX(), ball.getY(), ball.getVx(), ball.getVy()
+                ball.getX(), ball.getY(), ball.getVx(), ball.getVy(), 15
         );
 
         PaddleSave paddleData = new PaddleSave(
-                paddle.getX(), paddle.getY(), paddle.getWidth()
+                paddle.getX(),
+                paddle.getY(),
+                (int) paddle.getWidth(),
+                (int) paddle.getHeight(),
+                paddle.getSpeed()
         );
 
         GameSave gameSave = new GameSave(
@@ -223,8 +267,19 @@ public class GameManager {
         );
 
         SaveManager.saveGame(gameSave);
+
+//        MenuPanel menuPanel = new MenuPanel(Game.getGame());
+//        javax.swing.SwingUtilities.invokeLater(() -> {
+//            Game.getGame().getFrame().setContentPane(menuPanel);
+//            menuPanel.updateMenu();
+//        });
+
+        System.out.println("Game saved successfully!");
     }
 
+    /**
+     * Load game đã lưu
+     */
     /**
      * Load game đã lưu
      */
@@ -239,7 +294,7 @@ public class GameManager {
         // Khôi phục ball
         BallSave ballData = gameSave.getBallData();
         ball.setPosition(ballData.getX(), ballData.getY());
-        ball.setVelocity(ballData.getVelX(), ballData.getVelY());
+        ball.setVelocity(ballData.getVelocityX(), ballData.getVelocityY());
 
         // Khôi phục paddle
         PaddleSave paddleData = gameSave.getPaddleData();
@@ -249,17 +304,26 @@ public class GameManager {
         // Khôi phục bricks - cần load level trước
         loadLevelForSavedGame();
 
-        for (BrickSave brickSave : gameSave.getBricksData()) {
-            int index =(int) brickSave.getIndex();
-            if (index >= 0 && index < bricks.size()) {
-                Brick brick = bricks.get(index);
-                if (brickSave.isDestroyed()) {
-                    brick.destroy();
+        // Khôi phục trạng thái và vị trí của từng brick
+        for (BrickSave brickSave : gameSave.getBricks()) {
+            // Tìm brick tại vị trí tương ứng
+            for (Brick brick : bricks) {
+                if ((int)brick.getX() == brickSave.getX() &&
+                        (int)brick.getY() == brickSave.getY() &&
+                        brick.getWidth() == brickSave.getWidth() &&
+                        brick.getHeight() == brickSave.getHeight()) {
+
+                    if (brickSave.isDestroyed()) {
+                        brick.destroy();
+                    }
+                    break;
                 }
             }
         }
 
-    }
+        // Đảm bảo ball bắt đầu di chuyển
+        ballStarted = false;
+        ball.setVelocity(0, 0);}
 
     /**
      * Load level phù hợp cho game đã lưu
@@ -271,34 +335,18 @@ public class GameManager {
     }
 
     /**
-     * Tìm brick tại vị trí row, col
+     * Xóa game đã lưu
      */
-//    private Brick findBrickAt(int row, int col) {
-//        for (Brick brick : bricks) {
-//            if (brick.getRow() == row && brick.getCol() == col) {
-//                return brick;
-//            }
-//        }
-//        return null;
-//    }
-
-    /**
-     * Kiểm tra có thể continue game không
-     */
-    public boolean canContinueGame() {
-        return SaveManager.saveExists();
+    public void deleteSavedGame() {
+        SaveManager.deleteSave(); // Sửa thành SaveManager.deleteSave()
     }
 
     /**
-     * Tiếp tục game từ save
+     * Reset game về trạng thái ban đầu - dùng khi thoát không lưu
      */
-    public void continueGame() {
-        GameSave savedGame = SaveManager.loadGame();
-        if (savedGame != null) {
-            loadSavedGame(savedGame);
-        }
+    public void resetGame() {
+        startGame(Defs.LEVEL_EASY);
     }
-
 
     public int getNextDifficulty() {
         if (currentDifficulty < Defs.LEVEL_BOSS) {
@@ -350,7 +398,7 @@ public class GameManager {
             case Defs.LEVEL_MEDIUM: return "MEDIUM";
             case Defs.LEVEL_HARD: return "HARD";
             case Defs.LEVEL_BOSS: return "BOSS";
-            default: return null;
+            default: return "UNKNOWN";
         }
     }
 
@@ -363,12 +411,6 @@ public class GameManager {
     public int getLives() { return lives; }
     public int getCurrentLevel() { return currentLevel; }
 
-    /**
-     * Lấy thông tin game đã lưu để hiển thị
-     */
-    public String getSaveInfo() {
-        return SaveManager.getSaveInfo();
-    }
     public boolean isGameOver() { return lives <= 0; }
     public void setLives(int lives) {
         this.lives = lives;

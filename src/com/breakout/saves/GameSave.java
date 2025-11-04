@@ -1,39 +1,69 @@
 package com.breakout.saves;
 
-import java.io.Serializable;
+import java.io.*;
+import java.util.Date;
 import java.util.List;
+import java.util.ArrayList;
 
 public class GameSave implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private int difficulty;
+    private int level;
     private int score;
     private int lives;
-    private int level;
-    private long timestamp;
+
     private BallSave ballData;
     private PaddleSave paddleData;
-    private List<BrickSave> bricksData;
+    private List<BrickSave> bricks;
+
+    private Date saveDate;
+
+    public GameSave() {
+        this.difficulty = 1;
+        this.level = 1;
+        this.score = 0;
+        this.lives = 3;
+        this.ballData = new BallSave();
+        this.paddleData = new PaddleSave();
+        this.bricks = new ArrayList<>();
+        this.saveDate = new Date();
+    }
 
     public GameSave(int difficulty, int score, int lives, int level,
-                    BallSave ballData, PaddleSave paddleData, List<BrickSave> bricksData) {
+                    BallSave ballSave, PaddleSave paddleSave, List<BrickSave> bricks) {
         this.difficulty = difficulty;
         this.score = score;
         this.lives = lives;
         this.level = level;
-        this.timestamp = System.currentTimeMillis();
-        this.ballData = ballData;
-        this.paddleData = paddleData;
-        this.bricksData = bricksData;
+        this.ballData = ballSave;
+        this.paddleData = paddleSave;
+        this.bricks = bricks;
+        this.saveDate = new Date();
     }
 
-    // Getters
+    // ✅ Getters and Setters
     public int getDifficulty() { return difficulty; }
-    public int getScore() { return score; }
-    public int getLives() { return lives; }
+    public void setDifficulty(int difficulty) { this.difficulty = difficulty; }
+
     public int getLevel() { return level; }
-    public long getTimestamp() { return timestamp; }
+    public void setLevel(int level) { this.level = level; }
+
+    public int getScore() { return score; }
+    public void setScore(int score) { this.score = score; }
+
+    public int getLives() { return lives; }
+    public void setLives(int lives) { this.lives = lives; }
+
     public BallSave getBallData() { return ballData; }
+    public void setBallData(BallSave ballData) { this.ballData = ballData; }
+
     public PaddleSave getPaddleData() { return paddleData; }
-    public List<BrickSave> getBricksData() { return bricksData; }
+    public void setPaddleData(PaddleSave paddleData) { this.paddleData = paddleData; }
+
+    public List<BrickSave> getBricks() { return bricks; }
+    public void setBricks(List<BrickSave> bricks) { this.bricks = bricks; }
+
+    public Date getSaveDate() { return saveDate; }
+    public void setSaveDate(Date saveDate) { this.saveDate = saveDate; }
 }

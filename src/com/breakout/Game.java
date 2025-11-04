@@ -6,6 +6,8 @@ import com.breakout.listeners.GameKeyListener;
 import com.breakout.managers.*;
 
 import javax.swing.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 /**
  * Game controller, using Singleton
@@ -42,6 +44,15 @@ public class Game {
 
         // THÊM DÒNG NÀY - KeyListener cho SettingPanel
         gui.getSettingPanel().addKeyListener(keyListener);
+
+        // THÊM: Xử lý khi đóng cửa sổ - không lưu game
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                // Đóng game không lưu
+                System.exit(0);
+            }
+        });
     }
 
     public static void initGame(JFrame frame) {
@@ -146,6 +157,59 @@ public class Game {
                 gui.showGameOverScreen(frame);
                 break;
         }
+    }
+
+    /**
+     * Bắt đầu game mới với difficulty được chọn
+     */
+    public void startNewGame(int difficulty) {
+        gm.startGame(difficulty);
+        changeState(Defs.STATE_PLAYING);
+    }
+
+    /**
+     * Tiếp tục game từ save
+     */
+    public void startContinueGame() {
+        if (gm.canContinueGame()) {
+            gm.continueGame();
+            changeState(Defs.STATE_PLAYING);
+        } else {
+            // Nếu không có game đã lưu, quay lại menu
+            System.out.println("No saved game found!");
+            changeState(Defs.STATE_MENU);
+        }
+    }
+
+    /**
+     * Thoát game không lưu - dùng khi ấn ESC từ gameplay
+     */
+    public void exitWithoutSaving() {
+        // Reset game về trạng thái ban đầu
+        gm.resetGame();
+        changeState(Defs.STATE_MENU);
+    }
+
+    /**
+     * Lưu game và thoát về menu - dùng từ SettingPanel
+     */
+    public void saveAndExitToMenu() {
+        gm.saveCurrentGame();
+        changeState(Defs.STATE_MENU);
+    }
+
+    /**
+     * Kiểm tra xem có thể continue game không
+     */
+    public boolean canContinueGame() {
+        return gm.canContinueGame();
+    }
+
+    /**
+     * Lấy thông tin game đã lưu
+     */
+    public String getSaveInfo() {
+        return gm.getSaveInfo();
     }
 
     public GameManager getGm() {

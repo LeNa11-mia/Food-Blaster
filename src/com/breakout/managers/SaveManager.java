@@ -1,53 +1,91 @@
 package com.breakout.managers;
 
 import com.breakout.saves.GameSave;
-
 import java.io.*;
+import java.text.SimpleDateFormat;
 
 public class SaveManager {
-    private static final String SAVE_FILE = "game_save.dat";
+    private static final String SAVE_DIR = "saves/";
+    private static final String SAVE_FILE = SAVE_DIR + "game_save.dat";
 
-    public static void saveGame(GameSave gameSave) {
-        try (ObjectOutputStream oos = new ObjectOutputStream(
-                new FileOutputStream(SAVE_FILE))) {
-            oos.writeObject(gameSave);
+    static {
+        // Tạo thư mục saves nếu chưa tồn tại
+        File dir = new File(SAVE_DIR);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+    }
+
+    public static boolean saveGame(GameSave gameSave) {
+        try {
+            gameSave.setSaveDate(new java.util.Date());
+
+            FileOutputStream fileOut = new FileOutputStream(SAVE_FILE);
+            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+            objectOut.writeObject(gameSave);
+            objectOut.close();
+            fileOut.close();
+
             System.out.println("Game saved successfully!");
+            return true;
+
         } catch (IOException e) {
-            System.err.println("Failed to save game: " + e.getMessage());
+            System.err.println("Error saving game: " + e.getMessage());
+            return false;
         }
     }
 
     public static GameSave loadGame() {
-        File saveFile = new File(SAVE_FILE);
-        if (!saveFile.exists()) {
-            return null;
-        }
+        try {
+            File file = new File(SAVE_FILE);
+            if (!file.exists()) {
+                return null;
+            }
 
-        try (ObjectInputStream ois = new ObjectInputStream(
-                new FileInputStream(SAVE_FILE))) {
-            return (GameSave) ois.readObject();
+            FileInputStream fileIn = new FileInputStream(SAVE_FILE);
+            ObjectInputStream objectIn = new ObjectInputStream(fileIn);
+            GameSave gameSave = (GameSave) objectIn.readObject();
+            objectIn.close();
+            fileIn.close();
+
+            System.out.println("Game loaded successfully!");
+            return gameSave;
+
         } catch (IOException | ClassNotFoundException e) {
-            System.err.println("Failed to load game: " + e.getMessage());
+            System.err.println("Error loading game: " + e.getMessage());
             return null;
         }
     }
 
     public static boolean saveExists() {
-        return new File(SAVE_FILE).exists();
+        File file = new File(SAVE_FILE);
+        return file.exists();
     }
 
     public static void deleteSave() {
-        File saveFile = new File(SAVE_FILE);
-        if (saveFile.exists()) {
-            saveFile.delete();
+        File file = new File(SAVE_FILE);
+        if (file.exists()) {
+            file.delete();
+            System.out.println("Save game deleted!");
         }
     }
 
     public static String getSaveInfo() {
-        GameSave save = loadGame();
-        if (save == null) return null;
+        if (!saveExists()) {
+            return "No saved game found!";
+        }
 
-        return String.format("Level %d - %s - %d points",
-                save.getLevel(), save.getDifficulty(), save.getScore());
+        try {
+            GameSave gameSave = loadGame();
+            if (gameSave != null) {
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                return String.format("Level: %d - Score: %d - Lives: %d",
+                        gameSave.getLevel(), gameSave.getScore(), gameSave.getLives());
+            }
+        } catch (Exception e) {
+            // Ignore error for info display
+        }
+
+        return "Corrupted save file!";
     }
 }
