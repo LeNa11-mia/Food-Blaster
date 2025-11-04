@@ -18,23 +18,25 @@ public class GUIManager {
     private GameModesPanel gameModesPanel;
     private WinPanel winPanel;
     private GameOverPanel gameOverPanel;
+    private Game game;
     private int previousState;  // Lưu state trước khi vào Settings
 
-    public GUIManager() {
-        previousState = Defs.STATE_LOADING;
+    public GUIManager(Game game) {
+        this.game = game;
         gameplayPanel = new GameplayPanel();
-        menuPanel = new MenuPanel();
+        menuPanel = new MenuPanel(game);
         gameModesPanel = new GameModesPanel();
         winPanel = new WinPanel();
         settingPanel = new SettingPanel();
         gameOverPanel = new GameOverPanel();
+        previousState = -1;
     }
 
-    public void resetButton(Map<JButton, Color> originalColors) {
-        for (JButton btn : originalColors.keySet()) {
-            btn.setBackground(originalColors.get(btn));
-        }
-    }
+//    public void resetButton(Map<JButton, Color> originalColors) {
+//        for (JButton btn : originalColors.keySet()) {
+//            btn.setBackground(originalColors.get(btn));
+//        }
+//    }
 
     private void showGUIPanel(JFrame frame, GUIPanel panel) {
         SwingUtilities.invokeLater(() -> {

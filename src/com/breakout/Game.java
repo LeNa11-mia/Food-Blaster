@@ -32,9 +32,8 @@ public class Game {
         this.frame = frame;
         instance = this; // Đảm bào instance không null trước khi khởi tạo gm và gui
         gm = new GameManager();
-        gui = new GUIManager();
+        gui = new GUIManager(this);
         keyListener = new GameKeyListener();
-
         // Thêm KeyListener cho GameplayPanel
         gui.getGameplayPanel().addKeyListener(keyListener);
 
@@ -119,27 +118,21 @@ public class Game {
         this.state = state;
         switch (state) {
             case Defs.STATE_MENU:
-                gui.resetButton(GUIPanel.originalColors);
                 gui.showMenuScreen(frame);
                 break;
             case Defs.STATE_PLAYING:
-                keyListener.resetKeys();
                 gui.showGameplayPanel(frame);
                 break;
             case Defs.STATE_GAME_MODES:  // THÊM CASE NÀY
-                gui.resetButton(GUIPanel.originalColors);
                 gui.showGameModesScreen(frame);
                 break;
             case Defs.STATE_SETTING:
-                gui.resetButton(GUIPanel.originalColors);
                 gui.showSettingsScreen(frame);
                 break;
             case Defs.STATE_WIN:
-                gui.resetButton(GUIPanel.originalColors);
                 gui.showWinScreen(frame);
                 break;
             case Defs.STATE_GAMEOVER:
-                gui.resetButton(GUIPanel.originalColors);
                 gui.showGameOverScreen(frame);
                 break;
         }
