@@ -11,11 +11,9 @@ public class MenuPanel extends GUIPanel {
 
     private Image backgroundImage;
     private JButton continueButton;
-    private Game game;
 
-    public MenuPanel(Game game) {
+    public MenuPanel() {
         super(Color.decode("#F3CFC6"));
-        this.game = game;
 
         // Load background image
         backgroundImage = new ImageIcon("src/com/breakout/resources.assets/mainMenu.png").getImage();

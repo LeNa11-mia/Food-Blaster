@@ -32,7 +32,7 @@ public class Game {
         this.frame = frame;
         instance = this; // Đảm bào instance không null trước khi khởi tạo gm và gui
         gm = new GameManager();
-        gui = new GUIManager(this);
+        gui = new GUIManager();
         keyListener = new GameKeyListener();
         // Thêm KeyListener cho GameplayPanel
         gui.getGameplayPanel().addKeyListener(keyListener);
@@ -100,7 +100,8 @@ public class Game {
 
         if (state == Defs.STATE_PLAYING) {
             gm.update(deltaTime, keyListener.isLeftPressed(), keyListener.isRightPressed());
-            gui.getGameplayPanel().repaint();
+            SwingUtilities.invokeLater(() -> gui.getGameplayPanel().repaint());
+            // Xử lý giao diện trên luồng riêng (EDT)
         }
     }
 
@@ -118,21 +119,27 @@ public class Game {
         this.state = state;
         switch (state) {
             case Defs.STATE_MENU:
+                gui.resetButton(GUIPanel.originalColors);
                 gui.showMenuScreen(frame);
                 break;
             case Defs.STATE_PLAYING:
+                keyListener.resetKeys();
                 gui.showGameplayPanel(frame);
                 break;
-            case Defs.STATE_GAME_MODES:  // THÊM CASE NÀY
+            case Defs.STATE_GAME_MODES:
+                gui.resetButton(GUIPanel.originalColors);
                 gui.showGameModesScreen(frame);
                 break;
             case Defs.STATE_SETTING:
+                gui.resetButton(GUIPanel.originalColors);
                 gui.showSettingsScreen(frame);
                 break;
             case Defs.STATE_WIN:
+                gui.resetButton(GUIPanel.originalColors);
                 gui.showWinScreen(frame);
                 break;
             case Defs.STATE_GAMEOVER:
+                gui.resetButton(GUIPanel.originalColors);
                 gui.showGameOverScreen(frame);
                 break;
         }
