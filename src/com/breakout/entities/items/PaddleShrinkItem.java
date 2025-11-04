@@ -20,7 +20,5 @@ public class PaddleShrinkItem extends BadItem {
         paddle.resizeSprite(newWidth, paddle.getHeight());
         System.out.println("✅" + name + " : " + oldWidth + "x" + paddle.getHeight()
                 + " → " + newWidth + "x" + paddle.getHeight());
-
-        gm.showMessageOnScreen(name + " " + icon);
     }
 }
