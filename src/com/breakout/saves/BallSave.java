@@ -7,8 +7,8 @@ public class BallSave implements Serializable {
     private double velX, velY;
 
     public BallSave(double x, double y, double velX, double velY) {
-        this.x = 200;
-        this.y = 300;
+        this.x = x;
+        this.y = y;
         this.velX = velX;
         this.velY = velY;
     }
