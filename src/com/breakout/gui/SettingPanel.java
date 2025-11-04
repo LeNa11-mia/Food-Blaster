@@ -2,6 +2,7 @@ package com.breakout.gui;
 
 import com.breakout.Game;
 import com.breakout.config.Defs;
+import com.breakout.config.GameConfig;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -12,11 +13,10 @@ public class SettingPanel extends GUIPanel {
     private JSlider sfxSlider;
     private JLabel musicValueLabel;
     private JLabel sfxValueLabel;
-    private Image backgroundImage;
 
     public SettingPanel() {
         super(Color.decode("#1a1a2e"));
-        backgroundImage = new ImageIcon("src/com/breakout/resources.assets/setting.png").getImage();
+        backgroundImage = GameConfig.SETTING_BACKGROUND;
         setLayout(new BorderLayout());
 
         // Quan trọng: Panel phải có thể nhận keyboard input
@@ -152,7 +152,7 @@ public class SettingPanel extends GUIPanel {
                     RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
             // Scale ảnh để fit toàn màn hình
-            g2d.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+            g2d.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
         }
     }
 

@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class GUIPanel extends JPanel {
+    protected ImageIcon backgroundImage;
     public static Map<JButton, Color> originalColors = new HashMap<>();
 
     public void addButton(JButton button) {

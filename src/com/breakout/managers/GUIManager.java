@@ -29,6 +29,12 @@ public class GUIManager {
         previousState = -1;
     }
 
+    public void resetButton(Map<JButton, Color> originalColors) {
+        for (JButton btn : originalColors.keySet()) {
+            btn.setBackground(originalColors.get(btn));
+        }
+    }
+
     private void showGUIPanel(JFrame frame, GUIPanel panel) {
         SwingUtilities.invokeLater(() -> {
             frame.getContentPane().removeAll();
@@ -49,6 +55,7 @@ public class GUIManager {
     }
 
     public void showMenuScreen(JFrame frame) {
+        menuPanel.updateMenu();
         showGUIPanel(frame, menuPanel);
     }
 
@@ -114,7 +121,7 @@ public class GUIManager {
      */
     public void updateWinScreen(int score, String difficulty) {
         if (winPanel != null) {
-            winPanel.updateScore(score, difficulty);
+            winPanel.updateInfo(score, difficulty);
         }
     }
 
@@ -123,7 +130,7 @@ public class GUIManager {
      */
     public void updateGameOverScreen(int score, String difficulty) {
         if (gameOverPanel != null) {
-            gameOverPanel.updateScore(score, difficulty);
+            gameOverPanel.updateInfo(score, difficulty);
         }
     }
 }

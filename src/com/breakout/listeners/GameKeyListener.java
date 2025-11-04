@@ -56,7 +56,6 @@ public class GameKeyListener implements KeyListener {
             // Nếu đang PLAYING và ball chưa bắt đầu -> start ball
             if (currentState == Defs.STATE_PLAYING && !gm.hasBallStarted()) {
                 gm.startBall();
-                gm.getBall().setVelocity(150, -150);
                 System.out.println("Ball started by SPACE!");
                 return;
             }

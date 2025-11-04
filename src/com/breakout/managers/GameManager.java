@@ -100,7 +100,7 @@ public class GameManager {
         if (savedGame != null) {
             loadSavedGame(savedGame);
             ballStarted = false; // không di chuyển ngay
-            ball.setVelocity(0,0);
+            ball.setVelocity(savedGame.getBallData().getVelocityX(),savedGame.getBallData().getVelocityY());
         }
     }
 
@@ -175,8 +175,8 @@ public class GameManager {
         // Collision with bricks
         for (Brick brick : bricks) {
             if (!brick.isDestroyed() && !brick.isHit() && ball.intersects(brick)) {
-                brick.hit();
                 ball.collisionFromSides(brick);
+                brick.hit();
                 SoundManager.playBrickHitSound();
                 break; // Only destroy one brick per collision
             }
@@ -373,7 +373,7 @@ public class GameManager {
     }
 
     public void enableLaser() {
-        laserEnabled = true;
+        // laserEnabled = true;
         // Laser shooting logic (có thể thêm sau)
     }
 

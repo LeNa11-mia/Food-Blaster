@@ -15,6 +15,14 @@ public class GameConfig {
     public static final int SCREEN_HEIGHT = 700;
     public static final String WINDOW_TITLE = "Food Blaster";
 
+    // ----- BACKGROUND IMAGES -----
+    public static final ImageIcon MENU_BACKGROUND = new ImageIcon("src/com/breakout/resources.assets/mainMenu.png");
+    public static final ImageIcon GAMEMODES_BACKGROUND = new ImageIcon("src/com/breakout/resources.assets/select.png");
+    public static final ImageIcon GAMEPLAY_BACKGROUND = new ImageIcon("src/com/breakout/resources.assets/gamePlay.png");
+    public static final ImageIcon WIN_BACKGROUND = null;
+    public static final ImageIcon GAMEOVER_BACKGROUND = new ImageIcon("src/com/breakout/resources.assets/gameOver.png");
+    public static final ImageIcon SETTING_BACKGROUND = new ImageIcon("src/com/breakout/resources.assets/setting.png");
+
     // ----- BALL -----
     public static final ImageIcon BALL_IMAGE = new ImageIcon("src/com/breakout/resources.assets/ball.png");
     public static final double BALL_WIDTH = BALL_IMAGE.getIconWidth();

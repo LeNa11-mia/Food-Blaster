@@ -2,6 +2,7 @@ package com.breakout.gui;
 
 import com.breakout.Game;
 import com.breakout.config.Defs;
+import com.breakout.config.GameConfig;
 import com.breakout.managers.GameManager;
 
 import javax.swing.*;
@@ -13,6 +14,7 @@ public class WinPanel extends GUIPanel {
 
     public WinPanel() {
         super(Color.decode("#2D5016")); // Dark green
+        backgroundImage = GameConfig.WIN_BACKGROUND;
 
         // Center content
         JPanel centerPanel = new JPanel();

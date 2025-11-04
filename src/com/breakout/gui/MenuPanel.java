@@ -2,7 +2,7 @@ package com.breakout.gui;
 
 import com.breakout.Game;
 import com.breakout.config.Defs;
-import com.breakout.managers.GameManager;
+import com.breakout.config.GameConfig;
 import com.breakout.managers.SaveManager;
 
 import javax.swing.*;
@@ -10,14 +10,13 @@ import java.awt.*;
 
 public class MenuPanel extends GUIPanel {
 
-    private Image backgroundImage;
     private JButton continueButton;
 
     public MenuPanel() {
         super(Color.decode("#F3CFC6"));
 
         // Load background image
-        backgroundImage = new ImageIcon("src/com/breakout/resources.assets/mainMenu.png").getImage();
+        backgroundImage = GameConfig.MENU_BACKGROUND;
 
         setLayout(null); // Dùng absolute positioning để đặt chính xác vị trí
 
@@ -34,7 +33,7 @@ public class MenuPanel extends GUIPanel {
 
         // Vẽ background image full màn hình
         if (backgroundImage != null) {
-            g2d.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+            g2d.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
         }
 
         // Vẽ chữ "Food Blaster" viết tay màu hồng ở phần trắng
@@ -108,8 +107,8 @@ public class MenuPanel extends GUIPanel {
         buttonPanel.setBounds(150, 400, 300, 150);
         add(buttonPanel);
 
-        revalidate();
-        repaint();
+        //revalidate();
+        //repaint();
 //        javax.swing.SwingUtilities.invokeLater(() -> {
 //            removeAll(); // Xóa tất cả components cũ
 //

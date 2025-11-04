@@ -2,17 +2,16 @@ package com.breakout.gui;
 
 import com.breakout.Game;
 import com.breakout.config.Defs;
+import com.breakout.config.GameConfig;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class GameModesPanel extends GUIPanel {
 
-    private Image backgroundImage;
-
     public GameModesPanel() {
         super(Color.decode("#F3CFC6"));
-        backgroundImage = new ImageIcon("src/com/breakout/resources.assets/select.png").getImage();
+        backgroundImage = GameConfig.GAMEMODES_BACKGROUND;
 
         setLayout(null); // Dùng absolute positioning
 
@@ -29,7 +28,7 @@ public class GameModesPanel extends GUIPanel {
 
         // Vẽ background image full màn hình
         if (backgroundImage != null) {
-            g2d.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+            g2d.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
         } else {
             g2d.setColor(Color.decode("#FFC0CB"));
             g2d.fillRect(0, 0, getWidth(), getHeight());

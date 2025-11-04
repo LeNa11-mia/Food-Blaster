@@ -13,6 +13,7 @@ public class GameplayPanel extends GUIPanel {
     public GameplayPanel() {
         setPreferredSize(new Dimension(GameConfig.SCREEN_WIDTH, GameConfig.SCREEN_HEIGHT));
         setBackground(new Color(255, 214, 214));
+        backgroundImage = GameConfig.GAMEPLAY_BACKGROUND;
     }
 
     private void draw(GameObject obj, Graphics2D g2d) {

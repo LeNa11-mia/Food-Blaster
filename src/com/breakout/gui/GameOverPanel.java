@@ -2,6 +2,7 @@ package com.breakout.gui;
 
 import com.breakout.Game;
 import com.breakout.config.Defs;
+import com.breakout.config.GameConfig;
 import com.breakout.gui.MenuPanel;
 
 import javax.swing.*;
@@ -11,12 +12,10 @@ public class GameOverPanel extends GUIPanel {
     private JLabel scoreLabel;
     private JLabel difficultyLabel;
 
-    private Image backgroundImage;
-
     public GameOverPanel() {
         super(Color.decode("#722F37")); // Cherry wine red
 
-        backgroundImage = new ImageIcon("src/com/breakout/resources.assets/gameOver.png").getImage();
+        backgroundImage = GameConfig.GAMEOVER_BACKGROUND;
 
         setLayout(null); // Absolute positioning
 
@@ -40,7 +39,7 @@ public class GameOverPanel extends GUIPanel {
 
         // Vẽ background image
         if (backgroundImage != null) {
-            g2d.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+            g2d.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
         } else {
             g2d.setColor(Color.decode("#722F37"));
             g2d.fillRect(0, 0, getWidth(), getHeight());
@@ -72,14 +71,9 @@ public class GameOverPanel extends GUIPanel {
 
     private void displayInfo(JPanel centerPanel) {
         // Score display
-        scoreLabel = new JLabel("Score: " + (Game.getGame().getGm() != null ? Game.getGame().getGm().getScore() : 0));
-        scoreLabel.setFont(new Font("Arial", Font.BOLD, 32));
-        scoreLabel.setForeground(new Color(255, 105, 180));
-        scoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         scoreLabel = createLabel(
                 "Score: " + (Game.getGame().getGm() != null ? Game.getGame().getGm().getScore() : 0),
                 Color.RED,
-                new Color(255, 105, 180),
                 new Font("Arial", Font.BOLD, 24)
         );
         centerPanel.add(scoreLabel);
