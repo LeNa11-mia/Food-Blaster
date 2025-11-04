@@ -15,8 +15,7 @@ public class GameOverPanel extends GUIPanel {
     public GameOverPanel() {
         super(Color.decode("#722F37")); // Cherry wine red
 
-        // Load background image
-        loadBackgroundImage();
+        backgroundImage = new ImageIcon("src/com/breakout/resources.assets/gameOver.png").getImage();
 
         setLayout(null); // Absolute positioning
 
@@ -31,41 +30,6 @@ public class GameOverPanel extends GUIPanel {
         addButtons(contentPanel);
 
         add(contentPanel);
-    }
-
-    private void loadBackgroundImage() {
-        try {
-            java.net.URL imgURL = getClass().getResource("/com/breakout/resources.assets/gameOver.png");
-
-            if (imgURL == null) {
-                imgURL = getClass().getResource("/resources.assets/gameOver.png");
-            }
-
-            if (imgURL == null) {
-                imgURL = getClass().getResource("/gameOver.png");
-            }
-
-            if (imgURL != null) {
-                backgroundImage = new ImageIcon(imgURL).getImage();
-                System.out.println("✓ GameOverPanel: Ảnh load thành công");
-            } else {
-                String[] filePaths = {
-                        "src/com/breakout/resources.assets/gameOver.png",
-                        "./src/com/breakout/resources.assets/gameOver.png"
-                };
-
-                for (String path : filePaths) {
-                    java.io.File file = new java.io.File(path);
-                    if (file.exists()) {
-                        backgroundImage = new ImageIcon(file.getAbsolutePath()).getImage();
-                        System.out.println("✓ GameOverPanel: Ảnh load từ file");
-                        break;
-                    }
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("✗ Lỗi load ảnh: " + e.getMessage());
-        }
     }
 
     @Override
