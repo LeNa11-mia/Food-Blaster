@@ -6,6 +6,7 @@ import com.breakout.entities.*;
 import com.breakout.entities.bricks.Brick;
 import com.breakout.entities.bricks.ExplosiveBrick;
 import com.breakout.entities.bricks.FallingBrick;
+import com.breakout.entities.bricks.NormalBrick;
 import com.breakout.entities.bricks.ItemBrick;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class Level extends LevelData {
 
                 Brick b = null;
                 if (type == Defs.NORMAL_BRICK) {
-                    b = new Brick(x, y);
+                    b = new NormalBrick(x, y);
                 }
                 else if (type == Defs.EXPLOSIVE_BRICK) {
                     b = new ExplosiveBrick(x, y, bricks);

@@ -95,25 +95,6 @@ public class GameManager {
             return;
         }
 
-        // Update ball
-        ball.update(deltaTime);
-        for (Brick brick : bricks) {
-            if (brick instanceof FallingBrick) {
-                brick.update(deltaTime);
-                if (paddle.intersects(brick)) {
-                    lives--;
-                }
-            }
-        }
-
-        // Control paddle
-        if (leftPressed) {
-            paddle.moveLeft(deltaTime, GameConfig.SCREEN_WIDTH);
-        }
-        if (rightPressed) {
-            paddle.moveRight(deltaTime, GameConfig.SCREEN_WIDTH);
-        }
-
         // Ball hits left/right walls
         if (ball.getX() <= 0
                 || ball.getX() + ball.getWidth() >= GameConfig.SCREEN_WIDTH - 12) {
@@ -136,15 +117,29 @@ public class GameManager {
 
         // Collision with paddle
         if (ball.intersects(paddle) && ball.getVy() > 0) {
-            ball.bounceY();
+            ball.collisionFromSides(paddle);
         }
 
         // Collision with bricks
         for (Brick brick : bricks) {
-            if (!brick.isDestroyed() && ball.intersects(brick)) {
+            if (!brick.isDestroyed() && !brick.isHit() && ball.intersects(brick)) {
                 brick.hit();
-                ball.bounceY();
+                ball.collisionFromSides(brick);
                 break; // Only destroy one brick per collision
+            }
+        }
+
+        // Update ball
+        ball.update(deltaTime);
+        // Update paddle
+        paddle.update(deltaTime);
+
+        for (Brick brick : bricks) {
+            if (brick instanceof FallingBrick) {
+                brick.update(deltaTime);
+                if (paddle.intersects(brick)) {
+                    lives--;
+                }
             }
         }
 

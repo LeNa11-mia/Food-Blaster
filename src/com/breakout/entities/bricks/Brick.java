@@ -2,44 +2,37 @@ package com.breakout.entities.bricks;
 
 import com.breakout.config.GameConfig;
 import com.breakout.core.GameObject;
-import com.breakout.interfaces.Destructible;
 
 /**
  * Brick - can be drawn and destroyed.
  */
-public class Brick extends GameObject implements Destructible {
-    protected boolean destroyed = false;
+public abstract class Brick extends GameObject {
+    protected boolean hit;
+    protected boolean destroyed;
 
     public Brick(double x, double y) {
         super(x, y, GameConfig.BRICK_WIDTH, GameConfig.BRICK_HEIGHT);
-        sprite = GameConfig.NORMAL_BRICK_IMAGE;
-        if (sprite == null) {
-            System.out.println("Sprite is null");
-        }
+        hit = false;
+        destroyed = false;
     }
 
     @Override
-    public void update(double deltaTime) {
-        // Bricks do not move
-    }
-
-    @Override
-    public void hit() {
-        destroyed = true;
-        onDestroyed();
-        // Bricks are destroyed when hit (default)
-    }
-
-    @Override
-    public void onDestroyed() {} // No effect
+    public void update(double deltaTime) {}
 
     public void destroy() {
         destroyed = true;
     }
 
+    public abstract void hit(); // Mỗi loại gạch có hành vi khác nhau sau va chạm
+
     public boolean isDestroyed() {
         return destroyed;
     }
+
+    public boolean isHit() {
+        return hit;
+    }
+
     // Thêm method getter cho health (luôn trả về 1)
     public int getHealth() {
             return destroyed ? 0 : 1;
@@ -55,9 +48,7 @@ public class Brick extends GameObject implements Destructible {
     }
 
     // Thêm method getter cho type
-    public String getType() {
-        return "NORMAL";
-    }
+    // public abstract String getType();
 
     // Thêm method để tính row/col tạm thời (nếu cần)
     public int getRow() {

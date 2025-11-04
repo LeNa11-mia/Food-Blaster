@@ -27,6 +27,7 @@ public class Defs {
     public static final int EXPLOSIVE_BRICK = 2;
     public static final int FALLING_BRICK = 3;
     public static final int ITEM_BRICK = 4;
+    public static final int UNBREAKABLE_BRICK = 5;
 
     // ----- ITEM TYPES -----
 }

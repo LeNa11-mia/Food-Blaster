@@ -12,20 +12,21 @@ public class GameConfig {
     public static final String WINDOW_TITLE = "Food Blaster";
 
     // ----- BALL -----
-    public static final int BALL_WIDTH = 15;
-    public static final int BALL_HEIGHT = 15;
+    public static final double BALL_WIDTH = 15;
+    public static final double BALL_HEIGHT = 15;
     public static final ImageIcon BALL_IMAGE = new ImageIcon("src/com/breakout/resources.assets/ball.png");
-    public static final double BALL_SPEED = 200;
+    public static final double BALL_SPEED = 300;
 
     // ----- PADDLE -----
-    public static final int PADDLE_WIDTH = 100;
-    public static final int PADDLE_HEIGHT = 15;
+    public static final double PADDLE_WIDTH = 100;
+    public static final double PADDLE_HEIGHT = 15;
     public static final double PADDLE_SPEED = 400;
+    public static final double VELOCITY_TRANSFER_TO_BALL = 0.2; // Phần trăm của vận tốc truyền cho bóng khi va chạm
     public static final ImageIcon PADDLE_IMAGE = new ImageIcon("src/com/breakout/resources.assets/paddle.png");
 
     // ----- BRICK -----
-    public static final int BRICK_WIDTH = 80;
-    public static final int BRICK_HEIGHT = 20;
+    public static final double BRICK_WIDTH = 80;
+    public static final double BRICK_HEIGHT = 20;
     public static final ImageIcon NORMAL_BRICK_IMAGE = new ImageIcon("src/com/breakout/resources.assets/brick.png");
 
     public static final int EXPLOSION_RADIUS = 1;    //explosion radius by bricks
@@ -37,9 +38,11 @@ public class GameConfig {
     public static final double ITEM_FALLING_SPEED = 170;
     public static final ImageIcon ITEM_BRICK_IMAGE = new ImageIcon("src/com/breakout/resources.assets/chocolateCake.png");
 
+    public static final ImageIcon UNBREAKABLE_BRICK_IMAGE = null;
+
     // ----- ITEM -----
-    public static final int ITEM_WIDTH = 60;
-    public static final int ITEM_HEIGHT = 60;
+    public static final double ITEM_WIDTH = 60;
+    public static final double ITEM_HEIGHT = 60;
     public static final ImageIcon ITEM_IMAGE = new ImageIcon("src/com/breakout/resources.assets/gameOverItem.png");
     // Add items ...
 }
