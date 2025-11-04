@@ -26,8 +26,6 @@ public class GameplayPanel extends GUIPanel {
         }
     }
 
-
-
     public void drawObjects(Graphics2D g2d) {
         var gm = Game.getGame().getGm();
 

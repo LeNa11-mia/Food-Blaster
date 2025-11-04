@@ -11,55 +11,21 @@ public class MenuPanel extends GUIPanel {
 
     private Image backgroundImage;
     private JButton continueButton;
+    private Game game;
 
-    public MenuPanel() {
+    public MenuPanel(Game game) {
         super(Color.decode("#F3CFC6"));
+        this.game = game;
 
         // Load background image
-        loadBackgroundImage();
+        backgroundImage = new ImageIcon("src/com/breakout/resources.assets/mainMenu.png").getImage();
 
         setLayout(null); // Dùng absolute positioning để đặt chính xác vị trí
 
         // Tạo button panel và đặt ở phần màu hồng
         JPanel buttonPanel = createButtonPanel();
-        buttonPanel.setBounds(150, 350, 300, 250); // x, y, width, height
+        buttonPanel.setBounds(150, 400, 300, 150); // x, y, width, height
         add(buttonPanel);
-    }
-
-    private void loadBackgroundImage() {
-        try {
-            java.net.URL imgURL = getClass().getResource("/com/breakout/resources.assets/mainMenu.png");
-
-            if (imgURL == null) {
-                imgURL = getClass().getResource("/resources.assets/mainMenu.png");
-            }
-
-            if (imgURL == null) {
-                imgURL = getClass().getResource("/mainMenu.png");
-            }
-
-            if (imgURL != null) {
-                backgroundImage = new ImageIcon(imgURL).getImage();
-                System.out.println("✓ Ảnh load thành công từ: " + imgURL);
-            } else {
-                System.out.println("✗ Không tìm thấy ảnh trong classpath");
-                String[] filePaths = {
-                        "src/com/breakout/resources.assets/mainMenu.png",
-                        "./src/com/breakout/resources.assets/mainMenu.png"
-                };
-
-                for (String path : filePaths) {
-                    java.io.File file = new java.io.File(path);
-                    if (file.exists()) {
-                        backgroundImage = new ImageIcon(file.getAbsolutePath()).getImage();
-                        System.out.println("✓ Ảnh load từ file: " + file.getAbsolutePath());
-                        break;
-                    }
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("✗ Lỗi load ảnh: " + e.getMessage());
-        }
     }
 
     @Override
@@ -67,16 +33,12 @@ public class MenuPanel extends GUIPanel {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g.create();
 
-        try {
             // Vẽ background image full màn hình
             if (backgroundImage != null) {
                 g2d.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
-            } else {
-                g2d.setColor(Color.decode("#FFC0CB"));
-                g2d.fillRect(0, 0, getWidth(), getHeight());
             }
 
-            // Vẽ chữ "Food Blaster" viết tay màu hồng ở phần trắng
+           // Vẽ chữ "Food Blaster" viết tay màu hồng ở phần trắng
             g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
             Font font;
@@ -98,10 +60,6 @@ public class MenuPanel extends GUIPanel {
 
             g2d.drawString(text, x, y);
 
-            //drawSaveInfo(g2d);
-        } finally {
-            g2d.dispose();
-        }
     }
 
     private JPanel createButtonPanel() {
@@ -135,35 +93,7 @@ public class MenuPanel extends GUIPanel {
             buttonPanel.add(continueButton);
         }
 
-        // Create buttons with different colors
-        JButton easyBtn = createButton("EASY", Color.decode("#F8C8DC"));
-        addButton(easyBtn);
-        JButton mediumBtn = createButton("MEDIUM", Color.decode("#FFC0CB"));
-        addButton(mediumBtn);
-        JButton hardBtn = createButton("HARD", Color.decode("#FAA0A0"));
-        addButton(hardBtn);
-        JButton bossBtn = createButton("BOSS FIGHTS", Color.decode("#F89880"));
-        addButton(bossBtn);
-        JButton exitBtn = createButton("EXIT", Color.decode("#D8BFD8"));
-        addButton(exitBtn);
-
-        // Add action listeners
-        easyBtn.addActionListener(e -> {
-            Game.getGame().getGm().startGame(Defs.LEVEL_EASY);
-            Game.getGame().changeState(Defs.STATE_PLAYING);
-        });
-        mediumBtn.addActionListener(e -> {
-            Game.getGame().getGm().startGame(Defs.LEVEL_MEDIUM);
-            Game.getGame().changeState(Defs.STATE_PLAYING);
-        });
-        hardBtn.addActionListener(e -> {
-            Game.getGame().getGm().startGame(Defs.LEVEL_HARD);
-            Game.getGame().changeState(Defs.STATE_PLAYING);
-        });
-        bossBtn.addActionListener(e -> {
-            Game.getGame().getGm().startGame(Defs.LEVEL_BOSS);
-            Game.getGame().changeState(Defs.STATE_PLAYING);
-        });
+        JButton exitBtn = createRoundedButton("EXIT", Color.decode("#D8BFD8"));
         exitBtn.addActionListener(e -> System.exit(0));
         buttonPanel.add(exitBtn);
 
@@ -173,9 +103,6 @@ public class MenuPanel extends GUIPanel {
 
     public void updateMenu() {
         removeAll(); // Xóa tất cả components cũ
-
-        // Load lại background
-        loadBackgroundImage();
 
         // Tạo lại button panel
         JPanel buttonPanel = createButtonPanel();
@@ -235,7 +162,7 @@ public class MenuPanel extends GUIPanel {
             }
         };
 
-        button.setFont(new Font("Arial", Font.BOLD, 18));
+        button.setFont(new Font("Arial", Font.BOLD,20 ));
         button.setForeground(Color.WHITE);
         button.setFocusPainted(false);
         button.setBorderPainted(false);

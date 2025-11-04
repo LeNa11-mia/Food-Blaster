@@ -139,15 +139,16 @@ public class GameManager {
         // Collision with paddle
         if (ball.intersects(paddle) && ball.getVy() > 0) {
             ball.bounceY();
+            ball.collisionFromSides(paddle);
             SoundManager.playWallHitSound();
         }
 
         // Collision with bricks
         for (Brick brick : bricks) {
-            if (!brick.isDestroyed() && ball.intersects(brick)) {
+            if (!brick.isDestroyed() && !brick.isHit() && ball.intersects(brick)) {
                 SoundManager.playBrickHitSound();
                 brick.hit();
-                ball.bounceY();
+                ball.collisionFromSides(brick);
                 break; // Only destroy one brick per collision
             }
         }

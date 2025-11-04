@@ -12,9 +12,7 @@ public class GameModesPanel extends GUIPanel {
 
     public GameModesPanel() {
         super(Color.decode("#F3CFC6"));
-
-        // Load background image
-        loadBackgroundImage();
+        backgroundImage = new ImageIcon("src/com/breakout/resources.assets/select.png").getImage();
 
         setLayout(null); // Dùng absolute positioning
 
@@ -22,42 +20,6 @@ public class GameModesPanel extends GUIPanel {
         JPanel modesPanel = createModesPanel();
         modesPanel.setBounds(125, 280, 350, 320); // x, y, width, height
         add(modesPanel);
-    }
-
-    private void loadBackgroundImage() {
-        try {
-            java.net.URL imgURL = getClass().getResource("/com/breakout/resources.assets/select.png");
-
-            if (imgURL == null) {
-                imgURL = getClass().getResource("/resources.assets/select.png");
-            }
-
-            if (imgURL == null) {
-                imgURL = getClass().getResource("/select.png");
-            }
-
-            if (imgURL != null) {
-                backgroundImage = new ImageIcon(imgURL).getImage();
-                System.out.println("✓ GameModesPanel: Ảnh load thành công từ: " + imgURL);
-            } else {
-                System.out.println("✗ Không tìm thấy ảnh trong classpath");
-                String[] filePaths = {
-                        "src/com/breakout/resources.assets/select.png",
-                        "./src/com/breakout/resources.assets/select.png"
-                };
-
-                for (String path : filePaths) {
-                    java.io.File file = new java.io.File(path);
-                    if (file.exists()) {
-                        backgroundImage = new ImageIcon(file.getAbsolutePath()).getImage();
-                        System.out.println("✓ Ảnh load từ file: " + file.getAbsolutePath());
-                        break;
-                    }
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("✗ Lỗi load ảnh: " + e.getMessage());
-        }
     }
 
     @Override
