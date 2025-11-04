@@ -3,66 +3,56 @@ package com.breakout.saves;
 import java.io.Serializable;
 
 public class BrickSave implements Serializable {
-    private int index;
-    private int row, col;
-    private int health;
+    private static final long serialVersionUID = 1L;
+
+    private int x, y;
+    private int width, height;
     private boolean destroyed;
-    private String type;
+    private int hitPoints;
+    private int maxHitPoints;
+    private int color;
+    private int points;
 
-    public BrickSave(int index, int row, int col, int health, boolean destroyed, String type) {
-        this.index = index;
-        this.row = row;
-        this.col = col;
-        this.health = health;
+    public BrickSave() {}
+
+    public BrickSave(int x, int y, int width, int height, boolean destroyed,
+                     int hitPoints, int maxHitPoints, int color, int points) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
         this.destroyed = destroyed;
-        this.type = type;
+        this.hitPoints = hitPoints;
+        this.maxHitPoints = maxHitPoints;
+        this.color = color;
+        this.points = points;
     }
 
-    public int getRow() {
-        return row;
-    }
+    // Getters and Setters
+    public int getX() { return x; }
+    public void setX(int x) { this.x = x; }
 
-    public void setIndex(int index) {
-        this.index = index;
-    }
+    public int getY() { return y; }
+    public void setY(int y) { this.y = y; }
 
-    public void setRow(int row) {
-        this.row = row;
-    }
+    public int getWidth() { return width; }
+    public void setWidth(int width) { this.width = width; }
 
-    public int getCol() {
-        return col;
-    }
+    public int getHeight() { return height; }
+    public void setHeight(int height) { this.height = height; }
 
-    public void setCol(int col) {
-        this.col = col;
-    }
+    public boolean isDestroyed() { return destroyed; }
+    public void setDestroyed(boolean destroyed) { this.destroyed = destroyed; }
 
-    public int getHealth() {
-        return health;
-    }
+    public int getHitPoints() { return hitPoints; }
+    public void setHitPoints(int hitPoints) { this.hitPoints = hitPoints; }
 
-    public void setHealth(int health) {
-        this.health = health;
-    }
+    public int getMaxHitPoints() { return maxHitPoints; }
+    public void setMaxHitPoints(int maxHitPoints) { this.maxHitPoints = maxHitPoints; }
 
-    public boolean isDestroyed() {
-        return destroyed;
-    }
+    public int getColor() { return color; }
+    public void setColor(int color) { this.color = color; }
 
-    public void setDestroyed(boolean destroyed) {
-        this.destroyed = destroyed;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public int getIndex() {
-        return index;
-    }
+    public int getPoints() { return points; }
+    public void setPoints(int points) { this.points = points; }
 }

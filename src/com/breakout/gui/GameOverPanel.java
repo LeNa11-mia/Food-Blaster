@@ -2,6 +2,7 @@ package com.breakout.gui;
 
 import com.breakout.Game;
 import com.breakout.config.Defs;
+import com.breakout.gui.MenuPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -71,8 +72,13 @@ public class GameOverPanel extends GUIPanel {
 
     private void displayInfo(JPanel centerPanel) {
         // Score display
+        scoreLabel = new JLabel("Score: " + (Game.getGame().getGm() != null ? Game.getGame().getGm().getScore() : 0));
+        scoreLabel.setFont(new Font("Arial", Font.BOLD, 32));
+        scoreLabel.setForeground(new Color(255, 105, 180));
+        scoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         scoreLabel = createLabel(
                 "Score: " + (Game.getGame().getGm() != null ? Game.getGame().getGm().getScore() : 0),
+                Color.RED,
                 new Color(255, 105, 180),
                 new Font("Arial", Font.BOLD, 24)
         );
@@ -115,11 +121,16 @@ public class GameOverPanel extends GUIPanel {
         // Menu button
         JButton menuBtn = createRoundedButton("MAIN MENU", new Color(160, 82, 45));
         menuBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
-        menuBtn.setMaximumSize(new Dimension(300, 50));
-        menuBtn.addActionListener(e -> Game.getGame().changeState(Defs.STATE_MENU));
         menuBtn.setMaximumSize(new Dimension(300, 55));
         menuBtn.setPreferredSize(new Dimension(300, 55));
-        menuBtn.addActionListener(e -> Game.getGame().changeState(Defs.STATE_MENU));
+        menuBtn.addActionListener(e -> {
+            Game.getGame().changeState(Defs.STATE_MENU);
+//            MenuPanel menuPanel = new MenuPanel(Game.getGame());
+//            javax.swing.SwingUtilities.invokeLater(() -> {
+//                Game.getGame().getFrame().setContentPane(menuPanel);
+//                menuPanel.updateMenu();
+//            });
+        });
         centerPanel.add(menuBtn);
     }
 

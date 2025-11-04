@@ -50,7 +50,21 @@ public class GameplayPanel extends GUIPanel {
 
     public void drawInstructions(Graphics2D g2d) {
         g2d.setColor(Color.WHITE);
+        g2d.setFont(new Font("Arial", Font.PLAIN, 14));
         g2d.drawString("Press ← → or A D to move", 10, 20);
+    }
+
+    // ✅ Vẽ điểm góc phải trên
+    public void drawScore(Graphics2D g2d) {
+        var gm = Game.getGame().getGm();
+
+        g2d.setColor(Color.WHITE);
+        g2d.setFont(new Font("Arial", Font.BOLD, 22));
+
+        String scoreText = "Score: " + gm.getScore();
+        int textWidth = g2d.getFontMetrics().stringWidth(scoreText);
+
+        g2d.drawString(scoreText, GameConfig.SCREEN_WIDTH - textWidth - 50, 30);
     }
 
     @Override
@@ -63,8 +77,9 @@ public class GameplayPanel extends GUIPanel {
         // Draw all objects
         drawObjects(g2d);
 
-        // Display instructions
+        // Display UI text
         drawInstructions(g2d);
+        drawScore(g2d);
 
         drawItemMessage(g2d);
     }

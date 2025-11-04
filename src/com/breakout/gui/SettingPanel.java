@@ -54,7 +54,7 @@ public class SettingPanel extends GUIPanel {
         buttonsPanel.setOpaque(false);
 
         // Continue Button với bo góc và màu hồng - sử dụng Times New Roman
-        JButton continueBtn = createRoundedButton("Continue", new Color(255, 105, 180)); // Màu hồng Hot Pink
+        JButton continueBtn = createRoundedButton("Continue", new Color(0x6EE7B7)); // Màu hồng Hot Pink
         continueBtn.addActionListener(e -> {
             // Return to previous state (PLAYING)
             Game.getGame().changeState(Defs.STATE_PLAYING);
@@ -62,9 +62,19 @@ public class SettingPanel extends GUIPanel {
         buttonsPanel.add(continueBtn);
         buttonsPanel.add(Box.createVerticalStrut(15));
 
-        // Back to Menu Button với bo góc và màu hồng - sử dụng Times New Roman
-        JButton menuBtn = createRoundedButton("Back to Menu", new Color(255, 105, 180)); // Màu hồng Hot Pink
+        // SAVE & EXIT Button - Lưu game và về menu
+        JButton saveExitBtn = createRoundedButton("SAVE & EXIT TO MENU", new Color(0xA78BFA)); // Màu xanh lá
+        saveExitBtn.addActionListener(e -> {
+            // Lưu game và về menu
+            Game.getGame().saveAndExitToMenu();
+        });
+        buttonsPanel.add(saveExitBtn);
+        buttonsPanel.add(Box.createVerticalStrut(15));
+
+        // Back to Menu Button (không lưu) - sử dụng Times New Roman
+        JButton menuBtn = createRoundedButton("Back to Menu (No Save)", new Color(0xFCA5A5)); // Màu cam đỏ
         menuBtn.addActionListener(e -> {
+            // Về menu không lưu
             Game.getGame().changeState(Defs.STATE_MENU);
         });
         buttonsPanel.add(menuBtn);
@@ -79,7 +89,7 @@ public class SettingPanel extends GUIPanel {
         add(centerWrapper, BorderLayout.CENTER);
 
         // Hint at bottom - sử dụng Times New Roman
-        JLabel hintLabel = createLabel("Press SPACE to toggle settings",
+        JLabel hintLabel = createLabel("Press ESC to return without saving | Press SPACE to toggle settings",
                 new Color(255, 255, 255, 150),
                 new Font("Times New Roman", Font.ITALIC, 14));
         hintLabel.setBorder(new EmptyBorder(0, 0, 20, 0));
@@ -120,6 +130,14 @@ public class SettingPanel extends GUIPanel {
         JLabel label = new JLabel(text);
         label.setForeground(color);
         label.setFont(new Font("Times New Roman", style, size));
+        return label;
+    }
+
+    protected JLabel createLabel(String text, Color color, Font font) {
+        JLabel label = new JLabel(text);
+        label.setForeground(color);
+        label.setFont(font);
+        label.setAlignmentX(Component.CENTER_ALIGNMENT);
         return label;
     }
 
@@ -237,7 +255,15 @@ public class SettingPanel extends GUIPanel {
                 }
                 g2.fillRoundRect(0, 0, getWidth(), getHeight(), 25, 25);
 
-                super.paintComponent(g);
+                // Vẽ chữ
+                g2.setColor(Color.WHITE);
+                g2.setFont(getFont());
+                FontMetrics fm = g2.getFontMetrics();
+                int textWidth = fm.stringWidth(getText());
+                int textHeight = fm.getAscent();
+                int x = (getWidth() - textWidth) / 2;
+                int y = (getHeight() + textHeight) / 2 - 2;
+                g2.drawString(getText(), x, y);
             }
 
             @Override

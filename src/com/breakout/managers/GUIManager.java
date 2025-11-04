@@ -24,19 +24,12 @@ public class GUIManager {
         menuPanel = new MenuPanel();
         gameModesPanel = new GameModesPanel();
         winPanel = new WinPanel();
-        settingPanel = new SettingPanel();
         gameOverPanel = new GameOverPanel();
+        settingPanel = new SettingPanel();
         previousState = -1;
     }
 
-    public void resetButton(Map<JButton, Color> originalColors) {
-        for (JButton btn : originalColors.keySet()) {
-            btn.setBackground(originalColors.get(btn));
-        }
-    }
-
     private void showGUIPanel(JFrame frame, GUIPanel panel) {
-        // Xử lý giao diện trên luồng riêng (EDT)
         SwingUtilities.invokeLater(() -> {
             frame.getContentPane().removeAll();
             frame.add(panel);
@@ -83,11 +76,54 @@ public class GUIManager {
         return settingPanel;
     }
 
+    public MenuPanel getMenuPanel() {
+        return menuPanel;
+    }
+
+    public GameModesPanel getGameModesPanel() {
+        return gameModesPanel;
+    }
+
+    public WinPanel getWinPanel() {
+        return winPanel;
+    }
+
+    public GameOverPanel getGameOverPanel() {
+        return gameOverPanel;
+    }
+
     public void setPreviousState(int state) {
         this.previousState = state;
     }
 
     public int getPreviousState() {
         return previousState;
+    }
+
+    /**
+     * Cập nhật trạng thái menu (ví dụ: enable/disable nút continue)
+     */
+    public void refreshMenu() {
+        if (menuPanel != null) {
+            menuPanel.refreshMenu();
+        }
+    }
+
+    /**
+     * Cập nhật thông tin win screen
+     */
+    public void updateWinScreen(int score, String difficulty) {
+        if (winPanel != null) {
+            winPanel.updateScore(score, difficulty);
+        }
+    }
+
+    /**
+     * Cập nhật thông tin game over screen
+     */
+    public void updateGameOverScreen(int score, String difficulty) {
+        if (gameOverPanel != null) {
+            gameOverPanel.updateScore(score, difficulty);
+        }
     }
 }
