@@ -11,19 +11,19 @@ public class MenuPanel extends GUIPanel {
 
     private Image backgroundImage;
     private JButton continueButton;
+    private Game game;
 
-    public MenuPanel() {
+    public MenuPanel(Game game) {
         super(Color.decode("#F3CFC6"));
+        this.game = game;
 
         // Load background image
-        loadBackgroundImage();
-        this.game = game;
         backgroundImage = new ImageIcon("src/com/breakout/resources.assets/mainMenu.png").getImage();
 
         setLayout(null); // Dùng absolute positioning để đặt chính xác vị trí
 
         // Tạo button panel và đặt ở phần màu hồng
-        JPanel buttonPanel = createButtonPanel(game);
+        JPanel buttonPanel = createButtonPanel();
         buttonPanel.setBounds(150, 400, 300, 150); // x, y, width, height
         add(buttonPanel);
     }
@@ -37,12 +37,8 @@ public class MenuPanel extends GUIPanel {
             if (backgroundImage != null) {
                 g2d.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
             }
-//            else {
-//                g2d.setColor(Color.decode("#FFC0CB"));
-//                g2d.fillRect(0, 0, getWidth(), getHeight());
-//            }
-//
-//            // Vẽ chữ "Food Blaster" viết tay màu hồng ở phần trắng
+
+           // Vẽ chữ "Food Blaster" viết tay màu hồng ở phần trắng
             g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
             Font font;
@@ -64,10 +60,6 @@ public class MenuPanel extends GUIPanel {
 
             g2d.drawString(text, x, y);
 
-            //drawSaveInfo(g2d);
-//        } finally {
-//            g2d.dispose();
-//        }
     }
 
     private JPanel createButtonPanel() {
@@ -102,35 +94,6 @@ public class MenuPanel extends GUIPanel {
             buttonPanel.add(continueButton);
         }
 
-        // Create buttons with different colors
-        JButton easyBtn = createButton("EASY", Color.decode("#F8C8DC"));
-        addButton(easyBtn);
-        JButton mediumBtn = createButton("MEDIUM", Color.decode("#FFC0CB"));
-        addButton(mediumBtn);
-        JButton hardBtn = createButton("HARD", Color.decode("#FAA0A0"));
-        addButton(hardBtn);
-        JButton bossBtn = createButton("BOSS FIGHTS", Color.decode("#F89880"));
-        addButton(bossBtn);
-        JButton exitBtn = createButton("EXIT", Color.decode("#D8BFD8"));
-        addButton(exitBtn);
-
-        // Add action listeners
-        easyBtn.addActionListener(e -> {
-            Game.getGame().getGm().startGame(Defs.LEVEL_EASY);
-            Game.getGame().changeState(Defs.STATE_PLAYING);
-        });
-        mediumBtn.addActionListener(e -> {
-            Game.getGame().getGm().startGame(Defs.LEVEL_MEDIUM);
-            Game.getGame().changeState(Defs.STATE_PLAYING);
-        });
-        hardBtn.addActionListener(e -> {
-            Game.getGame().getGm().startGame(Defs.LEVEL_HARD);
-            Game.getGame().changeState(Defs.STATE_PLAYING);
-        });
-        bossBtn.addActionListener(e -> {
-            Game.getGame().getGm().startGame(Defs.LEVEL_BOSS);
-            Game.getGame().changeState(Defs.STATE_PLAYING);
-        });
         JButton exitBtn = createRoundedButton("EXIT", Color.decode("#D8BFD8"));
         exitBtn.addActionListener(e -> System.exit(0));
         buttonPanel.add(exitBtn);

@@ -16,13 +16,11 @@ public class SettingPanel extends GUIPanel {
 
     public SettingPanel() {
         super(Color.decode("#1a1a2e"));
+        backgroundImage = new ImageIcon("src/com/breakout/resources.assets/setting.png").getImage();
         setLayout(new BorderLayout());
 
         // Quan trọng: Panel phải có thể nhận keyboard input
         setFocusable(true);
-
-        // Load background image
-        loadBackgroundImage();
 
         // Main panel with settings
         JPanel mainPanel = new JPanel();
@@ -123,22 +121,6 @@ public class SettingPanel extends GUIPanel {
         label.setForeground(color);
         label.setFont(new Font("Times New Roman", style, size));
         return label;
-    }
-
-    private void loadBackgroundImage() {
-        try {
-            // Thử load ảnh từ resources
-            java.net.URL imgURL = getClass().getResource("/com/breakout/resources.assets/setting.png");
-            if (imgURL != null) {
-                backgroundImage = new ImageIcon(imgURL).getImage();
-                System.out.println("✓ SettingPanel: Ảnh load thành công từ: " + imgURL);
-            } else {
-                System.err.println("✗ SettingPanel: Không tìm thấy ảnh mainMenu.png");
-            }
-        } catch (Exception e) {
-            System.err.println("✗ SettingPanel: Lỗi load ảnh: " + e.getMessage());
-            e.printStackTrace();
-        }
     }
 
     @Override
