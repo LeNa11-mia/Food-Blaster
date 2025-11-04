@@ -7,7 +7,7 @@ import com.breakout.core.GameObject;
  * Paddle - moves left and right.
  */
 public class Paddle extends GameObject {
-    private double speed = 400; // Movement speed
+    private double speed = GameConfig.PADDLE_SPEED; // Movement speed
 
     public Paddle(double x, double y) {
         super(x, y, GameConfig.PADDLE_WIDTH, GameConfig.PADDLE_HEIGHT); // Paddle size: 100x15 pixels

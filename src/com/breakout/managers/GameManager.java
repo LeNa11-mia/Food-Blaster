@@ -118,11 +118,13 @@ public class GameManager {
         if (ball.getX() <= 0
                 || ball.getX() + ball.getWidth() >= GameConfig.SCREEN_WIDTH - 12) {
             ball.bounceX();
+            SoundManager.playWallHitSound();
         }
 
         // Ball hits top wall
         if (ball.getY() <= 0) {
             ball.bounceY();
+            SoundManager.playWallHitSound();
         }
 
         // Ball falls below bottom border - GAME OVER
@@ -137,11 +139,13 @@ public class GameManager {
         // Collision with paddle
         if (ball.intersects(paddle) && ball.getVy() > 0) {
             ball.bounceY();
+            SoundManager.playWallHitSound();
         }
 
         // Collision with bricks
         for (Brick brick : bricks) {
             if (!brick.isDestroyed() && ball.intersects(brick)) {
+                SoundManager.playBrickHitSound();
                 brick.hit();
                 ball.bounceY();
                 break; // Only destroy one brick per collision

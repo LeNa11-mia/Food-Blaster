@@ -1,5 +1,8 @@
 package com.breakout.config;
 
+import com.breakout.managers.SoundManager;
+
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 
 /**
@@ -20,7 +23,7 @@ public class GameConfig {
     // ----- PADDLE -----
     public static final int PADDLE_WIDTH = 100;
     public static final int PADDLE_HEIGHT = 15;
-    public static final double PADDLE_SPEED = 400;
+    public static final double PADDLE_SPEED = 300;
     public static final ImageIcon PADDLE_IMAGE = new ImageIcon("src/com/breakout/resources.assets/paddle.png");
 
     // ----- BRICK -----
@@ -41,5 +44,8 @@ public class GameConfig {
     public static final int ITEM_WIDTH = 60;
     public static final int ITEM_HEIGHT = 60;
     public static final ImageIcon ITEM_IMAGE = new ImageIcon("src/com/breakout/resources.assets/gameOverItem.png");
-    // Add items ...
+
+    // ----- SOUND EFFECTS PATH -----
+    public static final String BRICK_HIT_SOUND_PATH = "src/com/breakout/resources.assets/ball-hit-brick.wav";
+    public static final String WALL_HIT_SOUND_PATH = "src/com/breakout/resources.assets/ball-hit-wall.wav";
 }

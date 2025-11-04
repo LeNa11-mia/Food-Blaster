@@ -35,6 +35,8 @@ public class Game {
         gui = new GUIManager();
         keyListener = new GameKeyListener();
 
+        SoundManager.loadSounds();
+
         // Thêm KeyListener cho GameplayPanel
         gui.getGameplayPanel().addKeyListener(keyListener);
 
