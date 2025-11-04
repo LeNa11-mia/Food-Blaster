@@ -69,7 +69,7 @@ public class WinPanel extends GUIPanel {
         add(instructionLabel, BorderLayout.SOUTH);
     }
 
-    public void updateScore(int finalScore, String difficultyName) {
+    public void updateInfo(int finalScore, String difficultyName) {
         if (scoreLabel != null) {
             scoreLabel.setText("Score: " + finalScore);
         }

@@ -71,13 +71,9 @@ public class GameOverPanel extends GUIPanel {
 
     private void displayInfo(JPanel centerPanel) {
         // Score display
-        JLabel scoreLabel = new JLabel("Score: " + (Game.getGame().getGm() != null ? Game.getGame().getGm().getScore() : 0));
-        scoreLabel.setFont(new Font("Arial", Font.BOLD, 32));
-        scoreLabel.setForeground(new Color(255, 105, 180));
-        scoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         scoreLabel = createLabel(
                 "Score: " + (Game.getGame().getGm() != null ? Game.getGame().getGm().getScore() : 0),
-                Color.WHITE,
+                new Color(255, 105, 180),
                 new Font("Arial", Font.BOLD, 24)
         );
         centerPanel.add(scoreLabel);
@@ -87,17 +83,13 @@ public class GameOverPanel extends GUIPanel {
         // Difficulty display
         difficultyLabel = createLabel(
                 "Difficulty: " + Game.getGame().getGm().getDifficultyName(),
-                Color.WHITE,
+                new Color(218, 112, 161),
                 new Font("Arial", Font.PLAIN, 18)
         );
-        JLabel difficultyLabel = new JLabel("Difficulty: " + Game.getGame().getGm().getDifficultyName());
-        difficultyLabel.setFont(new Font("Arial", Font.PLAIN, 20));
-        difficultyLabel.setForeground(new Color(218, 112, 161));
-        difficultyLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         centerPanel.add(difficultyLabel);
     }
 
-    public void updateScore(int finalScore, String difficultyName) {
+    public void updateInfo(int finalScore, String difficultyName) {
         if (scoreLabel != null) {
             scoreLabel.setText("Score: " + finalScore);
         }
