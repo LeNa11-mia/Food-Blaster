@@ -23,7 +23,6 @@ public class GameManager {
     private Paddle paddle;
     private List<Brick> bricks;
     private List<Item> activeItems;
-    private Game game;
 
     private int score;
     private int lives;
@@ -38,10 +37,6 @@ public class GameManager {
         bricks = new ArrayList<>();
         activeItems = new ArrayList<>();
         lives = 1; // Only 1 life as per your requirement
-    }
-
-    public GameManager(Game game) {
-        this.game = game;
     }
 
     private boolean paused = false;
@@ -80,10 +75,10 @@ public class GameManager {
         resetPaddle();
         lives = 1;
         score = 0;
+        activeItems.clear();
     }
 
     public void update(double deltaTime, boolean leftPressed, boolean rightPressed) {
-
         if (paused) return;
 
         if (!ballStarted) return;
@@ -92,8 +87,6 @@ public class GameManager {
             // Lưu game trước khi chuyển sang GAMEOVER
             saveCurrentGame();
             Game.getGame().changeState(Defs.STATE_GAMEOVER);
-
-            game.changeState(Defs.STATE_GAMEOVER);
             return; // Don't update if game is over
         } else if (isWin()) {
             // Lưu game trước khi chuyển sang WIN
@@ -122,7 +115,8 @@ public class GameManager {
         }
 
         // Ball hits left/right walls
-        if (ball.getX() <= 0 || ball.getX() + ball.getWidth() >= GameConfig.SCREEN_WIDTH - 15) {
+        if (ball.getX() <= 0
+                || ball.getX() + ball.getWidth() >= GameConfig.SCREEN_WIDTH - 12) {
             ball.bounceX();
         }
 
@@ -151,6 +145,19 @@ public class GameManager {
                 brick.hit();
                 ball.bounceY();
                 break; // Only destroy one brick per collision
+            }
+        }
+
+        // Update items
+        Iterator<Item> iter = activeItems.iterator();
+        while (iter.hasNext()) {
+            Item item = iter.next();
+            item.update(deltaTime);
+            if (item.intersects(paddle)) {
+                item.applyEffect(paddle, this);
+                iter.remove();
+            } else if (item.getY() > GameConfig.SCREEN_HEIGHT) {
+                iter.remove(); // xóa item khi rơi ra ngoài
             }
         }
 
@@ -204,8 +211,6 @@ public class GameManager {
      */
     public void loadSavedGame(GameSave gameSave) {
         if (gameSave == null) return;
-
-        game.changeState(Defs.STATE_LOADING);
 
         currentDifficulty = gameSave.getDifficulty();
         score = gameSave.getScore();

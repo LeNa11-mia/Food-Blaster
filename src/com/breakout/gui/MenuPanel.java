@@ -81,7 +81,6 @@ public class MenuPanel extends GUIPanel {
         playBtn.addActionListener(e -> Game.getGame().changeState(Defs.STATE_GAME_MODES));
         buttonPanel.add(playBtn);
 
-
         // Nếu có save → thêm CONTINUE ở giữa PLAY và EXIT
         if (hasSave) {
             continueButton = createRoundedButton("CONTINUE", Color.decode("#FFB6C1"));
