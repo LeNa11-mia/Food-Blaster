@@ -1,7 +1,6 @@
 package com.breakout.managers;
 
 import com.breakout.Game;
-import com.breakout.config.Defs;
 import com.breakout.gui.*;
 
 import javax.swing.*;
@@ -66,13 +65,13 @@ public class GUIManager {
 
     public void showWinScreen(JFrame frame) {
         GameManager gm = Game.getGame().getGm();
-        winPanel.updateScore(gm.getScore(), gm.getDifficultyName());
+        winPanel.updateInfo(gm.getScore(), gm.getDifficultyName());
         showGUIPanel(frame, winPanel);
     }
 
     public void showGameOverScreen(JFrame frame) {
         GameManager gm = Game.getGame().getGm();
-        gameOverPanel.updateScore(gm.getScore(), gm.getDifficultyName());
+        gameOverPanel.updateInfo(gm.getScore(), gm.getDifficultyName());
         showGUIPanel(frame, gameOverPanel);
     }
 

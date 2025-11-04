@@ -30,7 +30,7 @@ public class Ball extends GameObject {
         // Mép trên nhỏ hơn - mép dưới lớn hơn = phần trùng nhau theo trục Y
 
         if (overlapX == 0 || overlapY == 0) {
-                return;
+            return;
         }
 
         if (overlapX < overlapY) { // Mới va chạm theo trục X
