@@ -24,20 +24,21 @@ public class Ball extends GameObject {
 
     // Xử lý va chạm từ các hướng
     public void collisionFromSides(GameObject obj) {
-        if (obj instanceof Paddle) {
-            collisionWithPaddle((Paddle) obj);
-        } else {
-            double overlapX = Math.min(x + getWidth(), obj.getX() + obj.getWidth()) - Math.max(x, obj.getX());
-            // Mép phải nhỏ hơn - mép trái lớn hơn = phần trùng nhau theo trục X
-            double overlapY = Math.min(y + getHeight(), obj.getY() + obj.getHeight()) - Math.max(y, obj.getY());
-            // Mép trên nhỏ hơn - mép dưới lớn hơn = phần trùng nhau theo chiều Y
+        double overlapX = Math.min(x + getWidth(), obj.getX() + obj.getWidth()) - Math.max(x, obj.getX());
+        // Mép phải nhỏ hơn - mép trái lớn hơn = phần trùng nhau theo trục X
+        double overlapY = Math.min(y + getHeight(), obj.getY() + obj.getHeight()) - Math.max(y, obj.getY());
+        // Mép trên nhỏ hơn - mép dưới lớn hơn = phần trùng nhau theo trục Y
 
-            if (overlapX == 0 || overlapY == 0) {
+        if (overlapX == 0 || overlapY == 0) {
                 return;
-            }
+        }
 
-            if (overlapX < overlapY) { // Mới va chạm theo chiều X
-                bounceX();
+        if (overlapX < overlapY) { // Mới va chạm theo trục X
+            bounceX();
+        } else {
+            // Bóng chạm mặt trên của paddle có cách tính va chạm riêng
+            if (obj instanceof Paddle) {
+                collisionWithPaddle((Paddle) obj);
             } else {
                 bounceY();
             }
@@ -65,8 +66,7 @@ public class Ball extends GameObject {
     }
 
     private void addPaddleVelocity(Paddle paddle) {
-        double transfer = 0.2;  // Truyền 20% vận tốc paddle cho bóng
-        setVelocity(vx + transfer * paddle.getVx(), vy);
+        setVelocity(vx + GameConfig.VELOCITY_TRANSFER_TO_BALL * paddle.getVx(), vy);
     }
 
     // Reverse direction when hitting walls

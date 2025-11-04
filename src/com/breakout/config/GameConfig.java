@@ -21,6 +21,7 @@ public class GameConfig {
     public static final double PADDLE_WIDTH = 100;
     public static final double PADDLE_HEIGHT = 15;
     public static final double PADDLE_SPEED = 400;
+    public static final double VELOCITY_TRANSFER_TO_BALL = 0.2; // Phần trăm của vận tốc truyền cho bóng khi va chạm
     public static final ImageIcon PADDLE_IMAGE = new ImageIcon("src/com/breakout/resources.assets/paddle.png");
 
     // ----- BRICK -----

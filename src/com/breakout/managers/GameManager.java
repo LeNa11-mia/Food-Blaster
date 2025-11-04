@@ -116,7 +116,7 @@ public class GameManager {
 
         // Collision with paddle
         if (ball.intersects(paddle) && ball.getVy() > 0) {
-            ball.collisionWithPaddle(paddle);
+            ball.collisionFromSides(paddle);
         }
 
         // Collision with bricks
