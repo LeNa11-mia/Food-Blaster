@@ -29,12 +29,15 @@ public class Level extends LevelData {
      */
     private static List<Brick> createLevel(int[][] layout) {
         List<Brick> bricks = new ArrayList<>();
+        double offsetX = 2;
+        double offsetY = 50;
+        double spacing = 1;
 
         for (int row = 0; row < layout.length; row++) {
             for (int col = 0; col < layout[row].length; col++) {
                 int type = layout[row][col];
-                double x = col * GameConfig.BRICK_WIDTH;
-                double y = 50 + row * GameConfig.BRICK_HEIGHT;
+                double x = offsetX + col * (GameConfig.BRICK_WIDTH + spacing);
+                double y = offsetY + row * (GameConfig.BRICK_HEIGHT + spacing);
 
                 Brick b = null;
                 if (type == Defs.NORMAL_BRICK) {

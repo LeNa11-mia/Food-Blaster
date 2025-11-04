@@ -1,7 +1,6 @@
 package com.breakout;
 
 import com.breakout.config.Defs;
-import com.breakout.gui.GUIPanel;
 import com.breakout.listeners.GameKeyListener;
 import com.breakout.managers.*;
 
@@ -124,6 +123,7 @@ public class Game {
                 gui.showMenuScreen(frame);
                 break;
             case Defs.STATE_PLAYING:
+                keyListener.resetKeys();
                 gui.showGameplayPanel(frame);
                 break;
             case Defs.STATE_GAME_MODES:  // THÊM CASE NÀY
