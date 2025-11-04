@@ -1,5 +1,7 @@
 package com.breakout.core;
 
+import com.breakout.utils.ImageUtils;
+
 import javax.swing.*;
 
 /**
@@ -35,5 +37,16 @@ public abstract class GameObject {
                x + width >= other.x &&
                y <= other.y + other.height &&
                y + height >= other.y;
+    }
+
+    public void resizeSprite(double newWidth, double newHeight) {
+        if (sprite == null || sprite.getImage() == null) {
+            System.out.println("❌ Sprite null before resize");
+            return;
+        }
+        System.out.println("✅ Resizing from " + width + "x" + height + " → " + newWidth + "x" + newHeight);
+        this.width = newWidth;
+        this.height = newHeight;
+        this.sprite = ImageUtils.resize(sprite, (int)newWidth, (int)newHeight);
     }
 }

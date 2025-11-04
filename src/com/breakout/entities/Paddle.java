@@ -52,7 +52,7 @@ public class Paddle extends GameObject {
     public void moveRight(double deltaTime, double screenWidth) {
         vx = speed;
         x += vx * deltaTime;
-        double maxX = screenWidth - width - 15;
+        double maxX = screenWidth - width - 12;
         if (x > maxX) {
             x = maxX;
         }

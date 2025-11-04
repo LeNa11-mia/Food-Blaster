@@ -8,7 +8,7 @@ import javax.swing.*;
 public class GameConfig {
     // ----- SCREEN -----
     public static final int SCREEN_WIDTH = 600;
-    public static final int SCREEN_HEIGHT = 800;
+    public static final int SCREEN_HEIGHT = 700;
     public static final String WINDOW_TITLE = "Food Blaster";
 
     // ----- BALL -----
@@ -35,14 +35,14 @@ public class GameConfig {
     public static final double GRAVITY = 980; // Bricks fall faster over time
     public static final ImageIcon FALLING_BRICK_IMAGE =  new ImageIcon("src/com/breakout/resources.assets/rottenCake.png");
 
-    public static final double ITEM_FALLING_SPEED = 150;
+    public static final double ITEM_FALLING_SPEED = 170;
     public static final ImageIcon ITEM_BRICK_IMAGE = new ImageIcon("src/com/breakout/resources.assets/chocolateCake.png");
 
     public static final ImageIcon UNBREAKABLE_BRICK_IMAGE = null;
 
     // ----- ITEM -----
-    public static final double ITEM_WIDTH = 0;
-    public static final double ITEM_HEIGHT = 0;
+    public static final double ITEM_WIDTH = 60;
+    public static final double ITEM_HEIGHT = 60;
     public static final ImageIcon ITEM_IMAGE = new ImageIcon("src/com/breakout/resources.assets/gameOverItem.png");
     // Add items ...
 }

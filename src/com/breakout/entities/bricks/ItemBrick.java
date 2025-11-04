@@ -21,16 +21,14 @@ public class ItemBrick extends Brick implements Destructible {
 
     @Override
     public void onDestroyed() {
-        spawnItem(); // Sinh ra vật phẩm
+        spawnItem();
     }
 
     private void spawnItem() {
-        // Sinh ra một vật phẩm ngẫu nhiên tại vị trí của gạch
         Item item = Item.createRandomItem(
-                getX() + getWidth() / 2 - GameConfig.ITEM_WIDTH / 2, // Căn giữa item
+                getX() + getWidth() / 2 - GameConfig.ITEM_WIDTH / 2,
                 getY() + getHeight() / 2 - GameConfig.ITEM_HEIGHT / 2
         );
-
         Game.getGame().getGm().addItem(item);
     }
 }

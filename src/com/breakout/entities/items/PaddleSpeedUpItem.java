@@ -12,6 +12,7 @@ public class PaddleSpeedUpItem extends GoodItem {
 
     @Override
     public void applyEffect(Paddle paddle, GameManager gm) {
-        paddle.setSpeed(paddle.getSpeed() * SPEED_MULTIPLIER);
+        double newSpeed = paddle.getSpeed() * SPEED_MULTIPLIER;
+        paddle.setSpeed(newSpeed);
     }
 }
