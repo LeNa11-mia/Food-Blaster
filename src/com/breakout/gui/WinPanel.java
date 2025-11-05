@@ -55,7 +55,7 @@ public class WinPanel extends GUIPanel {
 
         // Difficulty display
         difficultyLabel = createLabel(
-                "Difficulty: " + Game.getGame().getGm().getDifficultyName(),
+                "Level: " + Game.getGame().getGm().getCurrentLevel(),
                 Color.WHITE,
                 new Font("Arial", Font.PLAIN, 18)
         );
@@ -71,12 +71,12 @@ public class WinPanel extends GUIPanel {
         add(instructionLabel, BorderLayout.SOUTH);
     }
 
-    public void updateInfo(int finalScore, String difficultyName) {
+    public void updateInfo(int finalScore, int level) {
         if (scoreLabel != null) {
             scoreLabel.setText("Score: " + finalScore);
         }
         if (difficultyLabel != null) {
-            difficultyLabel.setText("Difficulty: " + difficultyName);
+            difficultyLabel.setText("Level: " + level);
         }
     }
 
@@ -103,7 +103,7 @@ public class WinPanel extends GUIPanel {
         restartBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         restartBtn.setMaximumSize(new Dimension(300, 50));
         restartBtn.addActionListener(e -> {
-            gm.startGame(gm.getCurrentDifficulty());
+            gm.startGame(gm.getCurrentLevel());
             Game.getGame().changeState(Defs.STATE_PLAYING);
         });
         centerPanel.add(restartBtn);

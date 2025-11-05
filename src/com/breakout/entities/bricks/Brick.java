@@ -3,6 +3,8 @@ package com.breakout.entities.bricks;
 import com.breakout.config.GameConfig;
 import com.breakout.core.GameObject;
 
+import java.awt.*;
+
 /**
  * Brick - can be drawn and destroyed.
  */

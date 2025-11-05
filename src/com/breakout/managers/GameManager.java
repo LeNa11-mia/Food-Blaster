@@ -11,7 +11,6 @@ import com.breakout.saves.BallSave;
 import com.breakout.saves.BrickSave;
 import com.breakout.saves.GameSave;
 import com.breakout.saves.PaddleSave;
-import com.breakout.gui.MenuPanel;
 
 import java.util.*;
 import java.util.List;
@@ -31,10 +30,11 @@ public class GameManager {
 
     private int score;
     private int lives;
-    private int currentDifficulty;
-    private int currentLevel = 1;
+    private int currentLevel;
 
     public GameManager() {
+        Level.unlockLevel(1); // Mở khóa level đầu tiên
+
         // Initialize game objects
         ball = new Ball(GameConfig.SCREEN_WIDTH/2.0, GameConfig.SCREEN_HEIGHT/2.0);
         paddle = new Paddle(GameConfig.SCREEN_WIDTH/2.0 - 50, GameConfig.SCREEN_HEIGHT - 50);
@@ -79,11 +79,11 @@ public class GameManager {
         ballStarted = true;
     }
 
-    public void startGame(int difficulty) {
-        currentDifficulty = difficulty;
-        currentLevel = 1;
+    public void startGame(int level) {
+        currentLevel = level;
 
-        bricks = Level.loadLevel(difficulty);
+        // ADDED: Pass ball parameter for InvisibleBallBrick support
+        bricks = Level.loadLevel(level, ball);
         resetBall();
         resetPaddle();
         lives = 1;
@@ -145,14 +145,20 @@ public class GameManager {
         }
 
         // Ball hits left/right walls
-        if (ball.getX() <= 0
-                || ball.getX() + ball.getWidth() >= GameConfig.SCREEN_WIDTH - 12) {
+        if (ball.getX() <= 0) {
+            ball.setX(1); // Tránh bị kẹt trong tường
+            ball.bounceX();
+            SoundManager.playWallHitSound();
+        }
+        if (ball.getX() + ball.getWidth() >= GameConfig.SCREEN_WIDTH - 12) {
+            ball.setX(GameConfig.SCREEN_WIDTH - 12 - ball.getWidth() - 1);
             ball.bounceX();
             SoundManager.playWallHitSound();
         }
 
         // Ball hits top wall
         if (ball.getY() <= 0) {
+            ball.setY(1);
             ball.bounceY();
             SoundManager.playWallHitSound();
         }
@@ -262,7 +268,7 @@ public class GameManager {
         );
 
         GameSave gameSave = new GameSave(
-                currentDifficulty, score, lives, currentLevel,
+                currentLevel, score, lives, currentLevel,
                 ballData, paddleData, bricksData
         );
 
@@ -286,7 +292,7 @@ public class GameManager {
     public void loadSavedGame(GameSave gameSave) {
         if (gameSave == null) return;
 
-        currentDifficulty = gameSave.getDifficulty();
+        currentLevel = gameSave.getDifficulty();
         score = gameSave.getScore();
         lives = gameSave.getLives();
         currentLevel = gameSave.getLevel();
@@ -330,7 +336,8 @@ public class GameManager {
      */
     private void loadLevelForSavedGame() {
         if (bricks == null || bricks.isEmpty()) {
-            bricks = Level.loadLevel(currentDifficulty);
+            // ADDED: Pass ball parameter for InvisibleBallBrick support
+            bricks = Level.loadLevel(currentLevel, ball);
         }
     }
 
@@ -349,14 +356,17 @@ public class GameManager {
     }
 
     public int getNextDifficulty() {
-        if (currentDifficulty < Defs.LEVEL_BOSS) {
-            currentDifficulty++;
+        if (currentLevel < Defs.LEVEL_BOSS) {
+            currentLevel++;
         }
-        return currentDifficulty;
+        return currentLevel;
     }
 
     private void resetBall() {
-        ball = new Ball(GameConfig.SCREEN_WIDTH/2.0, GameConfig.SCREEN_HEIGHT/2.0);
+        // CHANGED: Maintain same ball instance for InvisibleBallBrick compatibility
+        ball.setPosition(GameConfig.SCREEN_WIDTH/2.0, GameConfig.SCREEN_HEIGHT/2.0);
+        ball.setVelocity(0, GameConfig.BALL_SPEED);
+        ball.setVisible(true); // Ensure ball is visible after reset
         ballStarted = false;
     }
 
@@ -389,17 +399,10 @@ public class GameManager {
                 return false;
             }
         }
-        return true;
-    }
-
-    public String getDifficultyName() {
-        switch (currentDifficulty) {
-            case Defs.LEVEL_EASY: return "EASY";
-            case Defs.LEVEL_MEDIUM: return "MEDIUM";
-            case Defs.LEVEL_HARD: return "HARD";
-            case Defs.LEVEL_BOSS: return "BOSS";
-            default: return "UNKNOWN";
+        if (currentLevel < GameConfig.TOTAL_LEVELS) {
+            Level.unlockLevel(currentLevel + 1); // Mở khóa level sau nếu có
         }
+        return true;
     }
 
     // Getters
@@ -409,11 +412,10 @@ public class GameManager {
     public List<Brick> getBricks() { return bricks; }
     public int getScore() { return score; }
     public int getLives() { return lives; }
-    public int getCurrentLevel() { return currentLevel; }
 
     public boolean isGameOver() { return lives <= 0; }
     public void setLives(int lives) {
         this.lives = lives;
     }
-    public int getCurrentDifficulty() { return currentDifficulty; }
+    public int getCurrentLevel() { return currentLevel; }
 }

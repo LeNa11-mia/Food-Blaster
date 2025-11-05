@@ -10,6 +10,9 @@ import javax.swing.*;
  * Game constants
  */
 public class GameConfig {
+
+    public static final int TOTAL_LEVELS = 6;
+
     // ----- SCREEN -----
     public static final int SCREEN_WIDTH = 625;
     public static final int SCREEN_HEIGHT = 700;
@@ -51,6 +54,8 @@ public class GameConfig {
     public static final ImageIcon ITEM_BRICK_IMAGE = NORMAL_BRICK_IMAGE; // Ẩn vị trí Item Brick
 
     public static final ImageIcon UNBREAKABLE_BRICK_IMAGE = null;
+
+    public static final ImageIcon INVISIBLE_BALL_BRICK_IMAGE = new ImageIcon("src/com/breakout/resources.assets/invisibleBallBrick.png");
 
     // ----- ITEM -----
     public static final ImageIcon ITEM_IMAGE = new ImageIcon("src/com/breakout/resources.assets/gameOverItem.png");
