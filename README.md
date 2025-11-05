@@ -1,4 +1,4 @@
-This README describes the folder layout and purpose of the main packages and files in the Breakout game project.
+This README describes the folder layout and purpose of the main packages and files in our Arkanoid game project.
 
 ```
 src/
