@@ -21,7 +21,6 @@ import java.util.List;
 public class GameManager {
     private String screenMessage = null;
     private double messageTimer = 0.0;
-    private static final double MESSAGE_DURATION = 2.0;
 
     private Ball ball;
     private Paddle paddle;
@@ -45,7 +44,7 @@ public class GameManager {
 
     public void showMessageOnScreen(String message) {
         this.screenMessage = message;
-        this.messageTimer = MESSAGE_DURATION; // Bắt đầu đếm ngược
+        this.messageTimer = GameConfig.ITEM_MESSAGE_DURATION; // Bắt đầu đếm ngược
     }
 
     public String getScreenMessage() {
@@ -89,6 +88,7 @@ public class GameManager {
         lives = 1;
         score = 0;
         activeItems.clear();
+        screenMessage = null;
         ballStarted = false;
     }
 

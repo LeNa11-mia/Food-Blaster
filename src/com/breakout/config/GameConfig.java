@@ -61,6 +61,8 @@ public class GameConfig {
     public static final ImageIcon ITEM_IMAGE = new ImageIcon("src/com/breakout/resources.assets/gameOverItem.png");
     public static final double ITEM_WIDTH = ITEM_IMAGE.getIconWidth();
     public static final double ITEM_HEIGHT = ITEM_IMAGE.getIconHeight();
+    public static final double ITEM_MESSAGE_DURATION = 2.0;
+
 
     // ----- SOUND EFFECTS PATH -----
     public static final String BRICK_HIT_SOUND_PATH = "src/com/breakout/resources.assets/ball-hit-brick.wav";
