@@ -3,11 +3,7 @@ package com.breakout.managers;
 import com.breakout.config.Defs;
 import com.breakout.config.GameConfig;
 import com.breakout.entities.*;
-import com.breakout.entities.bricks.Brick;
-import com.breakout.entities.bricks.ExplosiveBrick;
-import com.breakout.entities.bricks.FallingBrick;
-import com.breakout.entities.bricks.NormalBrick;
-import com.breakout.entities.bricks.ItemBrick;
+import com.breakout.entities.bricks.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,23 +12,25 @@ public class Level extends LevelData {
 
     private static boolean[] levelUnlocked = new boolean[GameConfig.TOTAL_LEVELS];
 
-    public static List<Brick> loadLevel(int id) {
+    public static List<Brick> loadLevel(int id, Ball ball) {
         switch (id) {
-            case 1: return createLevel(LevelData.level1);
-            case 2: return createLevel(LevelData.level2);
-            case 3: return createLevel(LevelData.level3);
-            case 4: return createLevel(LevelData.level3);
-            case 5: return createLevel(LevelData.level3);
-            case 6: return createLevel(LevelData.level3);
+            case 1: return createLevel(LevelData.level1, ball);
+            case 2: return createLevel(LevelData.level2, ball);
+            case 3: return createLevel(LevelData.level3, ball);
+            case 4: return createLevel(LevelData.level3, ball);
+            case 5: return createLevel(LevelData.level3, ball);
+            case 6: return createLevel(LevelData.level3, ball);
             default: return new ArrayList<>();
         }
     }
 
     /**
      * Return a map of bricks including normal bricks and explosive bricks.
+     *
      * @param layout the layout of bricks
+     * @param ball
      */
-    private static List<Brick> createLevel(int[][] layout) {
+    private static List<Brick> createLevel(int[][] layout, Ball ball) {
         List<Brick> bricks = new ArrayList<>();
         double offsetX = GameConfig.BRICK_WIDTH;
         double offsetY = 85;
@@ -56,6 +54,9 @@ public class Level extends LevelData {
                 }
                 else if (type == Defs.ITEM_BRICK) {
                     b = new ItemBrick(x, y);
+                }
+                else if (type == Defs.INVISIBLE_BALL_BRICK) {
+                    b = new InvisibleBallBrick(x, y, ball);
                 }
                 if (b != null) bricks.add(b);
             }

@@ -82,7 +82,8 @@ public class GameManager {
     public void startGame(int level) {
         currentLevel = level;
 
-        bricks = Level.loadLevel(level);
+        // ADDED: Pass ball parameter for InvisibleBallBrick support
+        bricks = Level.loadLevel(level, ball);
         resetBall();
         resetPaddle();
         lives = 1;
@@ -335,7 +336,8 @@ public class GameManager {
      */
     private void loadLevelForSavedGame() {
         if (bricks == null || bricks.isEmpty()) {
-            bricks = Level.loadLevel(currentLevel);
+            // ADDED: Pass ball parameter for InvisibleBallBrick support
+            bricks = Level.loadLevel(currentLevel, ball);
         }
     }
 
@@ -361,7 +363,10 @@ public class GameManager {
     }
 
     private void resetBall() {
-        ball = new Ball(GameConfig.SCREEN_WIDTH/2.0, GameConfig.SCREEN_HEIGHT/2.0);
+        // CHANGED: Maintain same ball instance for InvisibleBallBrick compatibility
+        ball.setPosition(GameConfig.SCREEN_WIDTH/2.0, GameConfig.SCREEN_HEIGHT/2.0);
+        ball.setVelocity(0, GameConfig.BALL_SPEED);
+        ball.setVisible(true); // Ensure ball is visible after reset
         ballStarted = false;
     }
 

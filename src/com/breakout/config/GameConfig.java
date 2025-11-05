@@ -55,6 +55,8 @@ public class GameConfig {
 
     public static final ImageIcon UNBREAKABLE_BRICK_IMAGE = null;
 
+    public static final ImageIcon INVISIBLE_BALL_BRICK_IMAGE = new ImageIcon("src/com/breakout/resources.assets/invisibleBallBrick.png");
+
     // ----- ITEM -----
     public static final ImageIcon ITEM_IMAGE = new ImageIcon("src/com/breakout/resources.assets/gameOverItem.png");
     public static final double ITEM_WIDTH = ITEM_IMAGE.getIconWidth();
