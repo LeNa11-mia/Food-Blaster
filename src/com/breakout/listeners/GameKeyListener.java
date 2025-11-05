@@ -2,7 +2,9 @@ package com.breakout.listeners;
 
 import com.breakout.Game;
 import com.breakout.config.Defs;
+import com.breakout.config.GameConfig;
 import com.breakout.managers.GameManager;
+import com.breakout.managers.Level;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -35,24 +37,8 @@ public class GameKeyListener implements KeyListener {
             }
         }
 
-        // SPACE - Continue hoặc chọn mode vào game, và start ball
+        // SPACE - Vào setting và start ball
         if (key == KeyEvent.VK_SPACE) {
-            if (currentState == Defs.STATE_MENU) {
-                // Nếu có game đã lưu -> Continue, ngược lại -> New Game
-                if (Game.getGame().canContinueGame()) {
-                    Game.getGame().startContinueGame();
-                } else {
-                    Game.getGame().changeState(Defs.STATE_GAME_MODES);
-                }
-                return;
-            }
-
-            // Nếu đang ở Game Modes -> Chọn Easy level
-            if (currentState == Defs.STATE_GAME_MODES) {
-                Game.getGame().startNewGame(Defs.LEVEL_EASY);
-                return;
-            }
-
             // Nếu đang PLAYING và ball chưa bắt đầu -> start ball
             if (currentState == Defs.STATE_PLAYING && !gm.hasBallStarted()) {
                 gm.startBall();
@@ -64,6 +50,13 @@ public class GameKeyListener implements KeyListener {
             if (currentState == Defs.STATE_PLAYING && gm.hasBallStarted()) {
                 Game.getGame().changeState(Defs.STATE_SETTING);
                 return;
+            }
+        }
+
+        // Mở khóa tất cả level (dùng khi check tính năng)
+        if (currentState == Defs.STATE_GAME_MODES && key == KeyEvent.VK_U) {
+            for (int i = 1; i <= GameConfig.TOTAL_LEVELS; i++) {
+                Level.unlockLevel(i);
             }
         }
 

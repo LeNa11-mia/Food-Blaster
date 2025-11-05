@@ -14,12 +14,6 @@ public class Defs {
     public static final int STATE_GAME_MODES = 6;
     public static final int STATE_CONTINUE = 7;
 
-    // ----- LEVELS -----
-    public static final int LEVEL_EASY = 1;
-    public static final int LEVEL_MEDIUM = 2;
-    public static final int LEVEL_HARD = 3;
-    public static final int LEVEL_BOSS = 4;
-
     // ----- UI -----
     public static final int GO_BACK = -1;
 
