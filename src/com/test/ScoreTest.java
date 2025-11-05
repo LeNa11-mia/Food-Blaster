@@ -106,6 +106,44 @@ class ScoreTest {
                 Arguments.of((Function<Ball, Brick>) ball -> new InvisibleBallBrick(250, 100, ball))
         );
     }
+    /**
+     * Check if ball is stuck in a collision loop with Unbreakable Brick.
+     */
+    @Test
+    public void testBallCollisionAccident() {
+        // given
+        UnbreakableBrick brick = new UnbreakableBrick(100, 100);
+        Ball ball = new Ball(95, 110); // slightly left of the brick
+        ball.setVelocity(GameConfig.BALL_SPEED, 0); // moving right
+
+        int collisionChain = 0; // track the number of consecutive collisions
+
+        // when
+        for (int i = 0; i < 300; i++) {
+            ball.update(0.016);
+            ball.collisionFromSides(brick);
+
+            if (isOverlapping(ball, brick)) {
+                collisionChain++;
+            } else {
+                collisionChain = 0;
+            }
+        }
+
+        // then
+        assertTrue(collisionChain < 3);
+    }
+
+    /**
+     * Simple AABB overlap test between ball and brick.
+     * No need for full collision resolution logic here.
+     */
+    private boolean isOverlapping(Ball a, UnbreakableBrick b) {
+        return a.getX() < b.getX() + b.getWidth()
+                && a.getX() + a.getWidth() > b.getX()
+                && a.getY() < b.getY() + b.getHeight()
+                && a.getY() + a.getHeight() > b.getY();
+    }
 
 
 }
