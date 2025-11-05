@@ -37,6 +37,11 @@ public class Ball extends GameObject {
 
         if (overlapX < overlapY) {
             bounceX();
+            // If the ball collides with the paddle from the left
+            // or the right, transfer the paddle's momentum
+            if (obj instanceof Paddle) {
+                addPaddleVelocity((Paddle) obj);
+            }
         } else {
             if (obj instanceof Paddle) {
                 collisionWithPaddle((Paddle) obj);

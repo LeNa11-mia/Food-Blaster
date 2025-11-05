@@ -6,6 +6,7 @@ import com.breakout.core.GameObject;
 import com.breakout.entities.Ball;
 import com.breakout.entities.bricks.Brick;
 import com.breakout.entities.items.Item;
+import com.breakout.managers.GameManager;
 
 import java.awt.*;
 
@@ -72,7 +73,7 @@ public class GameplayPanel extends GUIPanel {
      * @param g2d the graphics context
      */
     public void drawObjects(Graphics2D g2d) {
-        var gm = Game.getGame().getGm();
+        GameManager gm = Game.getGame().getGm();
 
         drawBall(gm.getBall(), g2d);
         draw(gm.getPaddle(), g2d);
@@ -105,7 +106,7 @@ public class GameplayPanel extends GUIPanel {
      * @param g2d the graphics context
      */
     public void drawScore(Graphics2D g2d) {
-        var gm = Game.getGame().getGm();
+        GameManager gm = Game.getGame().getGm();
 
         g2d.setColor(Color.WHITE);
         g2d.setFont(new Font("Arial", Font.BOLD, 22));
