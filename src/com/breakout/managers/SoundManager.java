@@ -9,38 +9,55 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * Quản lý việc tải và phát âm thanh.
+ * Handles loading and playback of in-game sound effects.
+ *
+ * <p>This class loads sound files when the game starts and provides
+ * non-blocking playback using a fixed thread pool. Sound clips are reused
+ * to avoid repeated loading overhead, improving performance.</p>
  */
 public class SoundManager {
+
+    /** Sound clip played when a brick is hit. */
     private static Clip brickHitClip;
+
+    /** Sound clip played when the ball hits a wall. */
     private static Clip wallHitClip;
 
-    // Thread pool với số luồng cố định
+    /**
+     * A fixed-size thread pool to handle sound playback without blocking
+     * the main game loop.
+     */
     private static final ExecutorService soundPool = Executors.newFixedThreadPool(2);
 
     /**
-     * Tải tất cả âm thanh cần thiết khi game khởi động.
+     * Loads all required sound effects.
+     *
+     * <p>This method should be called once during game initialization.</p>
      */
     public static void loadSounds() {
         try {
-            // Tải âm thanh va chạm gạch
             brickHitClip = loadClip(GameConfig.BRICK_HIT_SOUND_PATH);
             wallHitClip = loadClip(GameConfig.WALL_HIT_SOUND_PATH);
         } catch (Exception e) {
-            System.err.println("Lỗi tải âm thanh: " + e.getMessage());
+            System.err.println("Failed to load sounds: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
     /**
-     * Tải một Clip từ đường dẫn.
+     * Loads an audio file from a given file path and returns it as a {@link Clip}.
+     *
+     * @param path The file system path to the .wav sound file.
+     * @return A Clip ready for playback, or {@code null} if loading fails.
+     * @throws LineUnavailableException If the audio line cannot be opened.
+     * @throws IOException If the audio file cannot be read.
+     * @throws UnsupportedAudioFileException If the file format is not supported.
      */
     public static Clip loadClip(String path) throws LineUnavailableException, IOException, UnsupportedAudioFileException {
-        // Cần đảm bảo đường dẫn File là chính xác trong môi trường của bạn
         File audioFile = new File(path);
 
         if (!audioFile.exists()) {
-            System.err.println("Không tìm thấy file âm thanh: " + path);
+            System.err.println("Sound file not found: " + path);
             return null;
         }
 
@@ -51,45 +68,42 @@ public class SoundManager {
     }
 
     /**
-     * Phát âm thanh va chạm gạch.
+     * Plays the brick hit sound effect.
+     *
+     * <p>Playback is handled asynchronously to avoid blocking game performance.</p>
      */
     public static void playBrickHitSound() {
         if (brickHitClip != null) {
-            // Reset clip về đầu
-            soundPool.submit(() -> { // Giao công việc cho thread pool
-                synchronized (brickHitClip) { // Chỉ 1 luồng được truy cập đến brickHitClip -> tránh xung đột dữ liệu
+            soundPool.submit(() -> {
+                synchronized (brickHitClip) {
                     brickHitClip.setFramePosition(0);
-                    // Dừng nếu đang phát (để phát lại nhanh)
                     if (brickHitClip.isRunning()) {
                         brickHitClip.stop();
                     }
-                    // Phát âm thanh
                     brickHitClip.start();
                 }
             });
-
         }
     }
 
     /**
-     * Phát âm thanh va chạm tường.
+     * Plays the wall hit sound effect.
+     *
+     * <p>Playback is handled asynchronously to avoid blocking game performance.</p>
      */
     public static void playWallHitSound() {
         if (wallHitClip != null) {
             soundPool.submit(() -> {
                 synchronized (wallHitClip) {
-                    // Reset clip về đầu
                     wallHitClip.setFramePosition(0);
-                    // Dừng nếu đang phát (để phát lại nhanh)
                     if (wallHitClip.isRunning()) {
                         wallHitClip.stop();
                     }
-                    // Phát âm thanh
                     wallHitClip.start();
                 }
             });
         }
     }
 
-    // Thêm các phương thức cho âm thanh khác (Menu Click, Game Over,...)
+    // Additional sound methods (e.g., menu click, game over) can be added here.
 }

@@ -7,36 +7,56 @@ import com.breakout.config.GameConfig;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Represents the "Game Over" screen displayed when the player loses the game.
+ * <p>
+ * This panel shows the final score, current level, and provides options
+ * to restart the game or return to the main menu. It features a stylized
+ * "Game Over" text and a themed background.
+ */
 public class GameOverPanel extends GUIPanel {
     private JLabel scoreLabel;
     private JLabel difficultyLabel;
 
+    /**
+     * Constructs a new {@code GameOverPanel} and initializes its layout,
+     * background, labels, and buttons.
+     * <p>
+     * The panel uses absolute positioning for precise element placement.
+     * It displays the player's score and level, and adds "Restart" and
+     * "Main Menu" buttons for navigation.
+     */
     public GameOverPanel() {
         super(Color.decode("#722F37")); // Cherry wine red
 
         backgroundImage = GameConfig.GAMEOVER_BACKGROUND;
+        setLayout(null);
 
-        setLayout(null); // Absolute positioning
-
-        // Panel chứa nội dung chính
+        // Main content panel
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setOpaque(false);
-        contentPanel.setBounds(150, 220, 300, 300); // Căn giữa hơn
+        contentPanel.setBounds(150, 220, 300, 300);
 
         displayInfo(contentPanel);
-        contentPanel.add(Box.createRigidArea(new Dimension(0, 40))); // Khoảng cách lớn hơn
+        contentPanel.add(Box.createRigidArea(new Dimension(0, 40)));
         addButtons(contentPanel);
 
         add(contentPanel);
     }
 
+    /**
+     * Custom painting method that draws the background image and the
+     * stylized "Game Over" text in the center of the panel.
+     *
+     * @param g the {@code Graphics} object used for drawing
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g.create();
 
-        // Vẽ background image
+        // Draw background image or fallback color
         if (backgroundImage != null) {
             g2d.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
         } else {
@@ -44,7 +64,7 @@ public class GameOverPanel extends GUIPanel {
             g2d.fillRect(0, 0, getWidth(), getHeight());
         }
 
-        // Vẽ chữ "Game Over" viết tay
+        // Draw "Game Over" stylized text
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
         Font font;
@@ -64,10 +84,14 @@ public class GameOverPanel extends GUIPanel {
         int y = 175;
 
         g2d.drawString(text, x, y);
-
         g2d.dispose();
     }
 
+    /**
+     * Displays the player's score and difficulty (level) in the center panel.
+     *
+     * @param centerPanel the panel to which the labels are added
+     */
     private void displayInfo(JPanel centerPanel) {
         // Score display
         scoreLabel = createLabel(
@@ -76,7 +100,6 @@ public class GameOverPanel extends GUIPanel {
                 new Font("Arial", Font.BOLD, 24)
         );
         centerPanel.add(scoreLabel);
-
         centerPanel.add(Box.createRigidArea(new Dimension(0, 25)));
 
         // Difficulty display
@@ -88,6 +111,12 @@ public class GameOverPanel extends GUIPanel {
         centerPanel.add(difficultyLabel);
     }
 
+    /**
+     * Updates the displayed score and difficulty level after the game ends.
+     *
+     * @param finalScore the final score achieved by the player
+     * @param level      the level or difficulty reached before the game ended
+     */
     public void updateInfo(int finalScore, int level) {
         if (scoreLabel != null) {
             scoreLabel.setText("Score: " + finalScore);
@@ -97,6 +126,14 @@ public class GameOverPanel extends GUIPanel {
         }
     }
 
+    /**
+     * Adds interactive buttons ("Restart" and "Main Menu") to the game over screen.
+     * <p>
+     * The "Restart" button restarts the current level, while the
+     * "Main Menu" button navigates back to the main menu screen.
+     *
+     * @param centerPanel the panel to which buttons are added
+     */
     private void addButtons(JPanel centerPanel) {
         // Restart button
         JButton restartBtn = createRoundedButton("RESTART", new Color(139, 0, 0));
@@ -108,25 +145,26 @@ public class GameOverPanel extends GUIPanel {
             Game.getGame().getGm().startGame(Game.getGame().getGm().getCurrentLevel());
         });
         centerPanel.add(restartBtn);
-
         centerPanel.add(Box.createRigidArea(new Dimension(0, 20)));
 
-        // Menu button
+        // Main Menu button
         JButton menuBtn = createRoundedButton("MAIN MENU", new Color(160, 82, 45));
         menuBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         menuBtn.setMaximumSize(new Dimension(300, 55));
         menuBtn.setPreferredSize(new Dimension(300, 55));
         menuBtn.addActionListener(e -> {
             Game.getGame().changeState(Defs.STATE_MENU);
-//            MenuPanel menuPanel = new MenuPanel(Game.getGame());
-//            javax.swing.SwingUtilities.invokeLater(() -> {
-//                Game.getGame().getFrame().setContentPane(menuPanel);
-//                menuPanel.updateMenu();
-//            });
         });
         centerPanel.add(menuBtn);
     }
 
+    /**
+     * Creates a custom rounded button with smooth color transitions when hovered or pressed.
+     *
+     * @param text    the text displayed on the button
+     * @param bgColor the base background color of the button
+     * @return a stylized {@code JButton} with rounded corners and custom effects
+     */
     private JButton createRoundedButton(String text, Color bgColor) {
         JButton button = new JButton(text) {
             @Override
@@ -134,7 +172,7 @@ public class GameOverPanel extends GUIPanel {
                 Graphics2D g2d = (Graphics2D) g.create();
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-                // Màu nền với hiệu ứng
+                // Background color with interactive effects
                 Color currentColor;
                 if (getModel().isPressed()) {
                     int r = Math.max(0, bgColor.getRed() - 30);
@@ -153,12 +191,12 @@ public class GameOverPanel extends GUIPanel {
                 g2d.setColor(currentColor);
                 g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 25, 25);
 
-                // Viền
+                // Border
                 g2d.setColor(new Color(255, 182, 193)); // Light pink
                 g2d.setStroke(new BasicStroke(3));
                 g2d.drawRoundRect(1, 1, getWidth() - 3, getHeight() - 3, 25, 25);
 
-                // Vẽ chữ
+                // Text
                 g2d.setColor(Color.WHITE);
                 g2d.setFont(getFont());
                 FontMetrics fm = g2d.getFontMetrics();

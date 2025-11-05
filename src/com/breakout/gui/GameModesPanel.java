@@ -8,31 +8,50 @@ import com.breakout.managers.Level;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Game Modes selection panel that allows players to choose different levels.
+ * Displays a grid of level buttons with unlock status and visual feedback.
+ * Features rounded buttons with hover effects and level locking mechanism.
+ *
+ * @author Breakout Team
+ * @version 1.0
+ */
 public class GameModesPanel extends GUIPanel {
 
+    /** Array of level selection buttons */
     private JButton[] buttons;
 
+    /**
+     * Constructor initializes the game modes panel with background and layout.
+     * Sets up the level selection interface with visual styling.
+     */
     public GameModesPanel() {
         super(Color.decode("#F3CFC6"));
         backgroundImage = GameConfig.GAMEMODES_BACKGROUND;
 
-        setLayout(null); // Dùng absolute positioning
+        setLayout(null); // Use absolute positioning for precise placement
 
-        // Các nút chọn level
+        // Initialize level selection buttons array
         buttons = new JButton[GameConfig.TOTAL_LEVELS];
 
-        // Tạo panel chứa các nút
+        // Create and position the modes selection panel
         JPanel modesPanel = createModesPanel();
         modesPanel.setBounds(125, 280, 350, 320); // x, y, width, height
         add(modesPanel);
     }
 
+    /**
+     * Custom painting method that draws the background image and title text.
+     * Renders the "Select Level" title with hand-written style font.
+     *
+     * @param g the Graphics object to protect
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g.create();
 
-        // Vẽ background image full màn hình
+        // Draw background image covering the entire screen
         if (backgroundImage != null) {
             g2d.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
         } else {
@@ -40,7 +59,7 @@ public class GameModesPanel extends GUIPanel {
             g2d.fillRect(0, 0, getWidth(), getHeight());
         }
 
-        // Vẽ chữ "Select Level" viết tay màu hồng ở phần trắng
+        // Draw "Select Level" text in pink hand-written style
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
         Font font;
@@ -51,7 +70,7 @@ public class GameModesPanel extends GUIPanel {
         }
 
         g2d.setFont(font);
-        g2d.setColor(new Color(255, 105, 180)); // Màu hồng pastel
+        g2d.setColor(new Color(255, 105, 180)); // Pastel pink color
 
         String text = "Select Level";
         FontMetrics fm = g2d.getFontMetrics();
@@ -64,24 +83,31 @@ public class GameModesPanel extends GUIPanel {
         g2d.dispose();
     }
 
+    /**
+     * Creates the main panel containing level selection grid and back button.
+     * Organizes level buttons in a grid layout with proper spacing.
+     *
+     * @return JPanel the configured modes selection panel
+     */
     private JPanel createModesPanel() {
         JPanel modesPanel = new JPanel();
-        modesPanel.setLayout(new BorderLayout()); // Các nút chọn level ở trung tâm, nút BACK ở dưới cùng
+        modesPanel.setLayout(new BorderLayout()); // Level buttons in center, BACK button at bottom
         modesPanel.setOpaque(false);
 
         JPanel levelGrid = new JPanel();
         levelGrid.setLayout(new GridLayout(2, 3, 25, 25));
-        // Các nút chọn level sắp xếp dạng lưới, cách nhau 25 pixel
+        // Level selection buttons arranged in grid, spaced 25 pixels apart
         levelGrid.setOpaque(false);
 
         JPanel bottomPanel = new JPanel();
         bottomPanel.setOpaque(false);
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(25, 0, 0, 0));
 
-        // Tạo các nút nhỏ gọn với màu sắc khác nhau
+        // Create compact buttons with different colors
         JButton backBtn = createRoundedButton("← BACK", Color.decode("#D8BFD8"), Defs.GO_BACK);
         bottomPanel.add(backBtn);
 
+        // Create level selection buttons
         for (int i = 0; i < GameConfig.TOTAL_LEVELS; i++) {
             buttons[i] = createRoundedButton(Integer.toString(i + 1), Color.decode("#FFC0CB"), i + 1);
             levelGrid.add(buttons[i]);
@@ -93,14 +119,29 @@ public class GameModesPanel extends GUIPanel {
         return modesPanel;
     }
 
+    /**
+     * Creates a custom rounded button with visual effects and level locking logic.
+     * Buttons change color on hover/press and show locked state for unavailable levels.
+     *
+     * @param text the button display text
+     * @param bgColor the base background color of the button
+     * @param mode the game mode or level number (Defs.GO_BACK for back button)
+     * @return JButton the created rounded button with custom behavior
+     */
     private JButton createRoundedButton(String text, Color bgColor, int mode) {
         JButton button = new JButton(text) {
+            /**
+             * Custom painting for rounded buttons with visual states.
+             * Handles normal, hover, pressed, and locked states with different colors.
+             *
+             * @param g the Graphics object for painting
+             */
             @Override
             protected void paintComponent(Graphics g) {
                 Graphics2D g2d = (Graphics2D) g.create();
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-                // Màu nền với hiệu ứng
+                // Background color with visual effects
                 Color currentColor;
                 if (getModel().isPressed()) {
                     int r = Math.max(0, bgColor.getRed() - 30);
@@ -116,19 +157,20 @@ public class GameModesPanel extends GUIPanel {
                     currentColor = bgColor;
                 }
 
+                // Handle locked levels - display in gray
                 if (mode != Defs.GO_BACK && !Level.isLevelUnlocked(mode)) {
-                    g2d.setColor(Color.LIGHT_GRAY); // Level chưa mở khóa có màu xám
+                    g2d.setColor(Color.LIGHT_GRAY); // Locked levels appear gray
                 } else {
                     g2d.setColor(currentColor);
                 }
                 g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
 
-                // Viền hồng
+                // Pink border
                 g2d.setColor(Color.PINK);
                 g2d.setStroke(new BasicStroke(2));
                 g2d.drawRoundRect(1, 1, getWidth() - 2, getHeight() - 2, 20, 20);
 
-                // Vẽ chữ
+                // Draw text
                 g2d.setColor(Color.WHITE);
                 g2d.setFont(getFont());
                 FontMetrics fm = g2d.getFontMetrics();
@@ -148,13 +190,13 @@ public class GameModesPanel extends GUIPanel {
         button.setBorderPainted(false);
         button.setContentAreaFilled(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        button.setPreferredSize(new Dimension(300, 50)); // Nút nhỏ gọn hơn
+        button.setPreferredSize(new Dimension(300, 50)); // More compact button size
 
-        // Add action listeners
+        // Add action listeners for button functionality
         button.addActionListener(e -> {
             if (mode == Defs.GO_BACK) {
                 Game.getGame().changeState(Defs.STATE_MENU);
-            } else if (Level.isLevelUnlocked(mode)) { // Kiểm tra xem level đã được mở khóa chưa
+            } else if (Level.isLevelUnlocked(mode)) { // Check if level is unlocked
                 Game.getGame().getGm().startGame(mode);
                 Game.getGame().changeState(Defs.STATE_PLAYING);
             }
