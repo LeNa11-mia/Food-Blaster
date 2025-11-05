@@ -6,6 +6,7 @@ import com.breakout.config.GameConfig;
 import com.breakout.entities.*;
 import com.breakout.entities.bricks.Brick;
 import com.breakout.entities.bricks.FallingBrick;
+import com.breakout.entities.bricks.UnbreakableBrick;
 import com.breakout.entities.items.Item;
 import com.breakout.saves.BallSave;
 import com.breakout.saves.BrickSave;
@@ -16,7 +17,7 @@ import java.util.*;
 import java.util.List;
 
 /**
- * Gameplay manager
+ * Quản
  */
 public class GameManager {
     private String screenMessage = null;
@@ -382,7 +383,7 @@ public class GameManager {
     // Check if player won (all bricks destroyed)
     public boolean isWin() {
         for (Brick brick : bricks) {
-            if (!brick.isDestroyed()) {
+            if (!(brick instanceof UnbreakableBrick) && !brick.isDestroyed()) {
                 return false;
             }
         }
