@@ -86,48 +86,4 @@ public abstract class Brick extends GameObject {
     public boolean isHit() {
         return hit;
     }
-
-    /**
-     * Gets the health of the brick. Always returns 1 for basic bricks.
-     *
-     * @return {@code 0} if destroyed, {@code 1} otherwise.
-     */
-    public int getHealth() {
-        return destroyed ? 0 : 1;
-    }
-
-    /**
-     * Sets the brick's health.
-     * <p>
-     * Since the base brick always has one health point, this method
-     * simply toggles the {@code destroyed} flag based on the value.
-     * </p>
-     *
-     * @param health The new health value (≤ 0 marks the brick as destroyed).
-     */
-    public void setHealth(int health) {
-        if (health <= 0) {
-            destroyed = true;
-        } else {
-            destroyed = false;
-        }
-    }
-
-    /**
-     * Calculates the row index of the brick based on its y-coordinate.
-     *
-     * @return The row index (integer division of y by {@link GameConfig#BRICK_HEIGHT}).
-     */
-    public int getRow() {
-        return (int) (getY() / GameConfig.BRICK_HEIGHT);
-    }
-
-    /**
-     * Calculates the column index of the brick based on its x-coordinate.
-     *
-     * @return The column index (integer division of x by {@link GameConfig#BRICK_WIDTH}).
-     */
-    public int getCol() {
-        return (int) (getX() / GameConfig.BRICK_WIDTH);
-    }
 }

@@ -74,8 +74,6 @@ public class ExplosiveBrick extends Brick implements Destructible {
      * </p>
      */
     private void explode() {
-        boolean exploded = true;
-
         double cx = getX();
         double cy = getY();
 

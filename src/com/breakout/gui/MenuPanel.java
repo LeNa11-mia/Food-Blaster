@@ -8,86 +8,106 @@ import com.breakout.managers.SaveManager;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * The main menu panel displayed when the game starts.
+ * <p>
+ * Provides navigation options such as starting a new game,
+ * continuing a saved game, or exiting the application.
+ * It also handles background rendering and custom button layout.
+ * </p>
+ */
 public class MenuPanel extends GUIPanel {
 
+    /** Button used for continuing a saved game (only shown if a save exists). */
     private JButton continueButton;
-    private static final Color BORDER_COLOR = Color.PINK; // Màu viền thống nhất
+
+    /** Default border color for all buttons in the menu. */
+    private static final Color BORDER_COLOR = Color.PINK;
+
+    /** Corner radius for rounded buttons. */
     private static final int CORNER_RADIUS = 20;
 
+    /**
+     * Constructs the main menu panel.
+     * Initializes layout, background image, and button arrangement.
+     */
     public MenuPanel() {
         super(Color.decode("#F3CFC6"));
 
-        // Load background image
+        // Load the background image from configuration
         backgroundImage = GameConfig.MENU_BACKGROUND;
 
-        setLayout(null); // Dùng absolute positioning để đặt chính xác vị trí
+        // Use absolute positioning for precise placement
+        setLayout(null);
 
-        // Tạo button panel và đặt ở phần màu hồng
+        // Create and position the button panel
         JPanel buttonPanel = createButtonPanel();
-        buttonPanel.setBounds(150, 400, 300, 150); // x, y, width, height
+        buttonPanel.setBounds(150, 400, 300, 150);
         add(buttonPanel);
     }
 
+    /**
+     * Custom rendering method for the panel.
+     * Draws the background and the stylized game title text.
+     *
+     * @param g the Graphics context used for painting
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g.create();
 
-        // Vẽ background image full màn hình
+        // Draw background image to fill the screen
         if (backgroundImage != null) {
             g2d.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
         }
 
-        // Vẽ chữ "Food Blaster" viết tay màu hồng ở phần trắng
-        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        // Enable smooth text rendering
+        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+                RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-        // Sử dụng phương thức chung từ GUIPanel
+        // Handwritten-style title
         Font font = getHandwrittenFont(Font.BOLD, 72);
-
         g2d.setFont(font);
-        g2d.setColor(new Color(255, 105, 180)); // Màu hồng pastel
+        g2d.setColor(new Color(255, 105, 180)); // Soft pink color
 
         String text = "Food Blaster";
         FontMetrics fm = g2d.getFontMetrics();
         int textWidth = fm.stringWidth(text);
         int x = (getWidth() - textWidth) / 2;
-        int y = 120; // Đặt ở phần màu trắng (khoảng 150px từ trên)
+        int y = 120; // Position near the top white area
 
         g2d.drawString(text, x, y);
-
         g2d.dispose();
     }
 
+    /**
+     * Creates the panel containing all interactive buttons
+     * (PLAY, CONTINUE if available, and EXIT).
+     *
+     * @return A JPanel containing menu buttons with grid layout.
+     */
     private JPanel createButtonPanel() {
         JPanel buttonPanel = new JPanel();
-
         boolean hasSave = SaveManager.saveExists();
 
-        // Nếu có save → 3 nút, nếu không → 2 nút
-        if (hasSave) {
-            buttonPanel.setLayout(new GridLayout(3, 1, 15, 20));
-        } else {
-            buttonPanel.setLayout(new GridLayout(2, 1, 15, 20));
-        }
-
+        // Layout: 3 buttons if save exists, otherwise 2
+        buttonPanel.setLayout(new GridLayout(hasSave ? 3 : 2, 1, 15, 20));
         buttonPanel.setOpaque(false);
 
+        // --- PLAY button ---
         JButton playBtn = createRoundedButton("PLAY", Color.decode("#F8C8DC"), BORDER_COLOR, CORNER_RADIUS);
-        playBtn.addActionListener(e -> {
-            Game.getGame().changeState(Defs.STATE_GAME_MODES);
-        });
+        playBtn.addActionListener(e -> Game.getGame().changeState(Defs.STATE_GAME_MODES));
         buttonPanel.add(playBtn);
 
-        // Nếu có save → thêm CONTINUE ở giữa PLAY và EXIT
+        // --- CONTINUE button (if save exists) ---
         if (hasSave) {
             continueButton = createRoundedButton("CONTINUE", Color.decode("#FFB6C1"), BORDER_COLOR, CORNER_RADIUS);
-            continueButton.addActionListener(e -> {
-                // Sử dụng phương thức startContinueGame() từ Game class
-                Game.getGame().startContinueGame();
-            });
+            continueButton.addActionListener(e -> Game.getGame().startContinueGame());
             buttonPanel.add(continueButton);
         }
 
+        // --- EXIT button ---
         JButton exitBtn = createRoundedButton("EXIT", Color.decode("#D8BFD8"), BORDER_COLOR, CORNER_RADIUS);
         exitBtn.addActionListener(e -> System.exit(0));
         buttonPanel.add(exitBtn);
@@ -95,27 +115,35 @@ public class MenuPanel extends GUIPanel {
         return buttonPanel;
     }
 
-
+    /**
+     * Refreshes the entire menu by rebuilding its UI components.
+     * Used when the save state changes (e.g., new save created or deleted).
+     */
     public void updateMenu() {
-        removeAll(); // Xóa tất cả components cũ
-
-        // Tạo lại button panel
+        removeAll();
         JPanel buttonPanel = createButtonPanel();
         buttonPanel.setBounds(150, 400, 300, 150);
         add(buttonPanel);
-
         revalidate();
         repaint();
     }
 
-    // Thêm method để enable/disable nút continue nếu cần
+    /**
+     * Enables or disables the CONTINUE button depending on whether
+     * the player can resume a saved game.
+     *
+     * @param enabled true to enable the button, false to disable it
+     */
     public void setContinueButtonEnabled(boolean enabled) {
         if (continueButton != null) {
             continueButton.setEnabled(Game.getGame().getGm().canContinueGame());
         }
     }
 
-    // Thêm method để cập nhật trạng thái menu
+    /**
+     * Rebuilds and refreshes the menu state.
+     * Used when reloading the main menu after gameplay.
+     */
     public void refreshMenu() {
         updateMenu();
     }

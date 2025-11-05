@@ -45,15 +45,6 @@ public abstract class Item extends GameObject {
     }
 
     /**
-     * Sets the name of the item.
-     *
-     * @param name The new name of the item.
-     */
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    /**
      * Updates the state of the item.
      * <p>
      * The item's primary behavior is falling down the Y-axis.
