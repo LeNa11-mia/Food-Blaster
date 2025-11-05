@@ -14,12 +14,16 @@ import java.util.List;
 
 public class Level extends LevelData {
 
+    private static boolean[] levelUnlocked = new boolean[GameConfig.TOTAL_LEVELS];
+
     public static List<Brick> loadLevel(int id) {
         switch (id) {
-            case Defs.LEVEL_EASY: return createLevel(LevelData.level1);
-            case Defs.LEVEL_MEDIUM: return createLevel(LevelData.level2);
-            case Defs.LEVEL_HARD: return createLevel(LevelData.level3);
-            case Defs.LEVEL_BOSS: return createLevel(LevelData.level3);
+            case 1: return createLevel(LevelData.level1);
+            case 2: return createLevel(LevelData.level2);
+            case 3: return createLevel(LevelData.level3);
+            case 4: return createLevel(LevelData.level3);
+            case 5: return createLevel(LevelData.level3);
+            case 6: return createLevel(LevelData.level3);
             default: return new ArrayList<>();
         }
     }
@@ -57,5 +61,13 @@ public class Level extends LevelData {
             }
         }
         return bricks;
+    }
+
+    public static void unlockLevel(int id) {
+        levelUnlocked[id - 1] = true;
+    }
+
+    public static boolean isLevelUnlocked(int id) {
+        return levelUnlocked[id - 1];
     }
 }

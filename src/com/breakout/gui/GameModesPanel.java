@@ -3,17 +3,23 @@ package com.breakout.gui;
 import com.breakout.Game;
 import com.breakout.config.Defs;
 import com.breakout.config.GameConfig;
+import com.breakout.managers.Level;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class GameModesPanel extends GUIPanel {
 
+    private JButton[] buttons;
+
     public GameModesPanel() {
         super(Color.decode("#F3CFC6"));
         backgroundImage = GameConfig.GAMEMODES_BACKGROUND;
 
         setLayout(null); // Dùng absolute positioning
+
+        // Các nút chọn level
+        buttons = new JButton[GameConfig.TOTAL_LEVELS];
 
         // Tạo panel chứa các nút
         JPanel modesPanel = createModesPanel();
@@ -60,21 +66,29 @@ public class GameModesPanel extends GUIPanel {
 
     private JPanel createModesPanel() {
         JPanel modesPanel = new JPanel();
-        modesPanel.setLayout(new GridLayout(5, 1, 0, 15)); // 5 nút, cách nhau 15px
+        modesPanel.setLayout(new BorderLayout()); // Các nút chọn level ở trung tâm, nút BACK ở dưới cùng
         modesPanel.setOpaque(false);
 
-        // Tạo các nút nhỏ gọn với màu sắc khác nhau
-        JButton easyBtn = createRoundedButton("EASY", Color.decode("#F8C8DC"), Defs.LEVEL_EASY);
-        JButton mediumBtn = createRoundedButton("MEDIUM", Color.decode("#FFC0CB"), Defs.LEVEL_MEDIUM);
-        JButton hardBtn = createRoundedButton("HARD", Color.decode("#FAA0A0"), Defs.LEVEL_HARD);
-        JButton bossBtn = createRoundedButton("BOSS FIGHTS", Color.decode("#F89880"), Defs.LEVEL_BOSS);
-        JButton backBtn = createRoundedButton("← BACK", Color.decode("#D8BFD8"), Defs.GO_BACK);
+        JPanel levelGrid = new JPanel();
+        levelGrid.setLayout(new GridLayout(2, 3, 25, 25));
+        // Các nút chọn level sắp xếp dạng lưới, cách nhau 25 pixel
+        levelGrid.setOpaque(false);
 
-        modesPanel.add(easyBtn);
-        modesPanel.add(mediumBtn);
-        modesPanel.add(hardBtn);
-        modesPanel.add(bossBtn);
-        modesPanel.add(backBtn);
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.setOpaque(false);
+        bottomPanel.setBorder(BorderFactory.createEmptyBorder(25, 0, 0, 0));
+
+        // Tạo các nút nhỏ gọn với màu sắc khác nhau
+        JButton backBtn = createRoundedButton("← BACK", Color.decode("#D8BFD8"), Defs.GO_BACK);
+        bottomPanel.add(backBtn);
+
+        for (int i = 0; i < GameConfig.TOTAL_LEVELS; i++) {
+            buttons[i] = createRoundedButton(Integer.toString(i + 1), Color.decode("#FFC0CB"), i + 1);
+            levelGrid.add(buttons[i]);
+        }
+
+        modesPanel.add(levelGrid, BorderLayout.CENTER);
+        modesPanel.add(bottomPanel, BorderLayout.SOUTH);
 
         return modesPanel;
     }
@@ -102,7 +116,11 @@ public class GameModesPanel extends GUIPanel {
                     currentColor = bgColor;
                 }
 
-                g2d.setColor(currentColor);
+                if (mode != Defs.GO_BACK && !Level.isLevelUnlocked(mode)) {
+                    g2d.setColor(Color.LIGHT_GRAY); // Level chưa mở khóa có màu xám
+                } else {
+                    g2d.setColor(currentColor);
+                }
                 g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
 
                 // Viền hồng
@@ -124,7 +142,7 @@ public class GameModesPanel extends GUIPanel {
             }
         };
 
-        button.setFont(new Font("Arial", Font.BOLD, 16));
+        button.setFont(new Font("Arial", Font.BOLD, 24));
         button.setForeground(Color.WHITE);
         button.setFocusPainted(false);
         button.setBorderPainted(false);
@@ -136,7 +154,7 @@ public class GameModesPanel extends GUIPanel {
         button.addActionListener(e -> {
             if (mode == Defs.GO_BACK) {
                 Game.getGame().changeState(Defs.STATE_MENU);
-            } else {
+            } else if (Level.isLevelUnlocked(mode)) { // Kiểm tra xem level đã được mở khóa chưa
                 Game.getGame().getGm().startGame(mode);
                 Game.getGame().changeState(Defs.STATE_PLAYING);
             }
