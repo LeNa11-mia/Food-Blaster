@@ -12,6 +12,12 @@ public class WinPanel extends GUIPanel {
     private JLabel scoreLabel;
     private JLabel difficultyLabel;
 
+    private static final Color NEXT_LEVEL_BG = Color.decode("#228B22"); // Forest green
+    private static final Color RESTART_BG = Color.decode("#6B8E23"); // Olive drab
+    private static final Color MENU_BG = Color.decode("#8B7355"); // Burlywood
+    private static final Color BORDER_COLOR = Color.WHITE; // Viền trắng
+    private static final int CORNER_RADIUS = 15; // Bo góc nhỏ hơn một chút
+
     public WinPanel() {
         super(Color.decode("#2D5016")); // Dark green
         backgroundImage = GameConfig.WIN_BACKGROUND;
@@ -85,7 +91,9 @@ public class WinPanel extends GUIPanel {
         // Next level button
         int nextLevel = Game.getGame().getGm().getNextDifficulty();
         if (nextLevel > 0) {
-            JButton nextBtn = createButton("NEXT LEVEL", Color.decode("#228B22")); // Forest green
+            // SỬ DỤNG createRoundedButton
+            JButton nextBtn = createRoundedButton("NEXT LEVEL", NEXT_LEVEL_BG, BORDER_COLOR, CORNER_RADIUS);
+            nextBtn.setFont(new Font("Arial", Font.BOLD, 18));
             nextBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
             nextBtn.setMaximumSize(new Dimension(300, 50));
             nextBtn.addActionListener(e -> {
@@ -98,8 +106,8 @@ public class WinPanel extends GUIPanel {
         }
 
         // Restart button
-        JButton restartBtn = createButton("RESTART", Color.decode("#6B8E23")); // Olive drab
-        addButton(restartBtn);
+        JButton restartBtn = createRoundedButton("RESTART", RESTART_BG, BORDER_COLOR, CORNER_RADIUS);
+        restartBtn.setFont(new Font("Arial", Font.BOLD, 18));
         restartBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         restartBtn.setMaximumSize(new Dimension(300, 50));
         restartBtn.addActionListener(e -> {
@@ -111,8 +119,8 @@ public class WinPanel extends GUIPanel {
         centerPanel.add(Box.createRigidArea(new Dimension(0, 15)));
 
         // Menu button
-        JButton menuBtn = createButton("MAIN MENU", Color.decode("#8B7355")); // Burlywood
-        addButton(menuBtn);
+        JButton menuBtn = createRoundedButton("MAIN MENU", MENU_BG, BORDER_COLOR, CORNER_RADIUS);
+        menuBtn.setFont(new Font("Arial", Font.BOLD, 18));
         menuBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         menuBtn.setMaximumSize(new Dimension(300, 50));
         menuBtn.addActionListener(e -> Game.getGame().changeState(Defs.STATE_MENU));

@@ -14,6 +14,12 @@ public class SettingPanel extends GUIPanel {
     private JLabel musicValueLabel;
     private JLabel sfxValueLabel;
 
+    private static final Color CONTINUE_BG = new Color(0x6EE7B7);
+    private static final Color SAVE_EXIT_BG = new Color(0xA78BFA);
+    private static final Color BACK_MENU_BG = new Color(0xFCA5A5);
+    private static final Color BORDER_COLOR = Color.WHITE;
+    private static final int CORNER_RADIUS = 25;
+
     public SettingPanel() {
         super(Color.decode("#1a1a2e"));
         backgroundImage = GameConfig.SETTING_BACKGROUND;
@@ -29,6 +35,7 @@ public class SettingPanel extends GUIPanel {
         mainPanel.setBorder(new EmptyBorder(50, 100, 50, 100));
 
         // Title với font chữ viết tay (chỉ cho chữ "Settings")
+        // SỬ DỤNG PHƯƠNG THỨC CHUNG: getHandwrittenFont
         JLabel titleLabel = createHandwrittenLabel("Settings", Color.WHITE, 52);
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainPanel.add(titleLabel);
@@ -53,8 +60,8 @@ public class SettingPanel extends GUIPanel {
         buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
         buttonsPanel.setOpaque(false);
 
-        // Continue Button với bo góc và màu hồng - sử dụng Times New Roman
-        JButton continueBtn = createRoundedButton("Continue", new Color(0x6EE7B7)); // Màu hồng Hot Pink
+        // Continue Button với bo góc và màu hồng - sử dụng createRoundedButton của GUIPanel
+        JButton continueBtn = createStyledRoundedButton("Continue", CONTINUE_BG);
         continueBtn.addActionListener(e -> {
             // Return to previous state (PLAYING)
             Game.getGame().changeState(Defs.STATE_PLAYING);
@@ -63,7 +70,7 @@ public class SettingPanel extends GUIPanel {
         buttonsPanel.add(Box.createVerticalStrut(15));
 
         // SAVE & EXIT Button - Lưu game và về menu
-        JButton saveExitBtn = createRoundedButton("SAVE & EXIT TO MENU", new Color(0xA78BFA)); // Màu xanh lá
+        JButton saveExitBtn = createStyledRoundedButton("SAVE & EXIT TO MENU", SAVE_EXIT_BG);
         saveExitBtn.addActionListener(e -> {
             // Lưu game và về menu
             Game.getGame().saveAndExitToMenu();
@@ -71,8 +78,8 @@ public class SettingPanel extends GUIPanel {
         buttonsPanel.add(saveExitBtn);
         buttonsPanel.add(Box.createVerticalStrut(15));
 
-        // Back to Menu Button (không lưu) - sử dụng Times New Roman
-        JButton menuBtn = createRoundedButton("Back to Menu (No Save)", new Color(0xFCA5A5)); // Màu cam đỏ
+        // Back to Menu Button (không lưu) - sử dụng createRoundedButton của GUIPanel
+        JButton menuBtn = createStyledRoundedButton("Back to Menu (No Save)", BACK_MENU_BG);
         menuBtn.addActionListener(e -> {
             // Về menu không lưu
             Game.getGame().changeState(Defs.STATE_MENU);
@@ -100,28 +107,7 @@ public class SettingPanel extends GUIPanel {
     private JLabel createHandwrittenLabel(String text, Color color, int size) {
         JLabel label = new JLabel(text);
         label.setForeground(color);
-
-        // Thử sử dụng các font chữ viết tay phổ biến
-        String[] handwrittenFonts = {
-                "Brush Script MT", "Lucida Handwriting", "Comic Sans MS",
-                "Segoe Print", "Bradley Hand", "Ink Free"
-        };
-
-        Font handwrittenFont = null;
-        for (String fontName : handwrittenFonts) {
-            Font font = new Font(fontName, Font.PLAIN, size);
-            if (font.getFamily().equals(fontName)) {
-                handwrittenFont = font;
-                break;
-            }
-        }
-
-        // Fallback font nếu không tìm thấy font chữ viết tay
-        if (handwrittenFont == null) {
-            handwrittenFont = new Font("Arial", Font.ITALIC, size);
-        }
-
-        label.setFont(handwrittenFont);
+        label.setFont(getHandwrittenFont(Font.PLAIN, size));
         return label;
     }
 
@@ -130,14 +116,6 @@ public class SettingPanel extends GUIPanel {
         JLabel label = new JLabel(text);
         label.setForeground(color);
         label.setFont(new Font("Times New Roman", style, size));
-        return label;
-    }
-
-    protected JLabel createLabel(String text, Color color, Font font) {
-        JLabel label = new JLabel(text);
-        label.setForeground(color);
-        label.setFont(font);
-        label.setAlignmentX(Component.CENTER_ALIGNMENT);
         return label;
     }
 
@@ -238,53 +216,14 @@ public class SettingPanel extends GUIPanel {
     }
 
     // Tạo button bo góc với màu hồng - sử dụng Times New Roman
-    private JButton createRoundedButton(String text, Color baseColor) {
-        JButton button = new JButton(text) {
-            @Override
-            protected void paintComponent(Graphics g) {
-                Graphics2D g2 = (Graphics2D) g;
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+    private JButton createStyledRoundedButton(String text, Color baseColor) {
+        // SỬ DỤNG PHƯƠNG THỨC CHUNG TỪ GUIPANEL
+        JButton button = createRoundedButton(text, baseColor, BORDER_COLOR, CORNER_RADIUS);
 
-                // Vẽ nền bo góc
-                if (getModel().isPressed()) {
-                    g2.setColor(baseColor.darker());
-                } else if (getModel().isRollover()) {
-                    g2.setColor(baseColor.brighter());
-                } else {
-                    g2.setColor(baseColor);
-                }
-                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 25, 25);
-
-                // Vẽ chữ
-                g2.setColor(Color.WHITE);
-                g2.setFont(getFont());
-                FontMetrics fm = g2.getFontMetrics();
-                int textWidth = fm.stringWidth(getText());
-                int textHeight = fm.getAscent();
-                int x = (getWidth() - textWidth) / 2;
-                int y = (getHeight() + textHeight) / 2 - 2;
-                g2.drawString(getText(), x, y);
-            }
-
-            @Override
-            protected void paintBorder(Graphics g) {
-                Graphics2D g2 = (Graphics2D) g;
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(baseColor.brighter());
-                g2.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, 25, 25);
-            }
-        };
-
-        button.setForeground(Color.WHITE);
-        // Sử dụng Times New Roman cho button
-        button.setFont(new Font("Times New Roman", Font.BOLD, 20));
-        button.setFocusPainted(false);
-        button.setBorderPainted(false);
-        button.setContentAreaFilled(false);
-        button.setOpaque(false);
+        // Thiết lập các thuộc tính riêng của SettingPanel
+        button.setFont(new Font("Times New Roman", Font.BOLD, 20)); // Sử dụng Times New Roman
         button.setMaximumSize(new Dimension(600, 50));
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         button.setBorder(new EmptyBorder(10, 30, 10, 30));
 
         return button;
