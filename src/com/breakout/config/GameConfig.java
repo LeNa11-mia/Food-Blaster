@@ -53,7 +53,7 @@ public class GameConfig {
     public static final double ITEM_FALLING_SPEED = 170;
     public static final ImageIcon ITEM_BRICK_IMAGE = NORMAL_BRICK_IMAGE; // Ẩn vị trí Item Brick
 
-    public static final ImageIcon UNBREAKABLE_BRICK_IMAGE = null;
+    public static final ImageIcon UNBREAKABLE_BRICK_IMAGE = new ImageIcon("assets/images/unbreakable-brick.png");
 
     public static final ImageIcon INVISIBLE_BALL_BRICK_IMAGE = new ImageIcon("assets/images/invisibleBallBrick.png");
 

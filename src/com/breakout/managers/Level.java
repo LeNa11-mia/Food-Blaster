@@ -45,17 +45,15 @@ public class Level extends LevelData {
                 Brick b = null;
                 if (type == Defs.NORMAL_BRICK) {
                     b = new NormalBrick(x, y);
-                }
-                else if (type == Defs.EXPLOSIVE_BRICK) {
+                } else if (type == Defs.EXPLOSIVE_BRICK) {
                     b = new ExplosiveBrick(x, y, bricks);
-                }
-                else if (type == Defs.FALLING_BRICK) {
+                } else if (type == Defs.UNBREAKABLE_BRICK) {
+                    b = new UnbreakableBrick(x, y);
+                } else if (type == Defs.FALLING_BRICK) {
                     b = new FallingBrick(x, y);
-                }
-                else if (type == Defs.ITEM_BRICK) {
+                } else if (type == Defs.ITEM_BRICK) {
                     b = new ItemBrick(x, y);
-                }
-                else if (type == Defs.INVISIBLE_BALL_BRICK) {
+                } else if (type == Defs.INVISIBLE_BALL_BRICK) {
                     b = new InvisibleBallBrick(x, y, ball);
                 }
                 if (b != null) bricks.add(b);
