@@ -11,6 +11,8 @@ import java.awt.*;
 public class MenuPanel extends GUIPanel {
 
     private JButton continueButton;
+    private static final Color BORDER_COLOR = Color.PINK; // Màu viền thống nhất
+    private static final int CORNER_RADIUS = 20;
 
     public MenuPanel() {
         super(Color.decode("#F3CFC6"));
@@ -39,13 +41,8 @@ public class MenuPanel extends GUIPanel {
         // Vẽ chữ "Food Blaster" viết tay màu hồng ở phần trắng
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-        Font font;
-        try {
-            // Thử dùng font viết tay
-            font = new Font("Brush Script MT", Font.BOLD, 72);
-        } catch (Exception e) {
-            font = new Font("Segoe Script", Font.BOLD, 72);
-        }
+        // Sử dụng phương thức chung từ GUIPanel
+        Font font = getHandwrittenFont(Font.BOLD, 72);
 
         g2d.setFont(font);
         g2d.setColor(new Color(255, 105, 180)); // Màu hồng pastel
@@ -58,6 +55,7 @@ public class MenuPanel extends GUIPanel {
 
         g2d.drawString(text, x, y);
 
+        g2d.dispose();
     }
 
     private JPanel createButtonPanel() {
@@ -74,8 +72,7 @@ public class MenuPanel extends GUIPanel {
 
         buttonPanel.setOpaque(false);
 
-        // Nút PLAY
-        JButton playBtn = createRoundedButton("PLAY", Color.decode("#F8C8DC"));
+        JButton playBtn = createRoundedButton("PLAY", Color.decode("#F8C8DC"), BORDER_COLOR, CORNER_RADIUS);
         playBtn.addActionListener(e -> {
             Game.getGame().changeState(Defs.STATE_GAME_MODES);
         });
@@ -83,7 +80,7 @@ public class MenuPanel extends GUIPanel {
 
         // Nếu có save → thêm CONTINUE ở giữa PLAY và EXIT
         if (hasSave) {
-            continueButton = createRoundedButton("CONTINUE", Color.decode("#FFB6C1"));
+            continueButton = createRoundedButton("CONTINUE", Color.decode("#FFB6C1"), BORDER_COLOR, CORNER_RADIUS);
             continueButton.addActionListener(e -> {
                 // Sử dụng phương thức startContinueGame() từ Game class
                 Game.getGame().startContinueGame();
@@ -91,7 +88,7 @@ public class MenuPanel extends GUIPanel {
             buttonPanel.add(continueButton);
         }
 
-        JButton exitBtn = createRoundedButton("EXIT", Color.decode("#D8BFD8"));
+        JButton exitBtn = createRoundedButton("EXIT", Color.decode("#D8BFD8"), BORDER_COLOR, CORNER_RADIUS);
         exitBtn.addActionListener(e -> System.exit(0));
         buttonPanel.add(exitBtn);
 
@@ -107,80 +104,8 @@ public class MenuPanel extends GUIPanel {
         buttonPanel.setBounds(150, 400, 300, 150);
         add(buttonPanel);
 
-        //revalidate();
-        //repaint();
-//        javax.swing.SwingUtilities.invokeLater(() -> {
-//            removeAll(); // Xóa tất cả components cũ
-//
-//            setLayout(null);
-//            // Tạo lại button panel
-//            JPanel buttonPanel = createButtonPanel();
-//            buttonPanel.setBounds(150, 400, 300, 150);
-//            add(buttonPanel);
-//
-//            revalidate();
-//            repaint();
-//        });
-    }
-
-    private JButton createRoundedButton(String text, Color bgColor) {
-        JButton button = new JButton(text) {
-            @Override
-            protected void paintComponent(Graphics g) {
-                Graphics2D g2d = (Graphics2D) g.create();
-                try {
-                    g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-                    // Vẽ nền bo góc với màu phù hợp
-                    Color currentColor;
-                    if (getModel().isPressed()) {
-                        // Khi nhấn: màu đậm hơn một chút (không chói)
-                        int r = Math.max(0, bgColor.getRed() - 30);
-                        int g1 = Math.max(0, bgColor.getGreen() - 30);
-                        int b = Math.max(0, bgColor.getBlue() - 30);
-                        currentColor = new Color(r, g1, b);
-                    } else if (getModel().isRollover()) {
-                        // Khi hover: sáng nhẹ hơn một chút
-                        int r = Math.min(255, bgColor.getRed() + 20);
-                        int g1 = Math.min(255, bgColor.getGreen() + 20);
-                        int b = Math.min(255, bgColor.getBlue() + 20);
-                        currentColor = new Color(r, g1, b);
-                    } else {
-                        currentColor = bgColor;
-                    }
-
-                    g2d.setColor(currentColor);
-                    g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
-
-                    // Vẽ viền hồng
-                    g2d.setColor(Color.PINK);
-                    g2d.setStroke(new BasicStroke(2));
-                    g2d.drawRoundRect(1, 1, getWidth() - 2, getHeight() - 2, 20, 20);
-
-                    // Vẽ chữ
-                    g2d.setColor(Color.WHITE);
-                    g2d.setFont(getFont());
-                    FontMetrics fm = g2d.getFontMetrics();
-                    int textWidth = fm.stringWidth(getText());
-                    int textHeight = fm.getAscent();
-                    int x = (getWidth() - textWidth) / 2;
-                    int y = (getHeight() + textHeight) / 2 - 2;
-                    g2d.drawString(getText(), x, y);
-                } finally {
-                    g2d.dispose();
-                }
-            }
-        };
-
-        button.setFont(new Font("Arial", Font.BOLD,20 ));
-        button.setForeground(Color.WHITE);
-        button.setFocusPainted(false);
-        button.setBorderPainted(false);
-        button.setContentAreaFilled(false);
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        button.setPreferredSize(new Dimension(200, 50));
-
-        return button;
+        revalidate();
+        repaint();
     }
 
     // Thêm method để enable/disable nút continue nếu cần
