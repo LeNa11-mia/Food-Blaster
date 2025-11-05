@@ -9,20 +9,36 @@ import com.breakout.managers.Level;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+/**
+ * Handles keyboard input for gameplay and menu navigation.
+ * <p>
+ * This class listens for key presses and releases to control
+ * the paddle, navigate between states, and trigger special actions.
+ * </p>
+ */
 public class GameKeyListener implements KeyListener {
 
+    /** Indicates whether the left key is currently pressed. */
     private boolean leftPressed = false;
+
+    /** Indicates whether the right key is currently pressed. */
     private boolean rightPressed = false;
 
+    /** Default constructor. */
     public GameKeyListener() {}
 
+    /**
+     * Handles key press events.
+     *
+     * @param e the {@link KeyEvent} triggered when a key is pressed
+     */
     @Override
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
         GameManager gm = Game.getGame().getGm();
         int currentState = Game.getGame().getState();
 
-        // ESC - Thoát không lưu từ gameplay
+        // ESC - Exit without saving from gameplay or return from settings
         if (key == KeyEvent.VK_ESCAPE) {
             if (currentState == Defs.STATE_PLAYING) {
                 Game.getGame().exitWithoutSaving();
@@ -37,30 +53,30 @@ public class GameKeyListener implements KeyListener {
             }
         }
 
-        // SPACE - Vào setting và start ball
+        // SPACE - Start ball or open settings
         if (key == KeyEvent.VK_SPACE) {
-            // Nếu đang PLAYING và ball chưa bắt đầu -> start ball
+            // Start ball if in PLAYING state and ball not started
             if (currentState == Defs.STATE_PLAYING && !gm.hasBallStarted()) {
                 gm.startBall();
                 System.out.println("Ball started by SPACE!");
                 return;
             }
 
-            // Nếu đang PLAYING và ball đã bắt đầu -> vào setting
+            // Open settings if ball already started
             if (currentState == Defs.STATE_PLAYING && gm.hasBallStarted()) {
                 Game.getGame().changeState(Defs.STATE_SETTING);
                 return;
             }
         }
 
-        // Mở khóa tất cả level (dùng khi check tính năng)
+        // U - Unlock all levels (debug/testing shortcut)
         if (currentState == Defs.STATE_GAME_MODES && key == KeyEvent.VK_U) {
             for (int i = 1; i <= GameConfig.TOTAL_LEVELS; i++) {
                 Level.unlockLevel(i);
             }
         }
 
-        // Điều khiển paddle (chỉ khi đang PLAYING)
+        // Paddle movement (only in PLAYING state)
         if (currentState == Defs.STATE_PLAYING) {
             if (key == KeyEvent.VK_LEFT || key == KeyEvent.VK_A) {
                 leftPressed = true;
@@ -71,6 +87,11 @@ public class GameKeyListener implements KeyListener {
         }
     }
 
+    /**
+     * Handles key release events.
+     *
+     * @param e the {@link KeyEvent} triggered when a key is released
+     */
     @Override
     public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode();
@@ -84,14 +105,37 @@ public class GameKeyListener implements KeyListener {
         }
     }
 
+    /**
+     * Resets all key states (used when re-entering gameplay or resetting controls).
+     */
     public void resetKeys() {
         leftPressed = false;
         rightPressed = false;
     }
 
+    /**
+     * Not used in this implementation.
+     *
+     * @param e the {@link KeyEvent} triggered when a key is typed
+     */
     @Override
     public void keyTyped(KeyEvent e) {}
 
-    public boolean isLeftPressed() { return leftPressed; }
-    public boolean isRightPressed() { return rightPressed; }
+    /**
+     * Checks whether the left key is currently pressed.
+     *
+     * @return {@code true} if the left key is pressed; {@code false} otherwise
+     */
+    public boolean isLeftPressed() {
+        return leftPressed;
+    }
+
+    /**
+     * Checks whether the right key is currently pressed.
+     *
+     * @return {@code true} if the right key is pressed; {@code false} otherwise
+     */
+    public boolean isRightPressed() {
+        return rightPressed;
+    }
 }

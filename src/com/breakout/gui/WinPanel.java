@@ -8,40 +8,75 @@ import com.breakout.managers.GameManager;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * {@code WinPanel} represents the victory screen shown after the player completes a level.
+ * <p>
+ * It displays the player's score, the current level, and provides buttons to:
+ * <ul>
+ *     <li>Proceed to the next level (if available)</li>
+ *     <li>Restart the current level</li>
+ *     <li>Return to the main menu</li>
+ * </ul>
+ * </p>
+ *
+ * <p>
+ * This panel extends {@link GUIPanel}, inheriting helper methods for consistent UI creation,
+ * such as rounded buttons and bordered labels.
+ * </p>
+ */
 public class WinPanel extends GUIPanel {
+    /** Displays the player's final score. */
     private JLabel scoreLabel;
+
+    /** Displays the current difficulty or level. */
     private JLabel difficultyLabel;
 
+    // === UI Color and Style Constants ===
     private static final Color NEXT_LEVEL_BG = Color.decode("#228B22"); // Forest green
-    private static final Color RESTART_BG = Color.decode("#6B8E23"); // Olive drab
-    private static final Color MENU_BG = Color.decode("#8B7355"); // Burlywood
-    private static final Color BORDER_COLOR = Color.WHITE; // Viền trắng
-    private static final int CORNER_RADIUS = 15; // Bo góc nhỏ hơn một chút
+    private static final Color RESTART_BG = Color.decode("#6B8E23");    // Olive drab
+    private static final Color MENU_BG = Color.decode("#8B7355");       // Burlywood
+    private static final Color BORDER_COLOR = Color.WHITE;              // White border
+    private static final int CORNER_RADIUS = 15;                        // Slightly rounded corners
 
+    /**
+     * Constructs the {@code WinPanel} and initializes all UI components.
+     * <p>
+     * The panel layout includes a title ("YOU WIN!"), score and level display,
+     * and a set of interactive buttons at the center.
+     * </p>
+     */
     public WinPanel() {
-        super(Color.decode("#2D5016")); // Dark green
+        super(Color.decode("#2D5016")); // Dark green background
         backgroundImage = GameConfig.WIN_BACKGROUND;
 
-        // Center content
+        // === Center Container ===
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
         centerPanel.setBackground(Color.decode("#2D5016"));
         centerPanel.setBorder(BorderFactory.createEmptyBorder(0, 100, 50, 100));
         centerPanel.setOpaque(false);
 
-        // Title at the top, score and difficulty in center panel, instructions at the bottom
+        // Add labels and player info
         displayInfo(centerPanel);
 
         centerPanel.add(Box.createRigidArea(new Dimension(0, 40)));
 
-        // Buttons
+        // Add action buttons
         addButtons(centerPanel);
 
         add(centerPanel, BorderLayout.CENTER);
     }
 
+    /**
+     * Displays the title ("YOU WIN!"), player's score, and current level.
+     * <p>
+     * Also adds an instructional label at the bottom.
+     * </p>
+     *
+     * @param centerPanel the main content panel where the info components are added
+     */
     private void displayInfo(JPanel centerPanel) {
-        // Title
+        // === Title ===
         JLabel titleLabel = createBorderedLabel(
                 "YOU WIN!",
                 Color.decode("#90EE90"),
@@ -50,7 +85,7 @@ public class WinPanel extends GUIPanel {
         );
         add(titleLabel, BorderLayout.NORTH);
 
-        // Score display
+        // === Score Display ===
         scoreLabel = createLabel(
                 "Score: " + (Game.getGame().getGm() != null ? Game.getGame().getGm().getScore() : 0),
                 Color.WHITE,
@@ -60,7 +95,7 @@ public class WinPanel extends GUIPanel {
 
         centerPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
-        // Difficulty display
+        // === Level Display ===
         difficultyLabel = createLabel(
                 "Level: " + Game.getGame().getGm().getCurrentLevel(),
                 Color.WHITE,
@@ -68,7 +103,7 @@ public class WinPanel extends GUIPanel {
         );
         centerPanel.add(difficultyLabel);
 
-        // Instructions at bottom
+        // === Instruction Label ===
         JLabel instructionLabel = createBorderedLabel(
                 "Click buttons to continue",
                 Color.decode("#90EE90"),
@@ -78,6 +113,12 @@ public class WinPanel extends GUIPanel {
         add(instructionLabel, BorderLayout.SOUTH);
     }
 
+    /**
+     * Updates the displayed score and level after the player finishes a game or level.
+     *
+     * @param finalScore the player's final score
+     * @param level the current level number
+     */
     public void updateInfo(int finalScore, int level) {
         if (scoreLabel != null) {
             scoreLabel.setText("Score: " + finalScore);
@@ -87,10 +128,21 @@ public class WinPanel extends GUIPanel {
         }
     }
 
+    /**
+     * Adds functional buttons to the Win Panel:
+     * <ul>
+     *     <li><b>Next Level</b> - proceeds to the next difficulty level (if available)</li>
+     *     <li><b>Restart</b> - restarts the current level</li>
+     *     <li><b>Main Menu</b> - returns to the main menu</li>
+     * </ul>
+     *
+     * @param centerPanel the container panel to which buttons are added
+     */
     private void addButtons(JPanel centerPanel) {
         GameManager gm = Game.getGame().getGm();
-        // Next level button
-        int nextLevel = Game.getGame().getGm().getNextDifficulty();
+        int nextLevel = gm.getNextDifficulty();
+
+        // === NEXT LEVEL BUTTON ===
         if (nextLevel > 0) {
             // SỬ DỤNG createRoundedButton
             JButton nextBtn = createRoundedButton("NEXT LEVEL", NEXT_LEVEL_BG, BORDER_COLOR, CORNER_RADIUS);
@@ -106,7 +158,7 @@ public class WinPanel extends GUIPanel {
             centerPanel.add(Box.createRigidArea(new Dimension(0, 15)));
         }
 
-        // Restart button
+        // === RESTART BUTTON ===
         JButton restartBtn = createRoundedButton("RESTART", RESTART_BG, BORDER_COLOR, CORNER_RADIUS);
         restartBtn.setFont(new Font("Arial", Font.BOLD, 18));
         restartBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -119,7 +171,7 @@ public class WinPanel extends GUIPanel {
 
         centerPanel.add(Box.createRigidArea(new Dimension(0, 15)));
 
-        // Menu button
+        // === MAIN MENU BUTTON ===
         JButton menuBtn = createRoundedButton("MAIN MENU", MENU_BG, BORDER_COLOR, CORNER_RADIUS);
         menuBtn.setFont(new Font("Arial", Font.BOLD, 18));
         menuBtn.setAlignmentX(Component.CENTER_ALIGNMENT);

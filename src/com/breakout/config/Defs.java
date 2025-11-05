@@ -12,7 +12,6 @@ public class Defs {
     public static final int STATE_GAMEOVER = 4;
     public static final int STATE_SETTING = 5;
     public static final int STATE_GAME_MODES = 6;
-    public static final int STATE_CONTINUE = 7;
 
     // ----- UI -----
     public static final int GO_BACK = -1;
