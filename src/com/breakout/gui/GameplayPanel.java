@@ -50,9 +50,9 @@ public class GameplayPanel extends GUIPanel {
     }
 
     public void drawInstructions(Graphics2D g2d) {
-        g2d.setColor(Color.WHITE);
-        g2d.setFont(new Font("Arial", Font.PLAIN, 14));
-        g2d.drawString("Press ← → or A D to move", 10, 20);
+        g2d.setColor(Color.PINK);
+        g2d.setFont(new Font("Arial", Font.BOLD, 14));
+        g2d.drawString("Press ← → or A D to move", 75, 35);
     }
 
     // ✅ Vẽ điểm góc phải trên
@@ -65,7 +65,7 @@ public class GameplayPanel extends GUIPanel {
         String scoreText = "Score: " + gm.getScore();
         int textWidth = g2d.getFontMetrics().stringWidth(scoreText);
 
-        g2d.drawString(scoreText, GameConfig.SCREEN_WIDTH - textWidth - 50, 30);
+        g2d.drawString(scoreText, GameConfig.SCREEN_WIDTH - textWidth - 50, 35);
     }
 
     @Override
@@ -74,6 +74,11 @@ public class GameplayPanel extends GUIPanel {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
+
+        // Vẽ background image full màn hình
+        if (backgroundImage != null) {
+            g2d.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+        }
 
         // Draw all objects
         drawObjects(g2d);

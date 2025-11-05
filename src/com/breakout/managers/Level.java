@@ -30,8 +30,8 @@ public class Level extends LevelData {
      */
     private static List<Brick> createLevel(int[][] layout) {
         List<Brick> bricks = new ArrayList<>();
-        double offsetX = 2;
-        double offsetY = 50;
+        double offsetX = GameConfig.BRICK_WIDTH;
+        double offsetY = 75;
         double spacing = 1;
 
         for (int row = 0; row < layout.length; row++) {
