@@ -39,11 +39,9 @@ public class Game {
 
         SoundManager.loadSounds();
 
-        // Thêm KeyListener cho GameplayPanel
         gui.getGameplayPanel().addKeyListener(keyListener);
-
-        // THÊM DÒNG NÀY - KeyListener cho SettingPanel
         gui.getSettingPanel().addKeyListener(keyListener);
+        gui.getGameModesPanel().addKeyListener(keyListener);
 
         // THÊM: Xử lý khi đóng cửa sổ - không lưu game
         frame.addWindowListener(new WindowAdapter() {
@@ -160,14 +158,6 @@ public class Game {
     }
 
     /**
-     * Bắt đầu game mới với difficulty được chọn
-     */
-    public void startNewGame(int difficulty) {
-        gm.startGame(difficulty);
-        changeState(Defs.STATE_PLAYING);
-    }
-
-    /**
      * Tiếp tục game từ save
      */
     public void startContinueGame() {
@@ -185,8 +175,6 @@ public class Game {
      * Thoát game không lưu - dùng khi ấn ESC từ gameplay
      */
     public void exitWithoutSaving() {
-        // Reset game về trạng thái ban đầu
-        gm.resetGame();
         changeState(Defs.STATE_MENU);
     }
 
