@@ -1,4 +1,73 @@
-This README describes the folder layout and purpose of the main packages and files in our Arkanoid game project.
+# Arkanoid
+
+A simple **Arkanoid (Breakout)** game made with Java.  
+Players control a paddle to bounce a ball and destroy all bricks while preventing the ball from leaving the screen.
+
+---
+
+## Features
+
+- 🎮 **Gameplay**
+    - Realistic ball–paddle collisions (with angle depending on hit position and velocity affected by paddle speed)
+    - Multiple brick types:
+        - Normal bricks
+        - Explosive bricks
+        - Falling bricks
+        - Unbreakable bricks
+        - Bricks that make ball invisible
+    - Multiple items:
+      - Bigger ball
+      - Expand paddle
+      - Shrink paddle
+      - Speed up paddle
+      - Slow down paddle
+      - Game over
+    - Score tracking
+    - Game pausing
+    - Game saving
+- 🕹️ **Controls**
+    - **← / →** Move paddle left / right
+    - **SPACE** Launch ball
+    - **SPACE** Pause / Resume
+    - **ESC** Back to menu
+- 🎨 **Graphics & UI**
+    - Custom-designed buttons and rounded UI components
+    - Smooth animations using Swing Timer
+    - Transparent menus and level selection grid (2x3 layout)
+- 🔊 **Sound Effects**
+    - Ball–paddle collision sound
+    - Wall bounce sound
+    - Brick destruction sound
+- 💾 **Save & Load**
+    - Save current game state
+    - Load a previously saved game
+- 🧱 **Multiple Levels**
+    - Level selection screen
+    - Each level has different brick layouts and difficulty
+
+---
+
+## 🎥 Demo Video
+▶️ **Watch Demo:**  
+[Arkanoid Demo]()
+
+---
+
+## Object-Oriented Design (OOP)
+| Principle          | Usage                                                                                  |
+|--------------------|----------------------------------------------------------------------------------------|
+| **Encapsulation**  | Bundling data and methods into a single class, hiding internal details.                |
+| **Inheritance**    | Reusing behavior from a base class.                                                    |
+| **Polymorphism**   | Using a single interface to handle multiple types.                                     |
+| **Abstraction**    | Defining abstract behaviors to be implemented by subclasses.                           |
+| **Design Pattern** | Implements the **Singleton** pattern in the `Game` class to ensure a single instance.  |
+
+
+---
+
+## 🗂️ Project Structure
+
+Folder layout and purpose of the main packages and files.
 
 ```
 src/
@@ -66,7 +135,7 @@ src/
 
 ```
 
-## File highlights
+### File highlights
 
 - **Main.java** — The entry point for launching the game (contains `public static void main(String[] args)`).
 - **Ball.java** — Handles ball physics and collisions.

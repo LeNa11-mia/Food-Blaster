@@ -22,7 +22,7 @@ public class GameConfig {
     public static final ImageIcon MENU_BACKGROUND = new ImageIcon("assets/images/mainMenu.png");
     public static final ImageIcon GAMEMODES_BACKGROUND = new ImageIcon("assets/images/select.png");
     public static final ImageIcon GAMEPLAY_BACKGROUND = new ImageIcon("assets/images/gamePlay.png");
-    public static final ImageIcon WIN_BACKGROUND = null;
+    public static final ImageIcon WIN_BACKGROUND = new ImageIcon("assets/images/win.png");
     public static final ImageIcon GAMEOVER_BACKGROUND = new ImageIcon("assets/images/gameOver.png");
     public static final ImageIcon SETTING_BACKGROUND = new ImageIcon("assets/images/setting.png");
 

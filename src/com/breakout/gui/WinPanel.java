@@ -27,6 +27,7 @@ public class WinPanel extends GUIPanel {
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
         centerPanel.setBackground(Color.decode("#2D5016"));
         centerPanel.setBorder(BorderFactory.createEmptyBorder(0, 100, 50, 100));
+        centerPanel.setOpaque(false);
 
         // Title at the top, score and difficulty in center panel, instructions at the bottom
         displayInfo(centerPanel);
@@ -125,5 +126,21 @@ public class WinPanel extends GUIPanel {
         menuBtn.setMaximumSize(new Dimension(300, 50));
         menuBtn.addActionListener(e -> Game.getGame().changeState(Defs.STATE_MENU));
         centerPanel.add(menuBtn);
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g.create();
+
+        // Vẽ background image
+        if (backgroundImage != null) {
+            g2d.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+        } else {
+            g2d.setColor(Color.decode("#722F37"));
+            g2d.fillRect(0, 0, getWidth(), getHeight());
+        }
+
+        g2d.dispose();
     }
 }
