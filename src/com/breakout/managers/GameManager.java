@@ -351,12 +351,9 @@ public class GameManager {
     /**
      * Reset game về trạng thái ban đầu - dùng khi thoát không lưu
      */
-    public void resetGame() {
-        startGame(Defs.LEVEL_EASY);
-    }
 
     public int getNextDifficulty() {
-        if (currentLevel < Defs.LEVEL_BOSS) {
+        if (currentLevel < GameConfig.TOTAL_LEVELS) {
             currentLevel++;
         }
         return currentLevel;
@@ -380,16 +377,6 @@ public class GameManager {
 
     public void addExtraBall() {
         //TODO: Logic thêm bóng (có thể thêm sau)
-    }
-
-    public void enableLaser() {
-        // laserEnabled = true;
-        // Laser shooting logic (có thể thêm sau)
-    }
-
-    private void nextLevel() {
-        currentLevel++;
-        // Logic chuyển level (có thể thêm sau)
     }
 
     // Check if player won (all bricks destroyed)
