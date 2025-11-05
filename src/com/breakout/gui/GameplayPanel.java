@@ -131,16 +131,4 @@ public class GameplayPanel extends GUIPanel {
         }
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
-
-        drawObjects(g2d);
-        drawInstructions(g2d);
-        drawScore(g2d);
-        drawItemMessage(g2d);
-    }
 }
