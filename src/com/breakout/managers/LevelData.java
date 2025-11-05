@@ -14,15 +14,15 @@ public class LevelData {
 
     /**
      * Layout for Level 1.
-     * <p>Primarily composed of Normal Bricks (1).</p>
+     * <p>Primarily composed of Normal Bricks and Item Bricks (1).</p>
      */
     public static final int[][] level1 = {
             {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 1, 1, 0, 0, 1, 1, 0},
-            {1, 1, 1, 1, 1, 1, 1, 1},
-            {1, 1, 1, 1, 1, 1, 1, 1},
-            {0, 1, 1, 1, 1, 1, 1, 0},
-            {0, 0, 1, 1, 1, 1, 0, 0},
+            {0, 1, 1, 0, 0, 1, 5, 0},
+            {5, 1, 1, 5, 1, 1, 1, 5},
+            {1, 1, 1, 1, 1, 5, 1, 1},
+            {0, 1, 5, 1, 1, 5, 1, 0},
+            {0, 0, 1, 5, 5, 1, 0, 0},
             {0, 0, 0, 1, 1, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0}
     };
@@ -75,7 +75,7 @@ public class LevelData {
 
     /**
      * Layout for Level 5.
-     * <p>Introduces Item Bricks (5).</p>
+     * <p>Brings back Item Bricks (5).</p>
      */
     public static final int[][] level5 = {
             {3, 1, 4, 2, 5, 4, 1, 3},
