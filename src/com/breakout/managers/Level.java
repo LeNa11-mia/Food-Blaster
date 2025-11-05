@@ -17,9 +17,9 @@ public class Level extends LevelData {
             case 1: return createLevel(LevelData.level1, ball);
             case 2: return createLevel(LevelData.level2, ball);
             case 3: return createLevel(LevelData.level3, ball);
-            case 4: return createLevel(LevelData.level3, ball);
-            case 5: return createLevel(LevelData.level3, ball);
-            case 6: return createLevel(LevelData.level3, ball);
+            case 4: return createLevel(LevelData.level4, ball);
+            case 5: return createLevel(LevelData.level5, ball);
+            case 6: return createLevel(LevelData.level6, ball);
             default: return new ArrayList<>();
         }
     }
