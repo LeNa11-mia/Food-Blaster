@@ -10,91 +10,116 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 /**
- * Game controller, using Singleton
+ * {@code Game} is the main game controller, implementing the Singleton pattern.
+ * It manages the game loop, state transitions, and centralizes access to all managers.
  */
 public class Game {
     private static Game instance = null;
 
-    private JFrame frame;
+    private final JFrame frame;
 
-    private GameManager gm;
-    private GUIManager gui;
-    private GameKeyListener keyListener;
+    private final GameManager gm;
+    private final GUIManager gui;
+    private final GameKeyListener keyListener;
 
-    // Game state
+    // Game state and loop control
     private int state;
     private Thread gameThread;
-    private boolean running;
+    private volatile boolean running;
 
     // Timing
     private long lastTime;
 
-    private Game(JFrame frame) {
-        state = Defs.STATE_LOADING;
+    /**
+     * Private constructor to enforce the Singleton pattern.
+     *
+     * @param frame The main {@link JFrame} window.
+     */
+    private Game(final JFrame frame) {
+        this.state = Defs.STATE_LOADING;
         this.frame = frame;
-        instance = this; // Đảm bào instance không null trước khi khởi tạo gm và gui
-        gm = new GameManager();
-        gui = new GUIManager();
-        keyListener = new GameKeyListener();
+        // Ensure instance is set before initializing managers that might reference it
+        instance = this;
 
+        // Initialize managers
+        this.gm = new GameManager();
+        this.gui = new GUIManager();
+        this.keyListener = new GameKeyListener();
+
+        // Load all game sounds
         SoundManager.loadSounds();
 
-        gui.getGameplayPanel().addKeyListener(keyListener);
-        gui.getSettingPanel().addKeyListener(keyListener);
-        gui.getGameModesPanel().addKeyListener(keyListener);
+        // Add KeyListener to relevant panels
+        this.gui.getGameplayPanel().addKeyListener(this.keyListener);
+        this.gui.getSettingPanel().addKeyListener(this.keyListener);
+        this.gui.getGameModesPanel().addKeyListener(this.keyListener);
 
-        // THÊM: Xử lý khi đóng cửa sổ - không lưu game
+        // ADDED: Handle window closing action
         frame.addWindowListener(new WindowAdapter() {
             @Override
-            public void windowClosing(WindowEvent e) {
-                // Đóng game không lưu
+            public void windowClosing(final WindowEvent e) {
+                // Exit the game without saving
                 System.exit(0);
             }
         });
     }
 
-    public static void initGame(JFrame frame) {
+    /**
+     * Initializes the Singleton instance of the Game controller.
+     * This must be called exactly once at startup.
+     *
+     * @param frame The main {@link JFrame} window.
+     */
+    public static void initGame(final JFrame frame) {
         instance = new Game(frame);
-        System.out.println("Đã khởi tạo Game!");
+        System.out.println("Game initialized!");
     }
 
+    /**
+     * Provides the single, global instance of the Game controller.
+     *
+     * @return The {@link Game} instance.
+     */
     public static Game getGame() {
         if (instance != null) {
             return instance;
         } else {
-            System.out.println("Chưa khởi tạo Game!");
+            System.err.println("Game not initialized! Exiting.");
             System.exit(0);
-            return null;
+            return null; // Should be unreachable
         }
     }
 
+    /**
+     * Starts the main game loop in a separate thread.
+     */
     private void startGameLoop() {
-        if (gameThread != null && gameThread.isAlive()) {
-            return; // Already running, preempt multiple loops
+        if (this.gameThread != null && this.gameThread.isAlive()) {
+            return; // Already running, prevent multiple loops
         }
 
-        // ( explain for co-members: The argument is a lambda expression (() -> { ... })
-        // which defines the code that the thread will run.
-        gameThread = new Thread(() -> {
-            while (running) {
+        // The argument is a lambda expression that defines the code the thread will run.
+        this.gameThread = new Thread(() -> {
+            while (this.running) {
                 update();
-                // this try-catch handles the rare case that the thread is interrupted during sleep
+                // This try-catch handles the rare case that the thread is interrupted during sleep
                 try {
-                    // ~60 FPS, pauses the loop for about 16 milliseconds.
-                    //1000 ms / 16 ms ≈ 60 updates per second, ~ 60 frames per second,
-                    // keeps the loop from running too fast and burning CPU unnecessarily.
+                    // ~60 FPS: Pauses the loop for about 16 milliseconds to limit CPU usage.
                     Thread.sleep(16);
-                } catch (InterruptedException e) {
+                } catch (final InterruptedException e) {
                     e.printStackTrace();
                 }
             }
         });
-        gameThread.start();
+        this.gameThread.start();
     }
 
+    /**
+     * Initializes timing and starts the game loop, switching the state to the Menu.
+     */
     public void start() {
-        lastTime = System.nanoTime();
-        running = true;
+        this.lastTime = System.nanoTime();
+        this.running = true;
 
         changeState(Defs.STATE_MENU);
 
@@ -102,117 +127,120 @@ public class Game {
         startGameLoop();
     }
 
+    /**
+     * The core update logic of the game loop.
+     * Calculates delta time and updates the game state if currently playing.
+     */
     private void update() {
-        if (!running || gm == null) return;
+        if (!this.running || this.gm == null) return;
 
         // Calculate deltaTime
-        long currentTime = System.nanoTime();
-        double deltaTime = (currentTime - lastTime) / 1_000_000_000.0;
-        lastTime = currentTime;
+        final long currentTime = System.nanoTime();
+        final double deltaTime = (currentTime - this.lastTime) / 1_000_000_000.0;
+        this.lastTime = currentTime;
 
-        if (state == Defs.STATE_PLAYING) {
-            gm.update(deltaTime, keyListener.isLeftPressed(), keyListener.isRightPressed());
-            SwingUtilities.invokeLater(() -> gui.getGameplayPanel().repaint());
-            // Xử lý giao diện trên luồng riêng (EDT)
+        if (this.state == Defs.STATE_PLAYING) {
+            // Update game logic (movement, collision, scores)
+            this.gm.update(deltaTime, this.keyListener.isLeftPressed(), this.keyListener.isRightPressed());
+
+            // Handle GUI drawing on the Event Dispatch Thread (EDT)
+            SwingUtilities.invokeLater(() -> this.gui.getGameplayPanel().repaint());
         }
     }
 
+    /**
+     * Gets the current state of the game.
+     *
+     * @return The current state ID (integer from {@link Defs}).
+     */
     public int getState() {
-        return state;
+        return this.state;
     }
 
-    public void changeState(int state) {
+    /**
+     * Changes the current game state and updates the GUI accordingly.
+     *
+     * @param state The new state ID (integer from {@link Defs}).
+     */
+    public void changeState(final int state) {
         if (this.state == state) return;
 
+        // Store the previous state if moving into settings
         if (state == Defs.STATE_SETTING && this.state != Defs.STATE_LOADING) {
-            gui.setPreviousState(this.state);
+            this.gui.setPreviousState(this.state);
         }
 
         this.state = state;
         switch (state) {
             case Defs.STATE_MENU:
-                gui.resetButton(GUIPanel.originalColors);
-                gui.showMenuScreen(frame);
+                this.gui.resetButton(GUIPanel.originalColors);
+                this.gui.showMenuScreen(this.frame);
                 break;
             case Defs.STATE_PLAYING:
-                keyListener.resetKeys();
-                gui.showGameplayPanel(frame);
+                this.keyListener.resetKeys();
+                this.gui.showGameplayPanel(this.frame);
                 break;
             case Defs.STATE_GAME_MODES:
-                gui.resetButton(GUIPanel.originalColors);
-                gui.showGameModesScreen(frame);
+                this.gui.resetButton(GUIPanel.originalColors);
+                this.gui.showGameModesScreen(this.frame);
                 break;
             case Defs.STATE_SETTING:
-                gui.resetButton(GUIPanel.originalColors);
-                gui.showSettingsScreen(frame);
+                this.gui.resetButton(GUIPanel.originalColors);
+                this.gui.showSettingsScreen(this.frame);
                 break;
             case Defs.STATE_WIN:
-                gui.resetButton(GUIPanel.originalColors);
-                gui.showWinScreen(frame);
+                this.gui.resetButton(GUIPanel.originalColors);
+                this.gui.showWinScreen(this.frame);
                 break;
             case Defs.STATE_GAMEOVER:
-                gui.resetButton(GUIPanel.originalColors);
-                gui.showGameOverScreen(frame);
+                this.gui.resetButton(GUIPanel.originalColors);
+                this.gui.showGameOverScreen(this.frame);
                 break;
         }
     }
 
     /**
-     * Tiếp tục game từ save
+     * Attempts to continue the game from a saved file.
      */
     public void startContinueGame() {
-        if (gm.canContinueGame()) {
-            gm.continueGame();
+        if (this.gm.canContinueGame()) {
+            this.gm.continueGame();
             changeState(Defs.STATE_PLAYING);
         } else {
-            // Nếu không có game đã lưu, quay lại menu
+            // If no saved game found, return to menu
             System.out.println("No saved game found!");
             changeState(Defs.STATE_MENU);
         }
     }
 
     /**
-     * Thoát game không lưu - dùng khi ấn ESC từ gameplay
+     * Exits the current gameplay session without saving and returns to the menu.
+     * Used when pressing ESC during gameplay.
      */
     public void exitWithoutSaving() {
         changeState(Defs.STATE_MENU);
     }
 
     /**
-     * Lưu game và thoát về menu - dùng từ SettingPanel
+     * Saves the current game state and returns to the menu.
+     * Used from the Setting Panel.
      */
     public void saveAndExitToMenu() {
-        gm.saveCurrentGame();
+        this.gm.saveCurrentGame();
         changeState(Defs.STATE_MENU);
     }
 
-    /**
-     * Kiểm tra xem có thể continue game không
-     */
-    public boolean canContinueGame() {
-        return gm.canContinueGame();
-    }
-
-    /**
-     * Lấy thông tin game đã lưu
-     */
-    public String getSaveInfo() {
-        return gm.getSaveInfo();
-    }
+    // --- Getters for Managers and Components ---
 
     public GameManager getGm() {
-        return gm;
+        return this.gm;
     }
 
     public GUIManager getGUI() {
-        return gui;
+        return this.gui;
     }
 
     public GameKeyListener getKeyListener() {
-        return keyListener;
-    }
-
-    public JFrame getFrame() {
-        return frame;
+        return this.keyListener;
     }
 }

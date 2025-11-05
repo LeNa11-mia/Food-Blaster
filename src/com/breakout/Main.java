@@ -5,24 +5,34 @@ import com.breakout.config.GameConfig;
 import javax.swing.*;
 
 /**
- * Main game class - Entry point for the application
+ * {@code Main} is the entry point for the Breakout game application.
+ * It is responsible for setting up the main window and initializing the game controller.
  */
 public class Main {
 
-    public static void main(String[] args) {
-        // Các thao tác xử lý giao diện của Swing chạy trên Event Dispatch Thread (EDT)
+    /**
+     * The main method, which starts the application.
+     *
+     * @param args Command line arguments (unused).
+     */
+    public static void main(final String[] args) {
+        // Swing GUI operations must run on the Event Dispatch Thread (EDT)
         SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame(GameConfig.WINDOW_TITLE);
+            // Setup the main window frame
+            final JFrame frame = new JFrame(GameConfig.WINDOW_TITLE);
+
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(GameConfig.SCREEN_WIDTH, GameConfig.SCREEN_HEIGHT);
-            frame.setLocationRelativeTo(null);
+            frame.setLocationRelativeTo(null); // Center the window
             frame.setResizable(false);
 
-            Game.initGame(frame); // Khởi tạo game, chưa vào game loop
+            // Initialize the singleton Game controller
+            Game.initGame(frame);
 
             frame.setVisible(true);
 
-            new Thread(() -> Game.getGame().start()).start(); // Tạo luồng riêng cho game loop
+            // Start the main game loop in a separate thread to keep the EDT responsive
+            new Thread(() -> Game.getGame().start()).start();
         });
     }
 }

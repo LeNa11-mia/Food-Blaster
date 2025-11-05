@@ -17,110 +17,143 @@ import java.util.*;
 import java.util.List;
 
 /**
- * Quản
+ * {@code GameManager} is responsible for managing the overall state of the game,
+ * including game objects, scores, lives, level progression, and save/load operations.
  */
 public class GameManager {
     private String screenMessage = null;
     private double messageTimer = 0.0;
 
-    private Ball ball;
+    private final Ball ball;
     private Paddle paddle;
     private List<Brick> bricks;
-    private List<Item> activeItems;
+    private final List<Item> activeItems;
 
     private int score;
     private int lives;
     private int currentLevel;
 
-    public GameManager() {
-        Level.unlockLevel(1); // Mở khóa level đầu tiên
-
-        // Initialize game objects
-        ball = new Ball(GameConfig.SCREEN_WIDTH/2.0, GameConfig.SCREEN_HEIGHT/2.0);
-        paddle = new Paddle(GameConfig.SCREEN_WIDTH/2.0 - 50, GameConfig.SCREEN_HEIGHT - 50);
-        bricks = new ArrayList<>();
-        activeItems = new ArrayList<>();
-        lives = 1; // Only 1 life as per your requirement
-    }
-
-    public void showMessageOnScreen(String message) {
-        this.screenMessage = message;
-        this.messageTimer = GameConfig.ITEM_MESSAGE_DURATION; // Bắt đầu đếm ngược
-    }
-
-    public String getScreenMessage() {
-        return screenMessage;
-    }
-
     private boolean paused = false;
     private boolean ballStarted = false;
 
-    public void addItem(Item item) {
-        this.activeItems.add(item);
-    }
+    /**
+     * Constructs the GameManager and initializes the core game objects.
+     */
+    public GameManager() {
+        Level.unlockLevel(1); // Unlock the first level
 
-    public List<Item> getActiveItems() {
-        return activeItems;
-    }
-
-    public boolean isPaused() {
-        return paused;
-    }
-
-    public void togglePause() {
-        paused = !paused;
-    }
-
-    public boolean hasBallStarted() {
-        return ballStarted;
-    }
-
-    public void startBall() {
-        ballStarted = true;
-    }
-
-    public void startGame(int level) {
-        currentLevel = level;
-
-        // ADDED: Pass ball parameter for InvisibleBallBrick support
-        bricks = Level.loadLevel(level, ball);
-        resetBall();
-        resetPaddle();
-        lives = 1;
-        score = 0;
-        activeItems.clear();
-        screenMessage = null;
-        ballStarted = false;
+        // Initialize game objects (using 'final' for ball and activeItems as they are the same instance)
+        this.ball = new Ball(GameConfig.SCREEN_WIDTH / 2.0, GameConfig.SCREEN_HEIGHT / 2.0);
+        this.paddle = new Paddle(GameConfig.SCREEN_WIDTH / 2.0 - 50, GameConfig.SCREEN_HEIGHT - 50);
+        this.bricks = new ArrayList<>();
+        this.activeItems = new ArrayList<>();
+        this.lives = 1; // Only 1 life as per your requirement
     }
 
     /**
-     * Tiếp tục game từ save file
+     * Displays a temporary message on the screen.
+     *
+     * @param message The message string to display.
+     */
+    public void showMessageOnScreen(final String message) {
+        this.screenMessage = message;
+        this.messageTimer = GameConfig.ITEM_MESSAGE_DURATION; // Start the timer
+    }
+
+    /**
+     * Gets the current screen message being displayed.
+     *
+     * @return The message string, or {@code null} if no message is active.
+     */
+    public String getScreenMessage() {
+        return this.screenMessage;
+    }
+
+    /**
+     * Adds a new item to the list of active items.
+     *
+     * @param item The {@link Item} to add.
+     */
+    public void addItem(final Item item) {
+        this.activeItems.add(item);
+    }
+
+    /**
+     * Gets the list of currently active items.
+     *
+     * @return A list of {@link Item} objects.
+     */
+    public List<Item> getActiveItems() {
+        return this.activeItems;
+    }
+
+    /**
+     * Checks if the ball has been launched (started).
+     *
+     * @return {@code true} if the ball is moving, {@code false} otherwise.
+     */
+    public boolean hasBallStarted() {
+        return this.ballStarted;
+    }
+
+    /**
+     * Starts the ball movement.
+     */
+    public void startBall() {
+        this.ballStarted = true;
+    }
+
+    /**
+     * Starts a new game at the specified level.
+     *
+     * @param level The level number to start.
+     */
+    public void startGame(final int level) {
+        this.currentLevel = level;
+
+        // ADDED: Pass ball parameter for InvisibleBallBrick support
+        this.bricks = Level.loadLevel(level, this.ball);
+        resetBall();
+        resetPaddle();
+        this.lives = 1;
+        this.score = 0;
+        this.activeItems.clear();
+        this.screenMessage = null;
+        this.ballStarted = false;
+    }
+
+    /**
+     * Continues the game from a saved file.
      */
     public void continueGame() {
-        GameSave savedGame = SaveManager.loadGame();
+        final GameSave savedGame = SaveManager.loadGame();
         if (savedGame != null) {
             loadSavedGame(savedGame);
-            ballStarted = false; // không di chuyển ngay
-            ball.setVelocity(savedGame.getBallData().getVelocityX(),savedGame.getBallData().getVelocityY());
+            this.ballStarted = false; // Do not move immediately
+            this.ball.setVelocity(savedGame.getBallData().getVelocityX(), savedGame.getBallData().getVelocityY());
         }
     }
 
     /**
-     * Kiểm tra xem có game đã lưu không
+     * Checks if a saved game exists.
+     *
+     * @return {@code true} if a saved game file is present.
      */
     public boolean canContinueGame() {
-        return SaveManager.saveExists(); // Sửa thành SaveManager.saveExists()
+        return SaveManager.saveExists();
     }
 
     /**
-     * Lấy thông tin game đã lưu để hiển thị
+     * Retrieves information about the saved game for display.
+     *
+     * @return A string containing saved game details or "No saved game".
      */
     public String getSaveInfo() {
         if (!canContinueGame()) {
             return "No saved game";
         }
 
-        GameSave savedGame = SaveManager.loadGame(); // Sửa thành SaveManager.loadGame()
+        final GameSave savedGame = SaveManager.loadGame();
         if (savedGame != null) {
             return String.format("Level: %d - Score: %d - Lives: %d",
                     savedGame.getLevel(), savedGame.getScore(), savedGame.getLives());
@@ -128,45 +161,54 @@ public class GameManager {
         return "Saved game";
     }
 
-    public void update(double deltaTime, boolean leftPressed, boolean rightPressed) {
-        if (paused) return;
+    /**
+     * Updates the game state, handles input, movement, and collisions.
+     *
+     * @param deltaTime Time elapsed since the last update.
+     * @param leftPressed {@code true} if the left movement key is pressed.
+     * @param rightPressed {@code true} if the right movement key is pressed.
+     */
+    public void update(final double deltaTime, final boolean leftPressed, final boolean rightPressed) {
+        if (this.paused) return;
 
-        if (!ballStarted) return;
+        if (!this.ballStarted) return;
 
-        // XÓA các lệnh saveCurrentGame() tự động
+        // Check game end conditions
         if (isGameOver()) {
-            // KHÔNG lưu game khi game over
+            // DO NOT save game on game over
             deleteSavedGame();
             Game.getGame().changeState(Defs.STATE_GAMEOVER);
             return; // Don't update if game is over
         } else if (isWin()) {
-            // KHÔNG lưu game khi win
+            // DO NOT save game on win
             Game.getGame().changeState(Defs.STATE_WIN);
             return;
         }
 
+        // --- Collision and Boundary Checks ---
+
         // Ball hits left/right walls
-        if (ball.getX() <= 0) {
-            ball.setX(1); // Tránh bị kẹt trong tường
-            ball.bounceX();
+        if (this.ball.getX() <= 0) {
+            this.ball.setX(1); // Avoid getting stuck in the wall
+            this.ball.bounceX();
             SoundManager.playWallHitSound();
         }
-        if (ball.getX() + ball.getWidth() >= GameConfig.SCREEN_WIDTH - 12) {
-            ball.setX(GameConfig.SCREEN_WIDTH - 12 - ball.getWidth() - 1);
-            ball.bounceX();
+        if (this.ball.getX() + this.ball.getWidth() >= GameConfig.SCREEN_WIDTH - 12) {
+            this.ball.setX(GameConfig.SCREEN_WIDTH - 12 - this.ball.getWidth() - 1);
+            this.ball.bounceX();
             SoundManager.playWallHitSound();
         }
 
         // Ball hits top wall
-        if (ball.getY() <= 0) {
-            ball.setY(1);
-            ball.bounceY();
+        if (this.ball.getY() <= 0) {
+            this.ball.setY(1);
+            this.ball.bounceY();
             SoundManager.playWallHitSound();
         }
 
         // Ball falls below bottom border - GAME OVER
-        if (ball.getY() > GameConfig.SCREEN_HEIGHT) {
-            lives--;
+        if (this.ball.getY() > GameConfig.SCREEN_HEIGHT) {
+            this.lives--;
             if (!isGameOver()) {
                 // Reset ball if still have lives (though you have only 1 life)
                 resetBall();
@@ -174,59 +216,62 @@ public class GameManager {
         }
 
         // Collision with paddle
-        if (ball.intersects(paddle) && ball.getVy() > 0) {
-            ball.collisionFromSides(paddle);
+        if (this.ball.intersects(this.paddle) && this.ball.getVy() > 0) {
+            this.ball.collisionFromSides(this.paddle);
             SoundManager.playWallHitSound();
         }
 
         // Collision with bricks
-        for (Brick brick : bricks) {
-            if (!brick.isDestroyed() && !brick.isHit() && ball.intersects(brick)) {
-                ball.collisionFromSides(brick);
+        for (final Brick brick : this.bricks) {
+            if (!brick.isDestroyed() && !brick.isHit() && this.ball.intersects(brick)) {
+                this.ball.collisionFromSides(brick);
                 brick.hit();
                 SoundManager.playBrickHitSound();
                 break; // Only destroy one brick per collision
             }
         }
 
-        if (messageTimer > 0) {
-            messageTimer -= deltaTime;
-            if (messageTimer <= 0) {
-                screenMessage = null; // Ẩn tin nhắn khi hết giờ
+        // --- Timer Updates ---
+
+        if (this.messageTimer > 0) {
+            this.messageTimer -= deltaTime;
+            if (this.messageTimer <= 0) {
+                this.screenMessage = null; // Hide the message when timer runs out
             }
         }
 
-        // Update ball
-        ball.update(deltaTime);
-        // Update paddle
-        paddle.update(deltaTime);
+        // --- Object Updates ---
 
-        // Update bricks
-        for (Brick brick : bricks) {
+        this.ball.update(deltaTime);
+        this.paddle.update(deltaTime);
+
+        // Update bricks (specific behavior for FallingBrick)
+        for (final Brick brick : this.bricks) {
             if (brick instanceof FallingBrick) {
                 brick.update(deltaTime);
-                if (paddle.intersects(brick)) {
-                    lives--;
+                // Check if falling brick hits the paddle
+                if (this.paddle.intersects(brick)) {
+                    this.lives--;
                 }
             }
         }
 
-        // Update items
-        Iterator<Item> iter = activeItems.iterator();
+        // Update items (move and check collision with paddle)
+        final Iterator<Item> iter = this.activeItems.iterator();
         while (iter.hasNext()) {
-            Item item = iter.next();
+            final Item item = iter.next();
             item.update(deltaTime);
-            if (item.intersects(paddle)) {
-                item.applyEffect(paddle, this);
+            if (item.intersects(this.paddle)) {
+                item.applyEffect(this.paddle, this);
                 iter.remove();
             } else if (item.getY() > GameConfig.SCREEN_HEIGHT) {
-                iter.remove(); // xóa item khi rơi ra ngoài
+                iter.remove(); // Remove item when it falls off screen
             }
         }
 
-        // Update score
+        // Update score (based on destroyed bricks)
         int destroyedCount = 0;
-        for (Brick brick : bricks) {
+        for (final Brick brick : this.bricks) {
             if (brick.isDestroyed()) {
                 destroyedCount++;
             }
@@ -235,88 +280,80 @@ public class GameManager {
     }
 
     /**
-     * Lưu game hiện tại - CHỈ được gọi khi người chơi chủ động save
+     * Saves the current game state - ONLY called when the player manually saves.
      */
     public void saveCurrentGame() {
-        List<BrickSave> bricksData = new ArrayList<>();
+        final List<BrickSave> bricksData = new ArrayList<>();
 
-        // Lưu trạng thái của từng brick
-        for (int i = 0; i < bricks.size(); i++) {
-            Brick brick = bricks.get(i);
+        // Save the state of each brick
+        for (final Brick brick : this.bricks) {
             bricksData.add(new BrickSave(
-                    (int)Math.round(brick.getX()),    // x position (làm tròn để tránh mất dữ liệu)
-                    (int)Math.round(brick.getY()),    // y position (làm tròn để tránh mất dữ liệu)
-                    (int)Math.round(brick.getWidth()),  // width
-                    (int)Math.round(brick.getHeight()), // height
-                    brick.isDestroyed(),              // destroyed
-                    1,                               // hitPoints (mặc định là 1)
-                    1,                               // maxHitPoints (mặc định là 1)
-                    0xFF0000,                        // color (màu mặc định - đỏ)
-                    10                                // points (điểm mặc định)
+                    (int) Math.round(brick.getX()),      // x position (rounded to avoid data loss)
+                    (int) Math.round(brick.getY()),      // y position (rounded to avoid data loss)
+                    (int) Math.round(brick.getWidth()),  // width
+                    (int) Math.round(brick.getHeight()), // height
+                    brick.isDestroyed(),                 // destroyed
+                    1,                                   // hitPoints (defaulted)
+                    1,                                   // maxHitPoints (defaulted)
+                    0xFF0000,                            // color (defaulted - red)
+                    10                                   // points (defaulted)
             ));
         }
 
-        BallSave ballData = new BallSave(
-                ball.getX(), ball.getY(), ball.getVx(), ball.getVy(), 15
+        final BallSave ballData = new BallSave(
+                this.ball.getX(), this.ball.getY(), this.ball.getVx(), this.ball.getVy(), 15
         );
 
-        PaddleSave paddleData = new PaddleSave(
-                paddle.getX(),
-                paddle.getY(),
-                (int) paddle.getWidth(),
-                (int) paddle.getHeight(),
-                paddle.getSpeed()
+        final PaddleSave paddleData = new PaddleSave(
+                this.paddle.getX(),
+                this.paddle.getY(),
+                (int) this.paddle.getWidth(),
+                (int) this.paddle.getHeight(),
+                this.paddle.getSpeed()
         );
 
-        GameSave gameSave = new GameSave(
-                currentLevel, score, lives, currentLevel,
+        final GameSave gameSave = new GameSave(
+                this.currentLevel, this.score, this.lives, this.currentLevel,
                 ballData, paddleData, bricksData
         );
 
         SaveManager.saveGame(gameSave);
 
-//        MenuPanel menuPanel = new MenuPanel(Game.getGame());
-//        javax.swing.SwingUtilities.invokeLater(() -> {
-//            Game.getGame().getFrame().setContentPane(menuPanel);
-//            menuPanel.updateMenu();
-//        });
-
         System.out.println("Game saved successfully!");
     }
 
     /**
-     * Load game đã lưu
+     * Loads a previously saved game state.
+     *
+     * @param gameSave The {@link GameSave} object containing the saved data.
      */
-    /**
-     * Load game đã lưu
-     */
-    public void loadSavedGame(GameSave gameSave) {
+    public void loadSavedGame(final GameSave gameSave) {
         if (gameSave == null) return;
 
-        currentLevel = gameSave.getDifficulty();
-        score = gameSave.getScore();
-        lives = gameSave.getLives();
-        currentLevel = gameSave.getLevel();
+        this.currentLevel = gameSave.getDifficulty(); // Assuming difficulty is level, though there is redundancy here
+        this.score = gameSave.getScore();
+        this.lives = gameSave.getLives();
+        this.currentLevel = gameSave.getLevel();
 
-        // Khôi phục ball
-        BallSave ballData = gameSave.getBallData();
-        ball.setPosition(ballData.getX(), ballData.getY());
-        ball.setVelocity(ballData.getVelocityX(), ballData.getVelocityY());
+        // Restore ball
+        final BallSave ballData = gameSave.getBallData();
+        this.ball.setPosition(ballData.getX(), ballData.getY());
+        this.ball.setVelocity(ballData.getVelocityX(), ballData.getVelocityY());
 
-        // Khôi phục paddle
-        PaddleSave paddleData = gameSave.getPaddleData();
-        paddle.setPosition(paddleData.getX(), paddleData.getY());
-        paddle.setWidth(paddleData.getWidth());
+        // Restore paddle
+        final PaddleSave paddleData = gameSave.getPaddleData();
+        this.paddle.setPosition(paddleData.getX(), paddleData.getY());
+        this.paddle.setWidth(paddleData.getWidth());
 
-        // Khôi phục bricks - cần load level trước
+        // Restore bricks - must load the level first
         loadLevelForSavedGame();
 
-        // Khôi phục trạng thái và vị trí của từng brick
-        for (BrickSave brickSave : gameSave.getBricks()) {
-            // Tìm brick tại vị trí tương ứng
-            for (Brick brick : bricks) {
-                if ((int)brick.getX() == brickSave.getX() &&
-                        (int)brick.getY() == brickSave.getY() &&
+        // Restore state and position of each brick
+        for (final BrickSave brickSave : gameSave.getBricks()) {
+            // Find the corresponding brick based on position and size
+            for (final Brick brick : this.bricks) {
+                if ((int) brick.getX() == brickSave.getX() &&
+                        (int) brick.getY() == brickSave.getY() &&
                         brick.getWidth() == brickSave.getWidth() &&
                         brick.getHeight() == brickSave.getHeight()) {
 
@@ -328,82 +365,112 @@ public class GameManager {
             }
         }
 
-        // Đảm bảo ball bắt đầu di chuyển
-        ballStarted = false;
-        ball.setVelocity(0, 0);}
+        // Ensure ball is not moving immediately after loading
+        this.ballStarted = false;
+        this.ball.setVelocity(0, 0);
+    }
 
     /**
-     * Load level phù hợp cho game đã lưu
+     * Loads the appropriate level layout for a saved game.
      */
     private void loadLevelForSavedGame() {
-        if (bricks == null || bricks.isEmpty()) {
+        if (this.bricks == null || this.bricks.isEmpty()) {
             // ADDED: Pass ball parameter for InvisibleBallBrick support
-            bricks = Level.loadLevel(currentLevel, ball);
+            this.bricks = Level.loadLevel(this.currentLevel, this.ball);
         }
     }
 
     /**
-     * Xóa game đã lưu
+     * Deletes the currently saved game file.
      */
     public void deleteSavedGame() {
-        SaveManager.deleteSave(); // Sửa thành SaveManager.deleteSave()
+        SaveManager.deleteSave();
     }
 
     /**
-     * Reset game về trạng thái ban đầu - dùng khi thoát không lưu
+     * Gets the next level number.
+     *
+     * @return The next level number, or the current level if it's the maximum.
      */
-
     public int getNextDifficulty() {
-        if (currentLevel < GameConfig.TOTAL_LEVELS) {
-            currentLevel++;
+        if (this.currentLevel < GameConfig.TOTAL_LEVELS) {
+            this.currentLevel++;
         }
-        return currentLevel;
+        return this.currentLevel;
     }
 
+    /**
+     * Resets the ball to its starting position and sets velocity to 0 (unstarted state).
+     */
     private void resetBall() {
         // CHANGED: Maintain same ball instance for InvisibleBallBrick compatibility
-        ball.setPosition(GameConfig.SCREEN_WIDTH/2.0, GameConfig.SCREEN_HEIGHT/2.0);
-        ball.setVelocity(0, GameConfig.BALL_SPEED);
-        ball.setVisible(true); // Ensure ball is visible after reset
-        ballStarted = false;
+        this.ball.setPosition(GameConfig.SCREEN_WIDTH / 2.0, GameConfig.SCREEN_HEIGHT / 2.0);
+        this.ball.setVelocity(0, GameConfig.BALL_SPEED);
+        this.ball.setVisible(true); // Ensure ball is visible after reset
+        this.ballStarted = false;
     }
 
+    /**
+     * Resets the paddle to its original position and default size/speed.
+     */
     private void resetPaddle() {
-        paddle = new Paddle(GameConfig.SCREEN_WIDTH/2.0 - 50, GameConfig.SCREEN_HEIGHT - 50);
+        this.paddle = new Paddle(GameConfig.SCREEN_WIDTH / 2.0 - 50, GameConfig.SCREEN_HEIGHT - 50);
     }
 
-    private void spawnRandomItem(double x, double y) {
-        //TODO: Logic spawn item (có thể thêm sau)
-    }
-
-    public void addExtraBall() {
-        //TODO: Logic thêm bóng (có thể thêm sau)
-    }
-
-    // Check if player won (all bricks destroyed)
+    /**
+     * Checks if the player has won the current level (all breakable bricks destroyed).
+     *
+     * @return {@code true} if the level is won, {@code false} otherwise.
+     */
     public boolean isWin() {
-        for (Brick brick : bricks) {
+        for (final Brick brick : this.bricks) {
             if (!(brick instanceof UnbreakableBrick) && !brick.isDestroyed()) {
                 return false;
             }
         }
-        if (currentLevel < GameConfig.TOTAL_LEVELS) {
-            Level.unlockLevel(currentLevel + 1); // Mở khóa level sau nếu có
+        if (this.currentLevel < GameConfig.TOTAL_LEVELS) {
+            Level.unlockLevel(this.currentLevel + 1); // Unlock the next level if available
         }
         return true;
     }
 
-    // Getters
+    // --- Getters and Setters ---
 
-    public Ball getBall() { return ball; }
-    public Paddle getPaddle() { return paddle; }
-    public List<Brick> getBricks() { return bricks; }
-    public int getScore() { return score; }
-    public int getLives() { return lives; }
+    public Ball getBall() {
+        return this.ball;
+    }
 
-    public boolean isGameOver() { return lives <= 0; }
-    public void setLives(int lives) {
+    public Paddle getPaddle() {
+        return this.paddle;
+    }
+
+    public List<Brick> getBricks() {
+        return this.bricks;
+    }
+
+    public int getScore() {
+        return this.score;
+    }
+
+    /**
+     * Checks if the game is over (lives <= 0).
+     *
+     * @return {@code true} if game is over.
+     */
+    public boolean isGameOver() {
+        return this.lives <= 0;
+    }
+
+    /**
+     * Sets the number of lives remaining.
+     *
+     * @param lives The new number of lives.
+     */
+    public void setLives(final int lives) {
         this.lives = lives;
     }
-    public int getCurrentLevel() { return currentLevel; }
+
+    public int getCurrentLevel() {
+        return this.currentLevel;
+    }
 }

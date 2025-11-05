@@ -8,35 +8,58 @@ import com.breakout.managers.Level;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * The {@code GameModesPanel} represents the GUI screen where players can select
+ * different game levels or return to the main menu.
+ * <p>
+ * This panel displays level buttons arranged in a grid layout and a "Back" button
+ * for navigation. Each level button indicates whether it is unlocked or not.
+ * </p>
+ */
 public class GameModesPanel extends GUIPanel {
 
+    /** Buttons representing each level. */
     private JButton[] buttons;
+
+    /** Background color for the "Back" button. */
     private static final Color BACK_BG = Color.decode("#D8BFD8"); // Thistle
+
+    /** Background color for level buttons. */
     private static final Color LEVEL_BG = Color.decode("#FFC0CB"); // Pink
-    private static final Color BORDER_COLOR = Color.PINK; // Viền
+
+    /** Border color for rounded buttons. */
+    private static final Color BORDER_COLOR = Color.PINK;
+
+    /** Corner radius for rounded buttons. */
     private static final int CORNER_RADIUS = 20;
 
+    /**
+     * Constructs the {@code GameModesPanel} and initializes the level selection UI.
+     */
     public GameModesPanel() {
         super(Color.decode("#F3CFC6"));
         backgroundImage = GameConfig.GAMEMODES_BACKGROUND;
 
-        setLayout(null); // Dùng absolute positioning
+        setLayout(null); // Use absolute positioning
 
-        // Các nút chọn level
         buttons = new JButton[GameConfig.TOTAL_LEVELS];
 
-        // Tạo panel chứa các nút
         JPanel modesPanel = createModesPanel();
         modesPanel.setBounds(125, 280, 350, 320); // x, y, width, height
         add(modesPanel);
     }
 
+    /**
+     * Paints the background, title text, and other components on the panel.
+     *
+     * @param g the {@link Graphics} context to draw with
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g.create();
 
-        // Vẽ background image full màn hình
+        // Draw background image
         if (backgroundImage != null) {
             g2d.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
         } else {
@@ -44,61 +67,72 @@ public class GameModesPanel extends GUIPanel {
             g2d.fillRect(0, 0, getWidth(), getHeight());
         }
 
-        // Vẽ chữ "Select Level" viết tay màu hồng ở phần trắng
+        // Draw title text
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-
-        // Sử dụng phương thức chung từ GUIPanel
         Font font = getHandwrittenFont(Font.BOLD, 60);
-
         g2d.setFont(font);
-        g2d.setColor(new Color(255, 105, 180)); // Màu hồng pastel
+        g2d.setColor(new Color(255, 105, 180));
 
         String text = "Select Level";
         FontMetrics fm = g2d.getFontMetrics();
         int textWidth = fm.stringWidth(text);
         int x = (getWidth() - textWidth) / 2;
         int y = 150;
-
         g2d.drawString(text, x, y);
 
         g2d.dispose();
     }
 
+    /**
+     * Creates a panel that contains all level buttons and the back button.
+     *
+     * @return a configured {@link JPanel} containing the level and back buttons
+     */
     private JPanel createModesPanel() {
-        JPanel modesPanel = new JPanel();
-        modesPanel.setLayout(new BorderLayout()); // Các nút chọn level ở trung tâm, nút BACK ở dưới cùng
+        JPanel modesPanel = new JPanel(new BorderLayout());
         modesPanel.setOpaque(false);
 
-        JPanel levelGrid = new JPanel();
-        levelGrid.setLayout(new GridLayout(2, 3, 25, 25));
-        // Các nút chọn level sắp xếp dạng lưới, cách nhau 25 pixel
+        JPanel levelGrid = new JPanel(new GridLayout(2, 3, 25, 25));
         levelGrid.setOpaque(false);
 
         JPanel bottomPanel = new JPanel();
         bottomPanel.setOpaque(false);
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(25, 0, 0, 0));
 
-        // Nút BACK sử dụng LevelButton
+        // Back button
         LevelButton backBtn = new LevelButton("← BACK", BACK_BG, Defs.GO_BACK);
-        backBtn.setFont(new Font("Arial", Font.BOLD, 20)); // Font nhỏ hơn cho nút BACK
+        backBtn.setFont(new Font("Arial", Font.BOLD, 20));
         bottomPanel.add(backBtn);
 
+        // Create level buttons
         for (int i = 0; i < GameConfig.TOTAL_LEVELS; i++) {
-            // Nút LEVEL sử dụng LevelButton
             buttons[i] = new LevelButton(Integer.toString(i + 1), LEVEL_BG, i + 1);
             levelGrid.add(buttons[i]);
         }
 
         modesPanel.add(levelGrid, BorderLayout.CENTER);
         modesPanel.add(bottomPanel, BorderLayout.SOUTH);
-
         return modesPanel;
     }
 
+    /**
+     * Inner class representing a styled rounded button for level selection and navigation.
+     */
     private class LevelButton extends JButton {
+
+        /** Base background color of the button. */
         private final Color baseColor;
+
+        /** Mode of this button (either a level number or {@link Defs#GO_BACK}). */
         private final int levelMode;
 
+        /**
+         * Constructs a {@code LevelButton} with the given text, background color, and mode.
+         *
+         * @param text   the label text of the button
+         * @param bgColor the base background color
+         * @param mode   the level mode or action identifier
+         */
         public LevelButton(String text, Color bgColor, int mode) {
             super(text);
             this.baseColor = bgColor;
@@ -107,6 +141,11 @@ public class GameModesPanel extends GUIPanel {
             addActionListener(e -> handleAction());
         }
 
+        /**
+         * Configures visual and behavioral properties of the button.
+         *
+         * @param text the text to display on the button
+         */
         private void setupButton(String text) {
             setFont(new Font("Arial", Font.BOLD, 24));
             setForeground(Color.WHITE);
@@ -117,6 +156,13 @@ public class GameModesPanel extends GUIPanel {
             setPreferredSize(new Dimension(300, 50));
         }
 
+        /**
+         * Handles button actions:
+         * <ul>
+         *   <li>If it's the back button, returns to the main menu.</li>
+         *   <li>If it's a level button, starts that level (if unlocked).</li>
+         * </ul>
+         */
         private void handleAction() {
             if (levelMode == Defs.GO_BACK) {
                 Game.getGame().changeState(Defs.STATE_MENU);
@@ -126,6 +172,11 @@ public class GameModesPanel extends GUIPanel {
             }
         }
 
+        /**
+         * Custom rendering for rounded button visuals with hover and press effects.
+         *
+         * @param g the {@link Graphics} context to draw the button with
+         */
         @Override
         protected void paintComponent(Graphics g) {
             Graphics2D g2d = (Graphics2D) g.create();
@@ -136,32 +187,25 @@ public class GameModesPanel extends GUIPanel {
                 boolean isLocked = levelMode != Defs.GO_BACK && !Level.isLevelUnlocked(levelMode);
 
                 if (isLocked) {
-                    actualBgColor = Color.LIGHT_GRAY; // Level chưa mở khóa
+                    actualBgColor = Color.LIGHT_GRAY;
                 } else {
-                    // Hiệu ứng hover/press (tương tự logic trong GUIPanel.createRoundedButton)
                     if (getModel().isPressed()) {
-                        int r = Math.max(0, baseColor.getRed() - 30);
-                        int g1 = Math.max(0, baseColor.getGreen() - 30);
-                        int b = Math.max(0, baseColor.getBlue() - 30);
-                        actualBgColor = new Color(r, g1, b);
+                        actualBgColor = adjustColor(baseColor, -30);
                     } else if (getModel().isRollover()) {
-                        int r = Math.min(255, baseColor.getRed() + 20);
-                        int g1 = Math.min(255, baseColor.getGreen() + 20);
-                        int b = Math.min(255, baseColor.getBlue() + 20);
-                        actualBgColor = new Color(r, g1, b);
+                        actualBgColor = adjustColor(baseColor, +20);
                     }
                 }
 
-                // Vẽ nền
+                // Draw background
                 g2d.setColor(actualBgColor);
                 g2d.fillRoundRect(0, 0, getWidth(), getHeight(), CORNER_RADIUS, CORNER_RADIUS);
 
-                // Vẽ viền
+                // Draw border
                 g2d.setColor(BORDER_COLOR);
                 g2d.setStroke(new BasicStroke(2));
                 g2d.drawRoundRect(1, 1, getWidth() - 2, getHeight() - 2, CORNER_RADIUS, CORNER_RADIUS);
 
-                // Vẽ chữ
+                // Draw text
                 g2d.setColor(Color.WHITE);
                 g2d.setFont(getFont());
                 FontMetrics fm = g2d.getFontMetrics();
@@ -170,10 +214,23 @@ public class GameModesPanel extends GUIPanel {
                 int x = (getWidth() - textWidth) / 2;
                 int y = (getHeight() + textHeight) / 2 - 2;
                 g2d.drawString(getText(), x, y);
-
             } finally {
                 g2d.dispose();
             }
+        }
+
+        /**
+         * Adjusts a color's brightness by adding or subtracting a value from its RGB components.
+         *
+         * @param color the original color
+         * @param delta the adjustment value (-30 for darker, +20 for lighter)
+         * @return the adjusted {@link Color}
+         */
+        private Color adjustColor(Color color, int delta) {
+            int r = Math.min(255, Math.max(0, color.getRed() + delta));
+            int g = Math.min(255, Math.max(0, color.getGreen() + delta));
+            int b = Math.min(255, Math.max(0, color.getBlue() + delta));
+            return new Color(r, g, b);
         }
     }
 }
