@@ -50,7 +50,7 @@ public class InvisibleBallBrick extends Brick implements Destructible {
 
             new Thread(() -> {
                 try {
-                    Thread.sleep(10000);
+                    Thread.sleep(5000);
                     ball.setVisible(true);
                 } catch (InterruptedException e) {
                     ball.setVisible(true);
