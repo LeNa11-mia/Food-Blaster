@@ -65,13 +65,13 @@ public class GUIManager {
 
     public void showWinScreen(JFrame frame) {
         GameManager gm = Game.getGame().getGm();
-        winPanel.updateInfo(gm.getScore(), gm.getDifficultyName());
+        winPanel.updateInfo(gm.getScore(), gm.getCurrentLevel());
         showGUIPanel(frame, winPanel);
     }
 
     public void showGameOverScreen(JFrame frame) {
         GameManager gm = Game.getGame().getGm();
-        gameOverPanel.updateInfo(gm.getScore(), gm.getDifficultyName());
+        gameOverPanel.updateInfo(gm.getScore(), gm.getCurrentLevel());
         showGUIPanel(frame, gameOverPanel);
     }
 
@@ -113,24 +113,6 @@ public class GUIManager {
     public void refreshMenu() {
         if (menuPanel != null) {
             menuPanel.refreshMenu();
-        }
-    }
-
-    /**
-     * Cập nhật thông tin win screen
-     */
-    public void updateWinScreen(int score, String difficulty) {
-        if (winPanel != null) {
-            winPanel.updateInfo(score, difficulty);
-        }
-    }
-
-    /**
-     * Cập nhật thông tin game over screen
-     */
-    public void updateGameOverScreen(int score, String difficulty) {
-        if (gameOverPanel != null) {
-            gameOverPanel.updateInfo(score, difficulty);
         }
     }
 }

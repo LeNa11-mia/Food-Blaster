@@ -10,6 +10,9 @@ import javax.swing.*;
  * Game constants
  */
 public class GameConfig {
+
+    public static final int TOTAL_LEVELS = 6;
+
     // ----- SCREEN -----
     public static final int SCREEN_WIDTH = 625;
     public static final int SCREEN_HEIGHT = 700;

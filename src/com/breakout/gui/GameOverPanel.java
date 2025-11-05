@@ -3,7 +3,6 @@ package com.breakout.gui;
 import com.breakout.Game;
 import com.breakout.config.Defs;
 import com.breakout.config.GameConfig;
-import com.breakout.gui.MenuPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -82,19 +81,19 @@ public class GameOverPanel extends GUIPanel {
 
         // Difficulty display
         difficultyLabel = createLabel(
-                "Difficulty: " + Game.getGame().getGm().getDifficultyName(),
+                "Level: " + Game.getGame().getGm().getCurrentLevel(),
                 new Color(218, 112, 161),
                 new Font("Arial", Font.PLAIN, 18)
         );
         centerPanel.add(difficultyLabel);
     }
 
-    public void updateInfo(int finalScore, String difficultyName) {
+    public void updateInfo(int finalScore, int level) {
         if (scoreLabel != null) {
             scoreLabel.setText("Score: " + finalScore);
         }
         if (difficultyLabel != null) {
-            difficultyLabel.setText("Difficulty: " + difficultyName);
+            difficultyLabel.setText("Difficulty: " + level);
         }
     }
 
@@ -106,7 +105,7 @@ public class GameOverPanel extends GUIPanel {
         restartBtn.setPreferredSize(new Dimension(300, 55));
         restartBtn.addActionListener(e -> {
             Game.getGame().changeState(Defs.STATE_PLAYING);
-            Game.getGame().getGm().startGame(Game.getGame().getGm().getCurrentDifficulty());
+            Game.getGame().getGm().startGame(Game.getGame().getGm().getCurrentLevel());
         });
         centerPanel.add(restartBtn);
 
