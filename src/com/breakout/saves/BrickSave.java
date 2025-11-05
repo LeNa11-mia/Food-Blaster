@@ -2,21 +2,50 @@ package com.breakout.saves;
 
 import java.io.Serializable;
 
+/**
+ * {@code BrickSave} is a simple data class used to persist the state of a single brick
+ * (position, size, health, and status) for saving and loading game progress.
+ * <p>
+ * This class implements {@link Serializable} to allow easy binary saving to a file.
+ * </p>
+ */
 public class BrickSave implements Serializable {
+    /** The serial version UID for serialization compatibility. */
     private static final long serialVersionUID = 1L;
 
-    private int x, y;
-    private int width, height;
+    private int x;
+    private int y;
+    private int width;
+    private int height;
     private boolean destroyed;
     private int hitPoints;
     private int maxHitPoints;
     private int color;
     private int points;
 
-    public BrickSave() {}
+    /**
+     * Default constructor required for deserialization.
+     */
+    public BrickSave() {
+        // Default constructor implementation remains empty as per original
+    }
 
-    public BrickSave(int x, int y, int width, int height, boolean destroyed,
-                     int hitPoints, int maxHitPoints, int color, int points) {
+    /**
+     * Initializes a new {@code BrickSave} instance with the current properties of a brick.
+     *
+     * @param x The current x-coordinate of the brick.
+     * @param y The current y-coordinate of the brick.
+     * @param width The width of the brick.
+     * @param height The height of the brick.
+     * @param destroyed The destruction status of the brick ({@code true} if destroyed).
+     * @param hitPoints The current health/hit points remaining.
+     * @param maxHitPoints The maximum health/hit points of the brick.
+     * @param color The integer RGB value representing the color of the brick.
+     * @param points The score value awarded for destroying the brick.
+     */
+    public BrickSave(final int x, final int y, final int width, final int height,
+                     final boolean destroyed, final int hitPoints, final int maxHitPoints,
+                     final int color, final int points) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -28,31 +57,85 @@ public class BrickSave implements Serializable {
         this.points = points;
     }
 
-    // Getters and Setters
-    public int getX() { return x; }
-    public void setX(int x) { this.x = x; }
+    // --- Getters and Setters ---
 
-    public int getY() { return y; }
-    public void setY(int y) { this.y = y; }
+    /**
+     * Gets the current x-coordinate.
+     * @return The x-coordinate.
+     */
+    public int getX() {
+        return this.x;
+    }
 
-    public int getWidth() { return width; }
-    public void setWidth(int width) { this.width = width; }
+    /**
+     * Sets the current x-coordinate.
+     * @param x The new x-coordinate.
+     */
+    public void setX(final int x) {
+        this.x = x;
+    }
 
-    public int getHeight() { return height; }
-    public void setHeight(int height) { this.height = height; }
+    /**
+     * Gets the current y-coordinate.
+     * @return The y-coordinate.
+     */
+    public int getY() {
+        return this.y;
+    }
 
-    public boolean isDestroyed() { return destroyed; }
-    public void setDestroyed(boolean destroyed) { this.destroyed = destroyed; }
+    /**
+     * Sets the current y-coordinate.
+     * @param y The new y-coordinate.
+     */
+    public void setY(final int y) {
+        this.y = y;
+    }
 
-    public int getHitPoints() { return hitPoints; }
-    public void setHitPoints(int hitPoints) { this.hitPoints = hitPoints; }
+    /**
+     * Gets the width of the brick.
+     * @return The width.
+     */
+    public int getWidth() {
+        return this.width;
+    }
 
-    public int getMaxHitPoints() { return maxHitPoints; }
-    public void setMaxHitPoints(int maxHitPoints) { this.maxHitPoints = maxHitPoints; }
+    /**
+     * Gets the height of the brick.
+     * @return The height.
+     */
+    public int getHeight() {
+        return this.height;
+    }
 
-    public int getColor() { return color; }
-    public void setColor(int color) { this.color = color; }
+    /**
+     * Checks if the brick is destroyed.
+     * @return {@code true} if the brick is destroyed.
+     */
+    public boolean isDestroyed() {
+        return this.destroyed;
+    }
 
-    public int getPoints() { return points; }
-    public void setPoints(int points) { this.points = points; }
+    /**
+     * Sets the destruction status of the brick.
+     * @param destroyed The new destruction status.
+     */
+    public void setDestroyed(final boolean destroyed) {
+        this.destroyed = destroyed;
+    }
+
+    /**
+     * Gets the color value (integer RGB).
+     * @return The color integer.
+     */
+    public int getColor() {
+        return this.color;
+    }
+
+    /**
+     * Sets the color value (integer RGB).
+     * @param color The new color integer.
+     */
+    public void setColor(final int color) {
+        this.color = color;
+    }
 }
