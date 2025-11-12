@@ -2,7 +2,7 @@
 
 A simple **Arkanoid (Breakout)** game made with Java.  
 Players control a paddle to bounce a ball and destroy all bricks while preventing the ball from leaving the screen.
-
+Demo video link: https://drive.google.com/drive/folders/1zjEhAEgsoHsxdp3tmm_DZo4GgSZ-pdaG
 ---
 
 ## Features
